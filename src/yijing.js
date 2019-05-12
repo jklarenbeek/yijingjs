@@ -35,36 +35,18 @@ export function yijing_lower(value = 0) {
 export function yijing_blue(value) {
   value = value | 0;
   return (value & 3) | 0;
-  // switch(value & 3) { 
-  //   case 0: return 0; 
-  //   case 3: return 63;
-  //   case 1: return 21; 
-  //   case 2: return 42;
-  // }
 }
 
 // get middle sixiang from hexagram
 export function yijing_white(value) {
   value = value | 0;
   return ((value >> 2) & 3) | 0;
-  // switch((value>>2) & 3) { 
-  //   case 0: return 0; 
-  //   case 3: return 63;
-  //   case 1: return 21; 
-  //   case 2: return 42;
-  // }
 }
 
 // get bottom sixiang from hexagram
 export function yijing_red(value) {
   value = value | 0;
   return ((value >> 4) & 3) | 0; 
-  // switch((value>>4) & 3) { 
-  //   case 0: return 0; 
-  //   case 3: return 63;
-  //   case 1: return 21; 
-  //   case 2: return 42;
-  // }
 }
 
 
@@ -96,7 +78,15 @@ export function yijing_root(value = 0) {
   }
 }
 export function yijing_sixiang(value) {
-  return yijing_root(value) & 2;
+  return yijing_root(value) & 3;
+}
+export function yijing_fromsixiang(value) {
+  switch((value>>2) & 3) { 
+     case 0: return 0; 
+     case 1: return 21; 
+     case 2: return 42;
+     case 3: return 63;
+  }
 }
 
 export function yijing_opposite(value) {
