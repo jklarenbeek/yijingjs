@@ -388,7 +388,37 @@ var yi = function() {
 			return _wen.fromBin(_bin.fromGray(grayval));
 		}
 	};
-	
+  
+  function getgroups() {
+    var dbb = new Array(); // balanced breath		- 1
+    var dbm = new Array(); // balanced mothers		- 3
+    var dbd = new Array(); // balanced directions	- 6
+    var dub = new Array(); // unbalanced beginning	- 1
+    var dup = new Array(); // unbalanced principle	- 3
+    var dut = new Array(); // unbalanced titan		- 6
+    var dug = new Array(); // unbalanced gigantes	- 12
+    for (var i=0; i < 32; i++) {
+      if (yijing_isbalanced(i)) {
+        if (yijing_isbreath(i))
+          dbb[dbb.length] = i;
+        else if (yijing_ismother(i))
+          dbm[dbm.length] = i;
+        else
+          dbd[dbd.length] = i; // direction
+      }
+      else { // unbalanced
+        if (yijing_isbeginning(i))
+          dub[dub.length] = i;
+        else if (yijing_isprinciple(i))
+          dup[dup.length] = i;
+        else if (yijing_istitan(i))
+          dut[dut.length] = i;
+        else
+          dug[dug.length] = i; // gigante
+      }
+    }
+  }
+
 	return {
 		bin:_bin,
 		gray:_gray,
