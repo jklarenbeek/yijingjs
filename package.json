@@ -16,5 +16,8 @@
     "rollup-plugin-node-resolve": "^4.2.3",
     "rollup-plugin-serve": "^1.0.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "hyperapp": "^1.2.9",
+    "hyperapp-svg": "^1.0.0"
+  }
 }
