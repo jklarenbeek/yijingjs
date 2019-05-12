@@ -12,13 +12,16 @@ export function bagua_linecount(value) {
   value = value | 0;
   return (value & 1) + ((value >> 1)) & 1 + ((value >> 2) & 1);
 }
+export function bagua_isabstract(value) {
+  return value === 0 || value === 7 || value === 5 || value === 2;
+}
 
 export const bagua_NAMES = Array.freeze(Array.seal(["earth", "mountain", "water", "wind", "thunder", "fire", "lake", "heaven"]));
 export const bagua_ELM5NAMES = Array.freeze(Array.seal(["earth", "earth", "water", "wood", "wood", "fire", "metal", "metal"]));
 
 //#endregion
 
-//#region yijing sixiang functions 
+//#region yijing.sixiang functions 
 // get top sixiang from hexagram
 export function yijing_blue(value) {
   value = value | 0;
@@ -52,7 +55,7 @@ export function yijing_fromsixiang(value) {
 
 //#endregion
 
-//#region yijing bagua functions
+//#region yijing.bagua functions
 
 // get upper trigram
 export function yijing_upper(value = 0) {
@@ -75,7 +78,7 @@ export function yijing_invert(value = 0) {
   return ((value ^ -1) & 63)|0;
 }
   
-// get center trigram from hexagram
+// get center hexagram
 export function yijing_center(value = 0) {
   value = value | 0;
   return ((value << 1) & 56 | (value >> 1) & 7)|0;
@@ -86,11 +89,11 @@ export function yijing_isroot(value) {
   return (value === 0 || value === 63 || value === 21 || value === 42);
 }
 export function yijing_root(value = 0) {
-  value = value|0;
-  while(true) {
-    value = yijing_center(value);
-    if (yijing_isroot(value)) return value;
+  value = value | 0;
+  while(!yijing_isroot(value)) {
+    value = yijing_center(c);
   }
+  return value;
 }
 export function yijing_opposite(value) {
   const lower = yijing_upper(value);
@@ -157,7 +160,7 @@ export function yijing_isgigante(value) {
 //#endregion
 
 //#region yijing string operators
-export function yijing_patternName(value) {
+export function yijing_symmetryName(value) {
   if (yijing_isbreath(value)) return 'breath';
   if (yijing_ismother(value)) return 'mother';
   if (yijing_isdirection(value)) return 'direction';
@@ -219,6 +222,7 @@ export function yijing_tobinarystring(value) {
 
 //#endregion
 
+//#region yijing king wen senquence
 export const yijing_KINGWEN_TOSEQUENCE = Array.freeze(Array.seal([ 
   2,	23,	8,	20,	16,	35,	45,	12,	// earth
   15,	52, 39,	53,	62, 56,	31,	33,	// mountain
@@ -245,3 +249,152 @@ export function yijing_tokingwen(value) {
 export function yijing_fromkingwen(value) {
   return yijing_KINGWEN_FROMSEQUENCE[value & 63];  
 }
+//#endregion
+
+//#region translations
+var yi = function() {
+
+	var _binwen = [ 
+		2,	23,	8,	20,	16,	35,	45,	12,	// earth
+		15,	52, 39,	53,	62, 56,	31,	33,	// mountain
+		7,	4,	29, 59,	40,	64,	47, 6,	// water
+		46,	18, 48,	57,	32,	50,	28,	44,	// wind
+		24,	27,	3,	42,	51,	21,	17,	25,	// thunder
+		36,	22,	63,	37,	55,	30,	49,	13,	// fire
+		19,	41,	60,	61,	54,	38,	58,	10,	// lake
+		11,	26,	5,	9,	34,	14,	43,	1,	// heaven
+	];
+	var _wenbin = new Array(65);
+	for (var i=0; i < 64; i++) {
+		_wenbin[_binwen[i]] = i;
+	}
+
+	var _wen_houses = [
+		[2,24,19,11, 34,43,5,8],	// aarde
+		[52,22,26,41, 38,10,61,53], // berg
+		[29,60,3,63, 49,55,36,7], 	// water
+		[57,9,37,42, 25,21,27,18],	// wind
+		[51,16,40,32, 46,48,28,17], // donder
+		[30,56,50,64, 4,59,6,13],	// vuur
+		[58,47,45,31, 39,15,62,54],	// meer
+		[1,44,33,12, 20,23,35,14] 	// hemel
+	];
+	
+	
+	var _lang = {
+		nl:(function() {
+			var _oer = [
+				{s:"Aarde", l:"Het Ontvangende",a:"is toegewijd",f:"de moeder"},
+				{s:"Berg", l:"Het Stilhouden",a:"is stilhouden",f:"de jongste zoon"},
+				{s:"Water", l:"Het Onpeilbare",a:"is gevaar",f:"de middelste zoon"},
+				{s:"Wind", l:"Het Zachtmoedige",a:"is indringen",f:"de oudste dochter"},
+				{s:"Donder", l:"Het Opwindende",a:"is beweging, is de schok",f:"de oudste zoon"},
+				{s:"Vuur", l:"Het Zich-Hechtende",a:"is lichtend of afhankelijk, is de zon of de bliksem, het vuur",f:"de middelste dochter"},
+				{s:"Meer", l:"Het Blijmoedige",a:"is vreugde",f:"de jongste dochter"},
+				{s:"Hemel", l:"Het Scheppende",a:"is sterk",f:"de vader"}
+			];
+			
+			var _gua = [
+				"Het Scheppende",	"Het Ontvangende",
+					"De Aanvangsmoeilijkheid",	"De Jeugddwaasheid",
+					"Het Wachten",				"De Strijd",
+					"Het Leger",				"De Aaneengeslotenheid",
+					"De Temmende Kracht van het Kleine", "Het Optreden",
+					"De Vrede",				"De Stilstand",
+					"Gemeenschap met Mensen",	"Het Bezit van het Grote",
+					"De Bescheidenheid",		"De Geestdrift",
+					"Het Navolgen",			"Het Werk aan het Bedorvene",
+					"De Toenadering",			"De Beschouwing (De Aanblik)",
+					"Het Doorbijten",			"De Bekoorlijkheid",
+					"De Versplintering",		"De Terugkeer (Het Keerpunt)",
+					"De Onschuld (Het Onverwachte)", "De Temmende Kracht van het Grote",
+					"De Mondhoeken (De Voeding)", "Het Overwicht van het Grote",
+				"Het Onpeilbare",	"Het Zich-Hechtende",
+				
+					"De Inwerking (Het Hofmaken)", "De Duurzaamheid",
+					"De Terugtocht",			"De Macht van het Grote",
+					"De Vooruitgang",			"De Verduistering van het Licht",
+					"Het Gezin (De Clan)",	"De Tegenstelling",
+					"De Hindernis",			"De Bevrijding",
+					"De Vermindering",		"De Vermeedering",
+					"De Doorbraak (De Vastberadenheid)", "Het Tegemoetkomen",
+					"Het Verzamelen",			"Het Omhoogdringen",
+					"De Benauwenis (De Uitputting)", "De Waterput",
+					"De Omwenteling (Het Ruien)", "De Spijspot",
+				"Het Opwindende",	"Het Stilhouden",
+					"De Ontwikkeling (Geleidelijke Vooruitgang)", "Het Huwende Meisje",
+					"De Volheid",				"De Zwerver",
+				"Het Zachtmoedige",	"Het Blijmoedige",
+					"De Oplossing",			"De Beperking",
+					"Innerlijke Waarheid",	"Het Overwicht van het Kleine",
+					"Na de Voleinding",		"Voor de Voleinding"
+			];
+			
+			return {
+				gua:function(wenval) {
+					return _gua[(wenval-1)&63];
+				}
+			};
+			
+		})()
+	};
+
+	var _bin = {
+		inc:function(binval) {
+			return (binval+1)&63;
+		},
+		dec:function(binval) {
+			return (binval-1)&63;
+		},
+		fromGray:function(/*unsigned short*/grayval) {
+			var temp = grayval ^ (grayval>>8)
+			temp ^= (temp>>4);
+			temp ^= (temp>>2);
+			temp ^= (temp>>1);
+			return temp;
+		},
+		fromWen:function(wenval) {
+			return _wenbin[wenval];
+		}
+	};
+	
+	var _gray = {
+		inc:function(grayval) {
+			return _gray.fromBin(_bin.fromGray(grayval)+1);
+		},
+		dec:function(grayval) {
+			return _gray.fromBin(_bin.fromGray(grayval)-1);
+		},
+		fromBin:function(binval) {
+			binval = Math.abs(binval);
+			return (binval>>1)^binval;
+		},
+		fromWen:function(wenval) {
+			return _gray.fromBin(_bin.fromWen(wenval));
+		}
+	};
+	
+	var _wen = {
+		inc:function(wenval) {
+			return wenval+1;
+		},
+		dec:function(binval) {
+			return wenval-1;
+		},
+		fromBin:function(binval) {
+			return _binwen[binval&63];
+		},
+		fromGray:function(grayval) {
+			return _wen.fromBin(_bin.fromGray(grayval));
+		}
+	};
+	
+	return {
+		bin:_bin,
+		gray:_gray,
+		wen:_wen,
+		lang:_lang.nl
+	}
+}();
+
+//#endregion
