@@ -1,2 +1,3 @@
-# yiyingjs
-An exploration into the world of the yiying and its mysterious patterns.
+# yijingjs
+An exploration into the world of the yijing and its mysterious patterns.
+

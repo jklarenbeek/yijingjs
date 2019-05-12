@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="display:none;">
+  <defs>
+    
+    <g id="yin" width="114" height="20">
+      <rect x="2" y="2" rx="8" ry="8" width="40" height="16" fill="black" />
+      <rect x="72" y="2" rx="8" ry="8" width="40" height="16" fill="black" />
+    </g>
+    
+    <g id="yang" width="114" height="20">
+      <rect x="2" y="2" rx="8" ry="8" width="110" height="16" fill="black" />
+    </g>
+
+    <g id="bagua0_l" fill="#FF8">
+     <use x="6" y="6" xlink:href="#yin" />
+     <use x="6" y="26" xlink:href="#yin" />
+     <use x="6" y="46" xlink:href="#yin" />
+    </g>
+    <g id="bagua0_t" fill="#FF8">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="95" stroke="#881" stroke-width="4" />
+     <text x="8" y="85" fill="black" font-family="Tahoma" font-size="20" font-weight="500">
+      1 Earth
+     </text>
+     <use x="6" y="6" xlink:href="#bagua0_l" />
+    </g>
+    <g id="bagua0" fill="#FF8">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="72" stroke="#881" stroke-width="4" />
+     <use x="6" y="6" xlink:href="#bagua0_l" />
+    </g>
+    
+    <g id="bagua1_l" fill="#FF8">
+     <use x="6" y="6" xlink:href="#yang" />
+     <use x="6" y="26" xlink:href="#yin" />
+     <use x="6" y="46" xlink:href="#yin" />
+    </g>
+    <g id="bagua1_t" fill="#FF8">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="95" stroke="#881" stroke-width="4" />
+     <text x="8" y="85" fill="black" font-family="Tahoma" font-size="20" font-weight="500">
+      2 Mountain
+     </text>
+     <use x="6" y="6" xlink:href="#bagua1_l" />
+    </g>
+    <g id="bagua1" fill="#FF8">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="72" stroke="#881" stroke-width="4" />
+     <use x="6" y="6" xlink:href="#bagua1_l" />
+    </g>
+    
+    <g id="bagua2_l" fill="#AAF">
+     <use x="6" y="6" xlink:href="#yin" />
+     <use x="6" y="26" xlink:href="#yang" />
+     <use x="6" y="46" xlink:href="#yin" />
+    </g>
+    <g id="bagua2_t" fill="#AAF">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="95" stroke="#448" stroke-width="4" />
+     <text x="8" y="85" fill="black" font-family="Tahoma" font-size="20" font-weight="500">
+      3 Water
+     </text>
+     <use x="6" y="6" xlink:href="#bagua2_l" />
+    </g>
+    <g id="bagua2" fill="#AAF">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="72" stroke="#448" stroke-width="4" />
+     <use x="6" y="6" xlink:href="#bagua2_l" />
+    </g>
+    
+    <g id="bagua3_l" fill="#8F8">
+     <use x="6" y="6" xlink:href="#yang" />
+     <use x="6" y="26" xlink:href="#yang" />
+     <use x="6" y="46" xlink:href="#yin" />
+    </div>
+    <g id="bagua3_t" fill="#8F8">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="95" stroke="#181" stroke-width="4" />
+     <text x="8" y="85" fill="black" font-family="Tahoma" font-size="20" font-weight="500">
+      4 Wind
+     </text>
+     <use x="6" y="6" xlink:href="#bagua3_l" />
+    </g>
+    <g id="bagua3" fill="#8F8">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="72" stroke="#181" stroke-width="4" />
+     <use x="6" y="6" xlink:href="#bagua3_l" />
+    </g>
+    
+    <g id="bagua4_l" fill="#8F8">
+     <use x="6" y="6" xlink:href="#yin" />
+     <use x="6" y="26" xlink:href="#yin" />
+     <use x="6" y="46" xlink:href="#yang" />
+    </g>
+    <g id="bagua4_t" fill="#8F8">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="95" stroke="#181" stroke-width="4" />
+     <text x="8" y="85" fill="black" font-family="Tahoma" font-size="20" font-weight="500">
+      5 Thunder
+     </text>
+     <use x="6" y="6" xlink:href="#bagua4_l" />
+    </g>
+    <g id="bagua4" fill="#8F8">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="72" stroke="#181" stroke-width="4" />
+     <use x="6" y="6" xlink:href="#bagua4_l" />
+    </g>
+    
+    <g id="bagua5_l" fill="#F88">
+     <use x="6" y="6" xlink:href="#yang" />
+     <use x="6" y="26" xlink:href="#yin" />
+     <use x="6" y="46" xlink:href="#yang" />
+    </g>
+    <g id="bagua5_t" fill="#F88">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="95" stroke="#811" stroke-width="4" />
+     <text x="8" y="85" fill="black" font-family="Tahoma" font-size="20" font-weight="500">
+      6 Fire
+     </text>
+     <use x="6" y="6" xlink:href="#bagua5_l" />
+    </g>
+    <g id="bagua5" fill="#F88">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="72" stroke="#811" stroke-width="4" />
+     <use x="6" y="6" xlink:href="#bagua5_l" />
+    </g>
+    
+    <g id="bagua6_l" fill="#FFD">
+     <use x="6" y="6" xlink:href="#yin" />
+     <use x="6" y="26" xlink:href="#yang" />
+     <use x="6" y="46" xlink:href="#yang" />
+    </g>
+    <g id="bagua6_t" fill="#FFD">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="95" stroke="#554" stroke-width="4" />
+     <text x="8" y="85" fill="black" font-family="Tahoma" font-size="20" font-weight="500">
+      7 Lake
+     </text>
+     <use x="6" y="6" xlink:href="#bagua6_l" />
+    </g>
+    <g id="bagua6" fill="#FFD">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="72" stroke="#554" stroke-width="4" />
+     <use x="6" y="6" xlink:href="#bagua6_l" />
+    </g>
+    
+    <g id="bagua7_l" fill="#FFD">
+     <use x="6" y="6" xlink:href="#yang" />
+     <use x="6" y="26" xlink:href="#yang" />
+     <use x="6" y="46" xlink:href="#yang" />
+    </g>
+
+    <g id="bagua7_t" fill="#FFD">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="95" stroke="#554" stroke-width="4" />
+     <text x="8" y="85" fill="black" font-family="Tahoma" font-size="20" font-weight="500">
+      8 Heaven
+     </text>
+     <use x="6" y="6" xlink:href="#bagua7_l" />
+    </g>
+    <g id="bagua7" fill="#FFD">
+     <rect x="0" y="0" rx="12" ry="12" width="126" height="72" stroke="#554" stroke-width="4" />
+     <use x="6" y="6" xlink:href="#bagua7_l" />
+    </g>
+
+     
+   </defs>
+</svg>

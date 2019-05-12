@@ -1,0 +1,20 @@
+{
+  "name": "yijingjs",
+  "version": "1.0.0",
+  "description": "An exploration into the world of the yijing and its mysterious patterns.",
+  "main": "./public/index.js",
+  "files": [
+    "public"
+  ],
+  "scripts": {
+    "start": "rollup -cw",
+    "build": "rollup -c"
+  },
+  "author": "jklarenbeek@gmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "rollup-plugin-node-resolve": "^4.2.3",
+    "rollup-plugin-serve": "^1.0.1"
+  },
+  "dependencies": {}
+}
