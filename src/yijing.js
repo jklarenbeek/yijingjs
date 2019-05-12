@@ -18,19 +18,7 @@ export const bagua_ELM5NAMES = Array.freeze(Array.seal(["earth", "earth", "water
 
 //#endregion
 
-//#region yijing getters
-
-// get upper trigram
-export function yijing_upper(value = 0) {
-  value = value | 0;
-  return value & 7;
-}
-// get lower trigram
-export function yijing_lower(value = 0) {
-  value = value | 0;
-  return (value >> 3) & 7;
-}
-
+//#region yijing sixiang functions 
 // get top sixiang from hexagram
 export function yijing_blue(value) {
   value = value | 0;
@@ -49,6 +37,33 @@ export function yijing_red(value) {
   return ((value >> 4) & 3) | 0; 
 }
 
+export function yijing_sixiang(value) {
+  return yijing_root(value) & 3;
+}
+export function yijing_fromsixiang(value) {
+  switch(value) { 
+     case 0: return 0; 
+     case 1: return 21; 
+     case 2: return 42;
+     case 3: return 63;
+  }
+}
+
+
+//#endregion
+
+//#region yijing bagua functions
+
+// get upper trigram
+export function yijing_upper(value = 0) {
+  value = value | 0;
+  return value & 7;
+}
+// get lower trigram
+export function yijing_lower(value = 0) {
+  value = value | 0;
+  return (value >> 3) & 7;
+}
 
 //#endregion
 
@@ -77,18 +92,6 @@ export function yijing_root(value = 0) {
     if (yijing_isroot(value)) return value;
   }
 }
-export function yijing_sixiang(value) {
-  return yijing_root(value) & 3;
-}
-export function yijing_fromsixiang(value) {
-  switch((value>>2) & 3) { 
-     case 0: return 0; 
-     case 1: return 21; 
-     case 2: return 42;
-     case 3: return 63;
-  }
-}
-
 export function yijing_opposite(value) {
   const lower = yijing_upper(value);
   const upper = yijing_lower(value);
