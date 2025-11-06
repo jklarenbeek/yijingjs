@@ -91,6 +91,20 @@ body {
   opacity: 0.6;
 }
 
+/* Smooth scrollbars */
+.overflow-y-auto {
+  scrollbar-width: thin;
+}
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded;
+}
+
 /* Print styles */
 @media print {
   body {

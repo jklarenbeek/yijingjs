@@ -1,15 +1,14 @@
 // src/components/InspectorPanel.jsx
-
 import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
-
+import HexagramCard from './HexagramCard';
 import { SYMMETRY_COLORS, toBinary } from '../globals.js';
 
-const InspectorPanel = ({ hexIndex, neighbors }) => {
+const InspectorPanel = ({ hexIndex, neighbors, onSelectHex }) => {
   if (hexIndex === null) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 text-center text-gray-500 dark:text-gray-400 shadow-sm border border-gray-200 dark:border-gray-700 transition-colors">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 text-center text-gray-500 dark:text-gray-400 shadow-sm border border-gray-200 dark:border-gray-700">
         <p>Select a hexagram to view details</p>
       </div>
     );
@@ -20,118 +19,157 @@ const InspectorPanel = ({ hexIndex, neighbors }) => {
   const upperWuxing = Bagua.bagua_toWuxing(upper);
   const lowerWuxing = Bagua.bagua_toWuxing(lower);
   const symmetry = Yijing.yijing_symmetryName(hexIndex);
+  const balanced = Yijing.yijing_balancedName(hexIndex);
+  const mantra = Yijing.yijing_mantraName(hexIndex);
   const lineCount = Yijing.yijing_lineCount(hexIndex);
   const binary = toBinary(hexIndex);
   const transitionType = Wuxing.wuxing_transitionType(lowerWuxing, upperWuxing);
+  const orbit = Yijing.yijing_orbitClass(hexIndex);
+  const centerChain = Yijing.yijing_getCenterChain(hexIndex);
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 space-y-4 shadow-sm border border-gray-200 dark:border-gray-700 transition-colors sticky top-4">
-      <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          Hexagram {hexIndex}
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 font-mono mt-1">
-          {binary}
-        </p>
-      </div>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col h-full">
+      {/* ---------- SCROLLABLE CONTENT ---------- */}
+      <div className="flex-1 overflow-y-auto p-6 space-y-6">
 
-      <div className="space-y-4">
-        <div>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">
-            Symmetry
-          </h3>
+        {/* ---------- HEADER (sticky) ---------- */}
+        <div className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6 sticky top-0 bg-white dark:bg-gray-800 z-10">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Hexagram {hexIndex}</h2>
+          <p className="text-sm font-mono text-gray-500 dark:text-gray-400 mt-1">{binary}</p>
+        </div>
+
+        {/* ---------- BASIC INFO ---------- */}
+        <section>
+          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Symmetry</h3>
           <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <div
-              className="w-4 h-4 rounded-full flex-shrink-0"
-              style={{ backgroundColor: SYMMETRY_COLORS[symmetry] }}
-            />
-            <span className="text-gray-900 dark:text-gray-100 capitalize font-medium">
-              {symmetry}
-            </span>
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: SYMMETRY_COLORS[symmetry] }} />
+            <span className="capitalize font-medium">{symmetry}</span>
           </div>
-        </div>
+        </section>
 
-        <div>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">
-            Yang Lines
-          </h3>
-          <div className="p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <p className="text-gray-900 dark:text-gray-100 font-medium">
-              {lineCount} / 6
-            </p>
+        <section>
+          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Mantra</h3>
+          <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: SYMMETRY_COLORS[symmetry] }} />
+            <span className="capitalize font-medium">{balanced} {mantra}</span>
           </div>
-        </div>
+        </section>
 
-        <div>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">
-            Trigrams
-          </h3>
+        <section>
+          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Yang Lines</h3>
+          <div className="p-2 bg-gray-50 dark:bg-gray-700/50 rounded"><p className="font-medium">{lineCount} / 6</p></div>
+        </section>
+
+        <section>
+          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Trigrams</h3>
           <div className="space-y-2">
-            <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 rounded p-3 transition-colors">
-              <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">
-                Upper ({upper})
-              </span>
-              <div className="flex items-center gap-2">
-                <span className="text-lg">{Wuxing.wuxing_toEmojiChar(upperWuxing)}</span>
-                <span className="text-sm capitalize text-gray-900 dark:text-gray-100">
-                  {upperWuxing}
-                </span>
-              </div>
-            </div>
-            <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 rounded p-3 transition-colors">
-              <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">
-                Lower ({lower})
-              </span>
-              <div className="flex items-center gap-2">
-                <span className="text-lg">{Wuxing.wuxing_toEmojiChar(lowerWuxing)}</span>
-                <span className="text-sm capitalize text-gray-900 dark:text-gray-100">
-                  {lowerWuxing}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">
-            Transition
-          </h3>
-          <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded p-3 transition-colors">
-            <span className="text-lg">{Wuxing.wuxing_transitionSymbolChar(transitionType)}</span>
-            <span className="text-sm capitalize text-gray-900 dark:text-gray-100 font-medium">
-              {transitionType}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {neighbors.length > 0 && (
-        <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
-            Neighbors ({neighbors.length})
-          </h3>
-          <div className="grid grid-cols-3 gap-2">
-            {neighbors.map(n => {
-              const relation = Yijing.yijing_relation(hexIndex, n);
-              const emoji = Yijing.yijing_relationEmojiChar(hexIndex, n);
-              return (
-                <div
-                  key={n}
-                  className="bg-gray-100 dark:bg-gray-700 rounded p-2 text-center hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer transition-colors"
-                >
-                  <div className="text-lg mb-1">{emoji}</div>
-                  <div className="text-xs text-gray-900 dark:text-gray-100 font-medium">
-                    {n}
-                  </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                    {relation}
+            {[{ label: 'Upper', trigram: upper, wuxing: upperWuxing }, { label: 'Lower', trigram: lower, wuxing: lowerWuxing }].map(
+              ({ label, trigram, wuxing }) => (
+                <div key={label} className="flex justify-between items-center p-3 bg-gray-100 dark:bg-gray-700 rounded">
+                  <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{label} ({trigram})</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{Wuxing.wuxing_toEmojiChar(wuxing)}</span>
+                    <span className="capitalize text-sm">{wuxing}</span>
                   </div>
                 </div>
-              );
-            })}
+              )
+            )}
           </div>
-        </div>
-      )}
+        </section>
+
+        <section>
+          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Transition</h3>
+          <div className="flex items-center gap-2 p-3 bg-gray-100 dark:bg-gray-700 rounded">
+            <span className="text-lg">{Wuxing.wuxing_transitionSymbolChar(transitionType)}</span>
+            <span className="capitalize font-medium">{transitionType}</span>
+          </div>
+        </section>
+
+        {/* ---------- TRANSFORMATIONS ---------- */}
+        <section className="border-t border-gray-200 dark:border-gray-700 pt-4">
+          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Transformations</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-0.75">
+            {Object.entries(orbit).map(([key, value]) => (
+              <div
+                key={key}
+                className="group flex flex-col items-center p-0.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              >
+                <HexagramCard
+                  hexIndex={value}
+                  selected={false}
+                  onClick={() => onSelectHex(value)}
+                  isNeighbor={false}
+                  symmetryGroup={Yijing.yijing_symmetryName(value)}
+                  filterSymmetry={[]}
+                />
+
+                {/* CAPTION – always visible */}
+                <span className="text-xs capitalize text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">
+                  {key} ({Yijing.yijing_relationEmojiChar(hexIndex, value)})
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ---------- PATH TO ROOT ---------- */}
+        {centerChain.length > 1 && (
+          <section className="border-t border-gray-200 dark:border-gray-700 pt-4">
+            <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Path to Root ({centerChain.length - 1} steps)</h3>
+            <div className="grid grid-cols-3 gap-0.75">
+              {centerChain.map((h, idx) => (
+                <div
+                  key={h}
+                  className="group flex flex-col items-center p-0.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <HexagramCard
+                    hexIndex={h}
+                    selected={h === hexIndex}
+                    onClick={() => onSelectHex(h)}
+                    isNeighbor={idx > 0}
+                    neighborRelation={idx > 0 ? centerChain[idx - 1] : null}
+                    symmetryGroup={Yijing.yijing_symmetryName(h)}
+                    filterSymmetry={[]}
+                  />
+                  <span className="text-xs text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">
+                    {idx === centerChain.length - 1 ? 'Cosmic' : (idx === centerChain.length - 2 ? 'Karmic' : 'Atomic')}&nbsp;
+                    ({Yijing.yijing_relationEmojiChar(hexIndex, h)})
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ---------- NEIGHBORS ---------- */}
+        {neighbors.length > 0 && (
+          <section className="border-t border-gray-200 dark:border-gray-700 pt-4">
+            <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Neighbors ({neighbors.length})</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-0.75">
+              {neighbors.map(n => (
+                <div
+                  key={n}
+                  onClick={() => onSelectHex(n)}
+                  className="group flex flex-col items-center p-0.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <HexagramCard
+                    hexIndex={n}
+                    selected={false}
+                    onClick={() => onSelectHex(n)}
+                    isNeighbor={true}
+                    neighborRelation={hexIndex}
+                    symmetryGroup={Yijing.yijing_symmetryName(n)}
+                    filterSymmetry={[]}
+                  />
+                  <span className="text-xs text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">
+                    {Yijing.yijing_relationEmojiChar(hexIndex, n)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
     </div>
   );
 };

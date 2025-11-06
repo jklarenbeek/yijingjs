@@ -7,14 +7,25 @@ import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
 
+export const BALANCED_COLORS = {
+  [Yijing.YIJING_BALANCED]: '#10b981', // representing harmony and balance in nature (Feng Shui wood/earth influence for stability)
+  [Yijing.YIJING_UNBALANCED]: '#ef4444', // symbolizing disruption and imbalance (Feng Shui fire element for dynamic change)
+};
+
+export const MANTRA_COLORS = {
+  [Yijing.YIJING_COSMIC]: '#8b5cf6', // evoking spiritual and universal energies (Feng Shui prosperity and heaven associations)
+  [Yijing.YIJING_KARMIC]: '#f97316', // reflecting action and cyclical fate (Feng Shui fire/earth for transformation)
+  [Yijing.YIJING_ATOMIC]: '#3b82f6', // denoting fundamental structures and flow (Feng Shui water/metal for foundational essence)
+};
+
 export const SYMMETRY_COLORS = {
-  'breath': '#ec4899',
-  'mother': '#8b5cf6',
-  'direction': '#3b82f6',
-  'beginning': '#eab308',
-  'principle': '#f97316',
-  'titan': '#ef4444',
-  'gigante': '#10b981'
+  [Yijing.YIJING_BREATH]: '#ec4899',
+  [Yijing.YIJING_MOTHER]: '#8b5cf6',
+  [Yijing.YIJING_DIRECTION]: '#3b82f6',
+  [Yijing.YIJING_BEGINNING]: '#eab308',
+  [Yijing.YIJING_PRINCIPLE]: '#f97316',
+  [Yijing.YIJING_TITAN]: '#ef4444',
+  [Yijing.YIJING_GIGANTE]: '#10b981'
 };
 
 export const WUXING_COLORS = {

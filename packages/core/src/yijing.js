@@ -78,6 +78,17 @@ export function yijing_isRoot(hexagram = 0) {
     || hexagram === 42);
 }
 
+export function yijing_getCenterChain(hex) {
+  const chain = [hex];
+  let current = hex;
+  while (!yijing_isRoot(current)) {
+    current = yijing_center(current);
+    if (chain.includes(current)) break;
+    chain.push(current);
+  }
+  return chain;
+}
+
 // Find the primordial root of a hexagram
 export function yijing_root(hexagram = 0) {
   let value = hexagram | 0;
@@ -92,18 +103,18 @@ export function yijing_opposite(hexagram = 0) {
   hexagram = hexagram | 0;
   const lower = yijing_upper(hexagram);
   const upper = yijing_lower(hexagram);
-  return (upper << 3) | lower;
+  return (lower << 3) | upper;
 }
 
 // Reverse line order (mirror)
 export function yijing_reverse(hexagram = 0) {
   hexagram = hexagram | 0;
-  return (hexagram & 1) << 5
-    + (hexagram & 2) << 3
-    + (hexagram & 4) << 1
-    + (hexagram & 8) >> 1
-    + (hexagram & 16) >> 3
-    + (hexagram & 32) >> 5;
+  return ((hexagram & 1) << 5) |
+    ((hexagram & 2) << 3) |
+    ((hexagram & 4) << 1) |
+    ((hexagram & 8) >> 1) |
+    ((hexagram & 16) >> 3) |
+    ((hexagram & 32) >> 5);
 }
 
 // Count yang lines in hexagram
@@ -149,24 +160,18 @@ export function yijing_neighbors(hexagram) {
  * @param {number} hexagram - Hexagram (0-63)
  * @returns {number[]} Sorted array of orbit members
  */
-export function yijing_orbitClass(hexagram = 0, compositions = true) {
+export function yijing_orbitClass(hexagram = 0) {
   hexagram = hexagram | 0;
-  const orbit = new Set();
+  const orbit = {};
 
   // Add original and all single transformations
-  orbit.add(hexagram);
-  orbit.add(yijing_invert(hexagram));
-  orbit.add(yijing_opposite(hexagram));
-  orbit.add(yijing_reverse(hexagram));
-  orbit.add(yijing_center(hexagram));
+  orbit["selected"] = hexagram;
+  orbit["inverted"] = yijing_invert(hexagram);
+  orbit["opposite"] = yijing_opposite(hexagram);
+  orbit["reversed"] = yijing_reverse(hexagram);
+  orbit["centered"] = yijing_center(hexagram);
 
-  // Add compound transformations
-  if (compositions) {
-    orbit.add(yijing_invert(yijing_opposite(hexagram)));
-    orbit.add(yijing_invert(yijing_reverse(hexagram)));
-    orbit.add(yijing_opposite(yijing_reverse(hexagram)));
-  }
-  return Array.from(orbit).sort((a, b) => a - b);
+  return orbit;
 }
 
 /**
@@ -212,7 +217,7 @@ export function yijing_balance(hexagram = 0) {
  * Returns how many center() operations needed to reach cosmic root.
  * - Depth 0: Cosmic roots (4 hexagrams)
  * - Depth 1: Karmic hexagrams
- * - Depth 2+: Mundane hexagrams
+ * - Depth 2+: Atomic hexagrams
  *
  * @param {number} hexagram - Hexagram (0-63)
  * @returns {number} Depth from cosmic root
@@ -274,20 +279,33 @@ export function yijing_isKarmic(hexagram = 0) {
     && yijing_isCosmic(yijing_center(hexagram));
 }
 
+// ATOMIC - Descendants of karmic
+export function yijing_isAtomic(hexagram = 0) {
+  return !(yijing_isCosmic(hexagram) || yijing_isKarmic(hexagram));
+}
+
 // OLYMPIAN (Balanced) - Divine equilibrium
 export function yijing_isBalanced(hexagram = 0) {
   return (yijing_lineCount(hexagram) === 3);
 }
 
+export const YIJING_BALANCED = "balanced";
+export const YIJING_UNBALANCED = "unbalanced";
+
+export function yijing_balancedName(hexagram = 0) {
+  return yijing_isBalanced(hexagram) ? YIJING_BALANCED : YIJING_UNBALANCED;
+}
+
 export const YIJING_COSMIC = "cosmic";
 export const YIJING_KARMIC = "karmic";
+export const YIJING_ATOMIC = "atomic";
 
 export function yijing_mantraName(hexagram) {
   if (yijing_isCosmic(hexagram))
     return YIJING_COSMIC; // 4 hexagrams
   if (yijing_isKarmic(hexagram))
     return YIJING_KARMIC; // 12 hexagrams
-  return ''; // 48 hexagrams
+  return YIJING_ATOMIC; // 48 hexagrams
 }
 
 //#endregion

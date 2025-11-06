@@ -4,8 +4,7 @@ import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
 
-import { cn } from '../globals.js';
-import { SYMMETRY_COLORS, getWuxingColor } from '../globals.js';
+import { BALANCED_COLORS, cn, MANTRA_COLORS, SYMMETRY_COLORS, getWuxingColor } from '../globals.js';
 
 const HexagramCard = ({
   hexIndex,
@@ -20,12 +19,15 @@ const HexagramCard = ({
   const lower = Yijing.yijing_lower(hexIndex);
   const upperWuxing = Bagua.bagua_toWuxing(upper);
   const lowerWuxing = Bagua.bagua_toWuxing(lower);
-  const transitionType = Wuxing.wuxing_transitionType(lowerWuxing, upperWuxing);
+  const upperColor = getWuxingColor(upperWuxing);
+  const lowerColor = getWuxingColor(lowerWuxing);
+
+  const transitionType = Wuxing.wuxing_transitionType(upperWuxing, lowerWuxing);
   const transitionSymbol = Wuxing.wuxing_transitionSymbolChar(transitionType);
 
   const symmetryColor = SYMMETRY_COLORS[symmetryGroup];
-  const upperColor = getWuxingColor(upperWuxing);
-  const lowerColor = getWuxingColor(lowerWuxing);
+  const balancedColor = BALANCED_COLORS[Yijing.yijing_balancedName(hexIndex)];
+  const mantraColor = MANTRA_COLORS[Yijing.yijing_mantraName(hexIndex)];
 
   // Determine border color based on selection and symmetry filters
   let borderColor;
@@ -54,11 +56,11 @@ const HexagramCard = ({
   };
 
   return (
-    <div className="relative"> {/* Wrapper for better glow control */}
+    <div className="relative w-full"> {/* Wrapper for better glow control */}
       <button
         onClick={() => onClick(hexIndex)}
         className={cn(
-          "relative p-3 rounded-lg border-2 transition-all aspect-square w-full",
+          "relative rounded-lg border-2 transition-all aspect-square w-full",
           "bg-linear-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900",
           "hover:scale-105 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
           selected && "shadow-lg shadow-yellow-400/50 scale-105 z-10",
@@ -101,12 +103,27 @@ const HexagramCard = ({
           {[3, 4, 5].map(pos => renderLine(pos))}
         </div>
 
-        {/* Symmetry indicator */}
+        {/* Color indicator */}
         <div
-          className="absolute top-1 right-1 w-2 h-2 rounded-full"
-          style={{ backgroundColor: symmetryColor }}
-          aria-hidden="true"
-        />
+          className="absolute top-1 right-1 flex flex-row space-x-1">
+          <div
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: symmetryColor }}
+            aria-hidden="true"
+          />
+          <div
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: mantraColor }}
+            aria-hidden="true"
+          />
+          <div
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: balancedColor }}
+            aria-hidden="true"
+          />
+
+
+        </div>
 
         {/* Neighbor relation badge */}
         {/* isNeighbor && neighborRelation && (

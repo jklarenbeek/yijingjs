@@ -1,5 +1,5 @@
-// tailwind.config.js
-
+// ./tailwind.config.js
+// tailwindcss version 4.1.16
 /** @type {import('tailwindcss').Config} */
 
 export default {
@@ -11,6 +11,18 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Balanced Color - organized by equal or unequal number of yang and yin lines
+        balanced: {
+          DEFAULT: '#10b981',     // emerald-500
+          unbalanced: '#ef4444',  // red-500
+        },
+
+        // Mantra Color - organized by depth to its root (heaven, fire, water, earth)
+        mantra: {
+          cosmic: '#8b5cf6',      // violet-500
+          karmic: '#f97316',      // orange-500
+          atomic: '#3b82f6',      // blue-500
+        },
         // Symmetry Group Colors - organized by visual hierarchy
         symmetry: {
           breath: '#ec4899',     // pink-500
