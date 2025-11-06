@@ -29,7 +29,7 @@ const HexagramCard = ({
     const renderLine = (position) => {
         const isYang = (hexIndex >> position) & 1;
         return (
-            <div key={position} className="w-full h-2 flex justify-center gap-1">
+            <div key={position} className="w-full h-3 flex justify-center gap-1"> {/* Increased h-2 to h-3 */}
                 {isYang ? (
                     <div className="w-full h-full bg-white rounded-sm" />
                 ) : (
@@ -46,7 +46,7 @@ const HexagramCard = ({
         <button
             onClick={() => onClick(hexIndex)}
             className={cn(
-                "relative p-2 rounded-lg border-2 transition-all",
+                "relative p-3 rounded-lg border-2 transition-all aspect-square", // Added aspect-square and increased padding
                 "bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900",
                 "hover:scale-105 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
                 selected && "border-yellow-400 shadow-lg shadow-yellow-400/50 scale-105 ring-2 ring-yellow-400",
@@ -66,7 +66,7 @@ const HexagramCard = ({
 
             {/* Upper trigram */}
             <div
-                className="space-y-0.5 mb-1 p-1 rounded"
+                className="space-y-1 mb-1 p-1 rounded" // Increased space-y-0.5 to space-y-1
                 style={{ backgroundColor: `color-mix(in srgb, ${upperColor} 20%, transparent)` }}
             >
                 {[0, 1, 2].map(pos => renderLine(pos))}
@@ -79,7 +79,7 @@ const HexagramCard = ({
 
             {/* Lower trigram */}
             <div
-                className="space-y-0.5 mt-1 p-1 rounded"
+                className="space-y-1 mt-1 p-1 rounded" // Increased space-y-0.5 to space-y-1
                 style={{ backgroundColor: `color-mix(in srgb, ${lowerColor} 20%, transparent)` }}
             >
                 {[3, 4, 5].map(pos => renderLine(pos))}

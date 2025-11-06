@@ -7,11 +7,13 @@ import * as Yijing from '@yijingjs/core';
 import HexagramGrid from './components/HexagramGrid';
 import SymmetryGroupsPanel from './components/SymmetryGroupsPanel';
 import InspectorPanel from './components/InspectorPanel';
+import SequenceDropdown from './components/SequenceDropdown'; // Add this import
 
 function App() {
   const [selectedHex, setSelectedHex] = useState(null);
   const [filterSymmetry, setFilterSymmetry] = useState([]);
   const [darkMode, setDarkMode] = useState(true);
+  const [currentSequence, setCurrentSequence] = useState('bagua'); // Add sequence state
 
   const symmetryGroups = useMemo(() => Yijing.yijing_symmetryGroups(), []);
 
@@ -93,11 +95,21 @@ function App() {
       <div className="flex flex-col lg:flex-row gap-4 p-4 max-w-screen-2xl mx-auto">
         {/* Main Panel */}
         <div className="flex-1 min-w-0">
-          <SymmetryGroupsPanel
-            groups={symmetryGroups}
-            filterSymmetry={filterSymmetry}
-            onFilterToggle={handleFilterToggle}
-          />
+          <div className="flex flex-col md:flex-row gap-4 mb-4">
+            <div className="flex-1">
+              <SequenceDropdown
+                currentSequence={currentSequence}
+                onSequenceChange={setCurrentSequence}
+              />
+            </div>
+            <div className="flex-1">
+              <SymmetryGroupsPanel
+                groups={symmetryGroups}
+                filterSymmetry={filterSymmetry}
+                onFilterToggle={handleFilterToggle}
+              />
+            </div>
+          </div>
 
           <HexagramGrid
             selectedHex={selectedHex}
@@ -105,6 +117,7 @@ function App() {
             neighbors={neighbors}
             symmetryData={symmetryGroups}
             filterSymmetry={filterSymmetry}
+            currentSequence={currentSequence} // Pass the current sequence
           />
         </div>
 

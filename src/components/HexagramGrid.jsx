@@ -9,13 +9,14 @@ const HexagramGrid = ({
     onSelectHex,
     neighbors,
     symmetryData,
-    filterSymmetry
+    filterSymmetry,
+    currentSequence
 }) => {
-    const sequence = getHexagramSequences()["bagua"];
+    const sequence = getHexagramSequences()[currentSequence]; // Use the current sequence
 
     return (
         <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 transition-colors">
-            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3"> {/* Increased gap from gap-2 to gap-3 */}
                 {sequence.values.map((i) => {
                     const isNeighbor = neighbors.includes(i);
                     const symmetryGroup = Yijing.yijing_symmetryName(i);
