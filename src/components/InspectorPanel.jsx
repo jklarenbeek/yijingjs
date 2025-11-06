@@ -42,7 +42,7 @@ const InspectorPanel = ({ hexIndex, neighbors, onSelectHex }) => {
         <section>
           <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Mantra</h3>
           <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: SYMMETRY_COLORS[symmetry] }} />
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: MANTRA_COLORS[mantra] }} />
             <span className="capitalize font-medium">{balanced} {mantra}</span>
           </div>
         </section>
@@ -50,7 +50,7 @@ const InspectorPanel = ({ hexIndex, neighbors, onSelectHex }) => {
         <section>
           <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Symmetry</h3>
           <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: MANTRA_COLORS[mantra] }} />
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: SYMMETRY_COLORS[symmetry] }} />
             <span className="capitalize font-medium">{symmetry}</span>
           </div>
         </section>

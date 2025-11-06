@@ -25,6 +25,7 @@ const HexagramCard = ({
 
   const transitionType = Wuxing.wuxing_transitionType(upperWuxing, lowerWuxing);
   const transitionSymbol = Wuxing.wuxing_transitionSymbolChar(transitionType);
+  const transitionName = transitionType.charAt(0).toUpperCase() + transitionType.slice(1);
 
   const symmetryColor = SYMMETRY_COLORS[symmetryGroup];
   const balancedColor = BALANCED_COLORS[Yijing.yijing_balancedName(hexIndex)];
@@ -35,7 +36,7 @@ const HexagramCard = ({
   const balancedName = Yijing.yijing_balancedName(hexIndex);
   const mantraName = Yijing.yijing_mantraName(hexIndex);
 
-  // ---- border logic ----
+  // ---- border logic (unchanged) ----
   let borderColor;
   if (selected) {
     borderColor = '#fbbf24';
@@ -66,7 +67,7 @@ const HexagramCard = ({
       <button
         onClick={() => onClick(hexIndex)}
         className={cn(
-          "relative rounded-lg border-2 transition-all aspect-square w-full",
+          "relative rounded-lg border-2 transition-all w-full",
           "bg-linear-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900",
           "hover:scale-105 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
           selected && "shadow-lg shadow-yellow-400/50 scale-105 z-10",
@@ -82,57 +83,74 @@ const HexagramCard = ({
         }}
         aria-label={`Hexagram ${hexIndex}`}
       >
-        {/* Hex number */}
-        <div className="flex justify-start px-2 pt-1">
+        {/* Header row */}
+        <div className="flex items-center justify-between ml-1 mr-1">
+          {/* Hex number */}
           <div className="text-xs font-mono text-gray-500 dark:text-gray-400">
             {hexIndex}
+          </div>
+
+          {/* Dots with tooltips */}
+          <div className="flex items-center gap-1">
+            <Tooltip title={`Symmetry: ${symmetryName}`} className="capitalize">
+              <div
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: symmetryColor }}
+                aria-hidden="true"
+              />
+            </Tooltip>
+
+            <Tooltip title={`Mantra: ${mantraName}`} className="capitalize">
+              <div
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: mantraColor }}
+                aria-hidden="true"
+              />
+            </Tooltip>
+
+            <Tooltip title={`Tao: ${balancedName}`} className="capitalize">
+              <div
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: balancedColor }}
+                aria-hidden="true"
+              />
+            </Tooltip>
           </div>
         </div>
 
         {/* Upper trigram */}
         <div
-          className="space-y-1 p-1 rounded"
+          className="space-y-1 p-1 rounded relative"
           style={{ backgroundColor: `color-mix(in srgb, ${upperColor} 20%, transparent)` }}
         >
           {[0, 1, 2].map(renderLine)}
         </div>
 
-        {/* Transition symbol */}
-        <div className="text-center text-sm text-gray-700 dark:text-gray-300">
-          {transitionSymbol}
-        </div>
-
         {/* Lower trigram */}
         <div
-          className="space-y-1 p-1 rounded"
+          className="space-y-1 p-1 rounded relative"
           style={{ backgroundColor: `color-mix(in srgb, ${lowerColor} 20%, transparent)` }}
         >
           {[3, 4, 5].map(renderLine)}
         </div>
 
-        <div className="absolute top-1 right-1 flex flex-row space-x-1">
-          <Tooltip title={`Symmetry: ${symmetryName}`} className="capitalize">
+        {/* Floating transition symbol */}
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center pointer-events-none">
+          <Tooltip title={transitionName} className="capitalize">
             <div
-              className="w-2 h-2 rounded-full"
-              style={{ backgroundColor: symmetryColor }}
-              aria-hidden="true"
-            />
-          </Tooltip>
-
-          <Tooltip title={`Mantra: ${mantraName}`} className="capitalize">
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ backgroundColor: mantraColor }}
-              aria-hidden="true"
-            />
-          </Tooltip>
-
-          <Tooltip title={`Tao: ${balancedName}`} className="capitalize">
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ backgroundColor: balancedColor }}
-              aria-hidden="true"
-            />
+              className={cn(
+                "pointer-events-auto w-8 h-8 rounded-full border-2 flex items-center justify-center",
+                "text-lg font-bold bg-white dark:bg-gray-900 shadow-md",
+                "opacity-40 hover:opacity-100 transition-opacity duration-200",
+                "group"
+              )}
+              style={{
+                borderColor: upperColor,
+                color: upperColor,
+              }}
+            >
+              {transitionSymbol}
+            </div>
           </Tooltip>
         </div>
 
