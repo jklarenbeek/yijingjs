@@ -41,6 +41,10 @@ export function getHexagramSequences() {
             "title": "Binary Sequence",
             "values": Array.from({ length: 64 }, (_, i) => i)
         },
+        "gray": {
+            "title": "Gray Code Sequence",
+            "values": Yijing.YIJING_GRAYCODE_SEQUENCE
+        },
         "kingwen": {
             "title": "King Wen Sequence",
             "values": Yijing.YIJING_KINGWEN_SEQUENCE
@@ -56,7 +60,7 @@ export function getHexagramSequences() {
         "later": {
             "title": "Later Heaven Sequence",
             "values": Yijing.generateHexagrams(Bagua.BAGUA_LATER_HEAVEN_SEQUENCE),
-        }
+        },
     }
     return seq;
 }
