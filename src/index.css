@@ -1,66 +1,40 @@
-/* globals.css */
 @import "tailwindcss";
 
-@tailwind utilities;
+/* Remove @tailwind utilities - not needed with @import "tailwindcss" */
 
 :root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-
-  /* Symmetry Group Colors */
-  --symmetry-breath: #ec4899;
-  --symmetry-mother: #8b5cf6;
-  --symmetry-direction: #3b82f6;
-  --symmetry-beginning: #eab308;
-  --symmetry-principle: #f97316;
-  --symmetry-titan: #ef4444;
-  --symmetry-gigante: #10b981;
-
-  /* Wuxing Element Colors */
-  --wuxing-earth: #a16207;
-  --wuxing-water: #0284c7;
-  --wuxing-wood: #16a34a;
-  --wuxing-fire: #dc2626;
-  --wuxing-metal: #6b7280;
-
-  /* Base Theme Colors - Light Mode */
-  --background: #f3f4f6;
-  --foreground: #111827;
-  --card: #ffffff;
-  --card-foreground: #111827;
-  --border: #e5e7eb;
-  --muted: #f9fafb;
-  --muted-foreground: #6b7280;
+  /* Custom properties for theme switching */
+  --background: 243 244 246; /* gray-100 */
+  --foreground: 17 24 39;    /* gray-900 */
+  --card: 255 255 255;       /* white */
+  --card-foreground: 17 24 39;
+  --border: 229 231 235;     /* gray-200 */
+  --muted: 249 250 251;      /* gray-50 */
+  --muted-foreground: 107 114 128; /* gray-500 */
 }
 
 .dark {
-  /* Base Theme Colors - Dark Mode */
-  --background: #111827;
-  --foreground: #f9fafb;
-  --card: #1f2937;
-  --card-foreground: #f9fafb;
-  --border: #374151;
-  --muted: #1f2937;
-  --muted-foreground: #9ca3af;
+  --background: 17 24 39;    /* gray-900 */
+  --foreground: 249 250 251; /* gray-50 */
+  --card: 31 41 55;          /* gray-800 */
+  --card-foreground: 249 250 251;
+  --border: 55 65 81;        /* gray-700 */
+  --muted: 31 41 55;         /* gray-800 */
+  --muted-foreground: 156 163 175; /* gray-400 */
 }
 
 * {
   box-sizing: border-box;
-  padding: 0;
-  margin: 0;
 }
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -73,151 +47,29 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--muted);
+  @apply bg-gray-50 dark:bg-gray-800;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--muted-foreground);
-  border-radius: 5px;
+  @apply bg-gray-400 dark:bg-gray-600 rounded;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--foreground);
-}
-
-/* Custom Utility Classes */
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  .symmetry-breath {
-    color: var(--symmetry-breath);
-  }
-
-  .symmetry-mother {
-    color: var(--symmetry-mother);
-  }
-
-  .symmetry-direction {
-    color: var(--symmetry-direction);
-  }
-
-  .symmetry-beginning {
-    color: var(--symmetry-beginning);
-  }
-
-  .symmetry-principle {
-    color: var(--symmetry-principle);
-  }
-
-  .symmetry-titan {
-    color: var(--symmetry-titan);
-  }
-
-  .symmetry-gigante {
-    color: var(--symmetry-gigante);
-  }
-
-  .wuxing-earth {
-    color: var(--wuxing-earth);
-  }
-
-  .wuxing-water {
-    color: var(--wuxing-water);
-  }
-
-  .wuxing-wood {
-    color: var(--wuxing-wood);
-  }
-
-  .wuxing-fire {
-    color: var(--wuxing-fire);
-  }
-
-  .wuxing-metal {
-    color: var(--wuxing-metal);
-  }
-}
-
-/* Animation for hexagram transitions */
-@keyframes pulse-glow {
-
-  0%,
-  100% {
-    box-shadow: 0 0 10px currentColor;
-  }
-
-  50% {
-    box-shadow: 0 0 20px currentColor;
-  }
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+  @apply bg-gray-500 dark:bg-gray-500;
 }
 
 /* Focus visible styles for accessibility */
 *:focus-visible {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
+  @apply outline-2 outline-blue-500 outline-offset-2;
 }
 
 /* Print styles */
 @media print {
   body {
-    background: white;
-    color: black;
+    @apply bg-white text-black;
   }
 
   .no-print {
     display: none;
-  }
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-
-button:hover {
-  border-color: #646cff;
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-/* Button focus states */
-button:focus-visible {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: #747bff;
-  }
-
-  button {
-    background-color: #f9f9f9;
   }
 }

@@ -1,14 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import * as Yijing from '@yijingjs/core';
-import * as Wuxing from '@yijingjs/wuxing';
-import * as Bagua from '@yijingjs/bagua';
 
 import HexagramGrid from './components/HexagramGrid';
 import SymmetryGroupsPanel from './components/SymmetryGroupsPanel';
 import InspectorPanel from './components/InspectorPanel';
-
-import './App.css'
 
 function App() {
   const [selectedHex, setSelectedHex] = useState(null);
@@ -67,24 +63,34 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedHex]);
 
+  // Apply dark mode to document
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
+
   return (
-    <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'}`}>
+    <div className="min-h-screen bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white transition-colors">
       {/* Header */}
-      <header className="bg-gray-800 border-b border-gray-700 px-6 py-4">
-        <div className="flex items-center justify-between">
+      <header className="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 px-6 py-4 transition-colors">
+        <div className="flex items-center justify-between max-w-screen-2xl mx-auto">
           <h1 className="text-2xl font-bold">Yijing Explorer</h1>
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors"
+            className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
+            aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
         </div>
       </header>
 
-      <div className="flex flex-col lg:flex-row gap-4 p-4">
+      <div className="flex flex-col lg:flex-row gap-4 p-4 max-w-screen-2xl mx-auto">
         {/* Main Panel */}
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <SymmetryGroupsPanel
             groups={symmetryGroups}
             filterSymmetry={filterSymmetry}
@@ -101,7 +107,7 @@ function App() {
         </div>
 
         {/* Inspector Panel */}
-        <div className="lg:w-96">
+        <div className="lg:w-96 lg:shrink-0">
           <InspectorPanel
             hexIndex={selectedHex}
             neighbors={neighbors}
@@ -110,7 +116,7 @@ function App() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-800 border-t border-gray-700 px-6 py-4 mt-8 text-center text-sm text-gray-400">
+      <footer className="bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700 px-6 py-4 mt-8 text-center text-sm text-gray-500 dark:text-gray-400 transition-colors">
         <p>Use arrow keys to navigate • Click hexagrams to explore relationships</p>
       </footer>
     </div>

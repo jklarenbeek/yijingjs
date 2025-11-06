@@ -10,32 +10,34 @@ const HexagramGrid = ({
     symmetryData,
     filterSymmetry
 }) => {
-
     const sequence = getHexagramSequences()["bagua"];
 
     return (
-        <div className="grid grid-cols-8 gap-2 p-4">
-            {sequence.values.map((i) => {
-                const isNeighbor = neighbors.includes(i);
-                const symmetryGroup = Yijing.yijing_symmetryName(i);
-                const isFiltered = filterSymmetry.length > 0 && !filterSymmetry.includes(symmetryGroup);
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 transition-colors">
+            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+                {sequence.values.map((i) => {
+                    const isNeighbor = neighbors.includes(i);
+                    const symmetryGroup = Yijing.yijing_symmetryName(i);
+                    const isFiltered = filterSymmetry.length > 0 && !filterSymmetry.includes(symmetryGroup);
 
-                return (
-                    <div
-                        key={i}
-                        className={isFiltered ? 'opacity-20' : 'opacity-100'}
-                    >
-                        <HexagramCard
-                            hexIndex={i}
-                            selected={selectedHex === i}
-                            onClick={onSelectHex}
-                            isNeighbor={isNeighbor}
-                            neighborRelation={selectedHex}
-                            symmetryGroup={symmetryGroup}
-                        />
-                    </div>
-                );
-            })}
+                    return (
+                        <div
+                            key={i}
+                            className={`transition-opacity duration-200 ${isFiltered ? 'opacity-20' : 'opacity-100'
+                                }`}
+                        >
+                            <HexagramCard
+                                hexIndex={i}
+                                selected={selectedHex === i}
+                                onClick={onSelectHex}
+                                isNeighbor={isNeighbor}
+                                neighborRelation={selectedHex}
+                                symmetryGroup={symmetryGroup}
+                            />
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 };
