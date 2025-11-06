@@ -1,0 +1,31 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: ./packages/core
+        run: npm ci
+
+      - name: Run tests
+        working-directory: ./packages/core
+        run: npm test
+
+      - name: Run coverage
+        working-directory: ./packages/core
+        run: npm run test:coverage

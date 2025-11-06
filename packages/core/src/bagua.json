@@ -1,0 +1,12 @@
+{
+  "nl": {
+    "kun": { "t":"Aarde", "l":"Het Ontvangende", "a":"is toegewijd", "f":"de moeder" },
+    "gen": { "t":"Berg", "l":"Het Stilhouden", "a":"is stilhouden", "f":"de jongste zoon" },
+    "kan": { "t":"Water", "l":"Het Onpeilbare", "a":"is gevaar", "f":"de middelste zoon" },
+    "xun": { "t":"Wind", "l":"Het Zachtmoedige", "a":"is indringen", "f":"de oudste dochter" },
+    "zhen": { "t":"Donder", "l":"Het Opwindende", "a":"is beweging, is de schok", "f":"de oudste zoon" },
+    "li": { "t":"Vuur", "l":"Het Zich-Hechtende", "a":"is verhelderend", "f":"de middelste dochter" },
+    "dui": { "t":"Meer", "l":"Het Blijmoedige", "a":"is vreugde", "f":"de jongste dochter" },
+    "qian": { "t":"Hemel", "l":"Het Scheppende", "a":"is sterk", "f":"de vader" }
+  }
+}

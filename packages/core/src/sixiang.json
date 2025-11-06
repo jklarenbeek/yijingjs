@@ -1,0 +1,8 @@
+{
+  "nl": {
+    "north": { "t": "Aarde" },
+    "east": { "t": "Water" },
+    "west": { "t": "Vuur" },
+    "south": { "t": "Lucht" }
+  }
+}

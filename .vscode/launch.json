@@ -1,25 +1,31 @@
 {
-	"version": "0.2.0",
-	"configurations": [
-	    {
-                "name": "Debug Chrome",
-                "type": "chrome",
-                "request": "launch",
-                "webRoot": "${workspaceRoot}/public",
-                "url": "http://localhost:10001",
-                "port": 9222,
-                "userDataDir": "${workspaceRoot}/.vscode/chrome",
-                "trace": true,
-                "breakOnLoad": true,
-                "smartStep": true,
-                "showAsyncStacks": true,
-                "skipFiles": [
-                    "node_modules/**"
-                ],
-                "sourceMaps": true,
-                "sourceMapPathOverrides": {
-                    "*": "${webRoot}/*"
-                },
-            }
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Vite Dev Server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Tests",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "test"],
+      "cwd": "${workspaceFolder}/packages/yijing-core",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Debug Chrome",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/src",
+      "sourceMaps": true
+    }
+  ]
 }

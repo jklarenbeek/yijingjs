@@ -1,0 +1,14 @@
+{
+  "nl": {
+    "earth": { "t": "Aarde" },
+    "water": { "t": "Water" },
+    "wood": { "t": "Hout" },
+    "fire": { "t": "Vuur" },
+    "metal": { "t": "Metaal" },
+    "neutral": { "t": "Neutraal" },
+    "creates": { "t": "Creeert" },
+    "destroys": { "t": "Vernietigd" },
+    "weakens": { "t": "Verzwakt" },
+    "insults": { "t": "Beledigd" }
+  }
+}

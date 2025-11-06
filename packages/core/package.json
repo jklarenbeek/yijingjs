@@ -1,0 +1,45 @@
+{
+  "name": "@yijingjs/core",
+  "version": "1.0.0",
+  "description": "Core library for Yijing (I Ching) hexagram calculations and transformations",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./wuxing": "./src/wuxing.js",
+    "./bagua": "./src/bagua.js",
+    "./yijing": "./src/yijing.js"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "npm test"
+  },
+  "keywords": [
+    "yijing",
+    "iching",
+    "hexagram",
+    "wuxing",
+    "bagua",
+    "divination",
+    "chinese-philosophy"
+  ],
+  "author": "Joham",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jklarenbeek/yijingjs.git",
+    "directory": "packages/core"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "devDependencies": {
+    "vitest": "^1.0.0",
+    "@vitest/ui": "^1.0.0"
+  }
+}

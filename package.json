@@ -1,23 +1,48 @@
 {
-  "name": "yijingjs",
-  "version": "1.0.0",
-  "description": "An exploration into the world of the yijing and its mysterious patterns.",
-  "main": "./public/index.js",
-  "files": [
-    "public"
-  ],
+  "name": "yijing-explorer",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "start": "rollup -cw",
-    "build": "rollup -c"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "test": "npm run test --workspace=packages/core",
+    "test:watch": "npm run test:watch --workspace=packages/core",
+    "test:ui": "npm run test:ui --workspace=packages/core",
+    "deploy": "npm run build && npx gh-pages -d dist"
   },
-  "author": "jklarenbeek@gmail.com",
-  "license": "ISC",
-  "devDependencies": {
-    "rollup-plugin-node-resolve": "^4.2.3",
-    "rollup-plugin-serve": "^1.0.1"
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
-    "hyperapp": "^1.2.9",
-    "hyperapp-svg": "^1.0.0"
+    "@yijingjs/core": "file:./packages/core",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.548.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.1.16",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react-swc": "^4.1.0",
+    "@vitest/ui": "^4.0.5",
+    "eslint": "^9.36.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.22",
+    "gh-pages": "^6.3.0",
+    "globals": "^16.4.0",
+    "jsdom": "^27.0.1",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^4.1.16",
+    "@tailwindcss/vite": "^4.1.16",
+    "vite": "^7.1.7",
+    "vitest": "^4.0.5"
   }
 }
