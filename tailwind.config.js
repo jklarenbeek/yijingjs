@@ -1,3 +1,5 @@
+// tailwind.config.js
+
 /** @type {import('tailwindcss').Config} */
 
 export default {
@@ -53,9 +55,11 @@ export default {
                 'glow-sm': '0 0 10px currentColor',
                 'glow-md': '0 0 20px currentColor',
                 'glow-lg': '0 0 30px currentColor',
+                'glow-xl': '0 0 40px currentColor', // Added extra large glow
             },
             animation: {
                 'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+                'pulse-glow-slow': 'pulse-glow 3s ease-in-out infinite', // Added slower variant
             },
             keyframes: {
                 'pulse-glow': {
@@ -66,6 +70,10 @@ export default {
                         boxShadow: '0 0 20px currentColor',
                     },
                 },
+            },
+            // Add backdrop-filter utilities if not already present
+            backdropBlur: {
+                xs: '2px',
             },
         },
     },

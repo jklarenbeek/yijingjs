@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-/* Remove @tailwind utilities - not needed with @import "tailwindcss" */
-
 :root {
   /* Custom properties for theme switching */
   --background: 243 244 246; /* gray-100 */
@@ -61,6 +59,34 @@ body {
 /* Focus visible styles for accessibility */
 *:focus-visible {
   @apply outline-2 outline-blue-500 outline-offset-2;
+}
+
+/* Enhanced glow effects for hexagram cards */
+.glow-transition {
+  transition: box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+/* Ensure the glow effect works well with the card layout */
+.hexagram-glow {
+  position: relative;
+  z-index: 1;
+}
+
+.hexagram-glow::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.hexagram-glow.glow-active::before {
+  opacity: 0.6;
 }
 
 /* Print styles */

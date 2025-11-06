@@ -13,7 +13,7 @@ function App() {
   const [selectedHex, setSelectedHex] = useState(null);
   const [filterSymmetry, setFilterSymmetry] = useState([]);
   const [darkMode, setDarkMode] = useState(true);
-  const [currentSequence, setCurrentSequence] = useState('bagua'); // Add sequence state
+  const [currentSequence, setCurrentSequence] = useState('bagua');
 
   const symmetryGroups = useMemo(() => Yijing.yijing_symmetryGroups(), []);
 
@@ -21,6 +21,11 @@ function App() {
     if (selectedHex === null) return [];
     return Yijing.yijing_neighbors(selectedHex);
   }, [selectedHex]);
+
+  // Toggle selection - click same hexagram to deselect
+  const handleSelectHex = (hexIndex) => {
+    setSelectedHex(prev => prev === hexIndex ? null : hexIndex);
+  };
 
   const handleFilterToggle = (symmetry) => {
     setFilterSymmetry(prev => {
@@ -113,11 +118,11 @@ function App() {
 
           <HexagramGrid
             selectedHex={selectedHex}
-            onSelectHex={setSelectedHex}
+            onSelectHex={handleSelectHex}  // Use the new toggle function
             neighbors={neighbors}
             symmetryData={symmetryGroups}
             filterSymmetry={filterSymmetry}
-            currentSequence={currentSequence} // Pass the current sequence
+            currentSequence={currentSequence}
           />
         </div>
 
