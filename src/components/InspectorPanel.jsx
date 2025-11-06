@@ -3,7 +3,7 @@ import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
 import HexagramCard from './HexagramCard';
-import { SYMMETRY_COLORS, toBinary } from '../globals.js';
+import { MANTRA_COLORS, SYMMETRY_COLORS, toBinary } from '../globals.js';
 
 const InspectorPanel = ({ hexIndex, neighbors, onSelectHex }) => {
   if (hexIndex === null) {
@@ -23,7 +23,7 @@ const InspectorPanel = ({ hexIndex, neighbors, onSelectHex }) => {
   const mantra = Yijing.yijing_mantraName(hexIndex);
   const lineCount = Yijing.yijing_lineCount(hexIndex);
   const binary = toBinary(hexIndex);
-  const transitionType = Wuxing.wuxing_transitionType(lowerWuxing, upperWuxing);
+  const transitionType = Wuxing.wuxing_transitionType(upperWuxing, lowerWuxing);
   const orbit = Yijing.yijing_orbitClass(hexIndex);
   const centerChain = Yijing.yijing_getCenterChain(hexIndex);
 
@@ -40,18 +40,18 @@ const InspectorPanel = ({ hexIndex, neighbors, onSelectHex }) => {
 
         {/* ---------- BASIC INFO ---------- */}
         <section>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Symmetry</h3>
-          <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: SYMMETRY_COLORS[symmetry] }} />
-            <span className="capitalize font-medium">{symmetry}</span>
-          </div>
-        </section>
-
-        <section>
           <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Mantra</h3>
           <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
             <div className="w-4 h-4 rounded-full" style={{ backgroundColor: SYMMETRY_COLORS[symmetry] }} />
             <span className="capitalize font-medium">{balanced} {mantra}</span>
+          </div>
+        </section>
+
+        <section>
+          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Symmetry</h3>
+          <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: MANTRA_COLORS[mantra] }} />
+            <span className="capitalize font-medium">{symmetry}</span>
           </div>
         </section>
 
@@ -61,27 +61,43 @@ const InspectorPanel = ({ hexIndex, neighbors, onSelectHex }) => {
         </section>
 
         <section>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Trigrams</h3>
-          <div className="space-y-2">
-            {[{ label: 'Upper', trigram: upper, wuxing: upperWuxing }, { label: 'Lower', trigram: lower, wuxing: lowerWuxing }].map(
-              ({ label, trigram, wuxing }) => (
-                <div key={label} className="flex justify-between items-center p-3 bg-gray-100 dark:bg-gray-700 rounded">
-                  <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{label} ({trigram})</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">{Wuxing.wuxing_toEmojiChar(wuxing)}</span>
-                    <span className="capitalize text-sm">{wuxing}</span>
-                  </div>
-                </div>
-              )
-            )}
-          </div>
-        </section>
+          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
+            Trigram Flow
+          </h3>
 
-        <section>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Transition</h3>
-          <div className="flex items-center gap-2 p-3 bg-gray-100 dark:bg-gray-700 rounded">
-            <span className="text-lg">{Wuxing.wuxing_transitionSymbolChar(transitionType)}</span>
-            <span className="capitalize font-medium">{transitionType}</span>
+          <div className="flex items-center justify-center gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+            {/* Upper Trigram */}
+            <div className="flex flex-col items-center">
+              <span className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Upper</span>
+              <div className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded">
+                <span className="text-lg">{Wuxing.wuxing_toEmojiChar(upperWuxing)}</span>
+                <span className="capitalize text-sm font-medium">{upperWuxing}</span>
+                <span className="text-xs text-gray-500 ml-1">({upper})</span>
+              </div>
+            </div>
+
+            {/* Transition Arrow + Symbol */}
+            <div className="flex flex-col items-center">
+              <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">Transition</span>
+              <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 rounded">
+                <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
+                  {Wuxing.wuxing_transitionSymbolChar(transitionType)}
+                </span>
+                <span className="capitalize text-sm font-medium text-blue-700 dark:text-blue-300">
+                  {transitionType}
+                </span>
+              </div>
+            </div>
+
+            {/* Lower Trigram */}
+            <div className="flex flex-col items-center">
+              <span className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Lower</span>
+              <div className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded">
+                <span className="text-lg">{Wuxing.wuxing_toEmojiChar(lowerWuxing)}</span>
+                <span className="capitalize text-sm font-medium">{lowerWuxing}</span>
+                <span className="text-xs text-gray-500 ml-1">({lower})</span>
+              </div>
+            </div>
           </div>
         </section>
 

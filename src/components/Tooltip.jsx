@@ -2,7 +2,12 @@
 import { useState } from 'react';
 import { cn } from '../globals.js';
 
-export const Tooltip = ({ children, title, placement = 'top' }) => {
+export const Tooltip = ({
+  children,
+  title,
+  placement = 'top',
+  className,
+}) => {
   const [visible, setVisible] = useState(false);
 
   const placementClasses = {
@@ -26,7 +31,8 @@ export const Tooltip = ({ children, title, placement = 'top' }) => {
         <div
           className={cn(
             'absolute z-50 whitespace-nowrap rounded-md bg-gray-800 px-2 py-1 text-xs text-white shadow-lg transition-opacity',
-            placementClasses[placement]
+            placementClasses[placement],
+            className
           )}
         >
           {title}
