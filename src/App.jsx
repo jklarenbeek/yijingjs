@@ -1,3 +1,5 @@
+// src/App.jsx
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import * as Yijing from '@yijingjs/core';

@@ -1,4 +1,5 @@
-import React from 'react';
+// src/components/HexagramGrid.jsx
+
 import * as Yijing from '@yijingjs/core';
 import HexagramCard from './HexagramCard';
 import { getHexagramSequences } from '../globals';

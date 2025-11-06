@@ -1,4 +1,4 @@
-// wuxing.js
+// ./packages/core/src/wuxing.js
 
 export const SIXIANG_NORTH = "north"; // ⚏ Lao Yin (from yin)
 export const SIXIANG_EAST = "east"; // ⚎ Shao Yang (from yin)

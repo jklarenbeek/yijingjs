@@ -1,4 +1,5 @@
-import React from 'react';
+// src/components/InspectorPanel.jsx
+
 import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';

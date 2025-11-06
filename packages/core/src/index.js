@@ -1,4 +1,5 @@
-// Main entry point - exports everything
+// ./packages/core/src/index.js
+
 export * from './wuxing.js';
 export * from './bagua.js';
 export * from './yijing.js';

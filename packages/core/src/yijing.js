@@ -1,7 +1,4 @@
-// yijing.js
-
-import * as w from './wuxing.js';
-import * as b from './bagua.js';
+// ./packages/core/src/yijing.js
 
 //#region Sixiang Layers
 

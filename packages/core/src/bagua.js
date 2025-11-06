@@ -1,4 +1,4 @@
-// bagua.js
+// ./packages/core/src/bagua.js
 
 import * as w from './wuxing.js';
 

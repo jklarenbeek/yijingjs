@@ -1,4 +1,4 @@
-import React from 'react';
+// src/components/SymmetryGroupsPanel.jsx
 
 import {
     YIJING_BREATH,
