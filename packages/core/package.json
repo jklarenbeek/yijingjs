@@ -37,9 +37,5 @@
     "src",
     "README.md",
     "LICENSE"
-  ],
-  "devDependencies": {
-    "vitest": "^1.0.0",
-    "@vitest/ui": "^1.0.0"
-  }
+  ]
 }
