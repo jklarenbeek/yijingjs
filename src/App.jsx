@@ -15,6 +15,8 @@ import { getAllSequences } from './utils/sequenceStorage';
 function App() {
   const [selectedHex, setSelectedHex] = useState(null);
   const [filterSymmetry, setFilterSymmetry] = useState([]);
+  const [filterMantra, setFilterMantra] = useState([]);
+  const [filterBalance, setFilterBalance] = useState([]);
   const [darkMode, setDarkMode] = useState(true);
   const [currentSequence, setCurrentSequence] = useState('bagua');
   const [editMode, setEditMode] = useState(false);
@@ -33,13 +35,34 @@ function App() {
     setSelectedHex(prev => prev === hexIndex ? null : hexIndex);
   };
 
-  const handleFilterToggle = (symmetry) => {
+  const handleSymmetryToggle = (key) => {
     setFilterSymmetry(prev => {
-      if (prev.includes(symmetry)) {
-        return prev.filter(s => s !== symmetry);
-      } else {
-        return [...prev, symmetry];
+      let newFilter = prev.includes(key) ? prev.filter(s => s !== key) : [...prev, key];
+      if (newFilter.length > 0) {
+        setFilterMantra([]);
+        setFilterBalance([]);
       }
+      return newFilter;
+    });
+  };
+
+  const handleMantraToggle = (key) => {
+    setFilterMantra(prev => {
+      let newFilter = prev.includes(key) ? prev.filter(s => s !== key) : [...prev, key];
+      if (newFilter.length > 0) {
+        setFilterSymmetry([]);
+      }
+      return newFilter;
+    });
+  };
+
+  const handleBalanceToggle = (key) => {
+    setFilterBalance(prev => {
+      let newFilter = prev.includes(key) ? prev.filter(s => s !== key) : [...prev, key];
+      if (newFilter.length > 0) {
+        setFilterSymmetry([]);
+      }
+      return newFilter;
     });
   };
 
@@ -129,7 +152,7 @@ function App() {
               className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
               aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             >
-              {darkMode ? <Sun className="w-5 h-5" /> : <Moon class ingenuity="w-5 h-5" />}
+              {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -146,6 +169,8 @@ function App() {
                 selectedHex={selectedHex}
                 onSelectHex={handleSelectHex}
                 filterSymmetry={filterSymmetry}
+                filterMantra={filterMantra}
+                filterBalance={filterBalance}
               />
             </div>
           ) : (
@@ -155,6 +180,8 @@ function App() {
                 onSelectHex={handleSelectHex}
                 neighbors={neighbors}
                 filterSymmetry={filterSymmetry}
+                filterMantra={filterMantra}
+                filterBalance={filterBalance}
                 currentSequence={currentSequence}
                 customSequences={customSequences}
               />
@@ -216,7 +243,11 @@ function App() {
               {activeTab === 'filters' && (
                 <FiltersPanel
                   filterSymmetry={filterSymmetry}
-                  onFilterToggle={handleFilterToggle}
+                  onSymmetryToggle={handleSymmetryToggle}
+                  filterMantra={filterMantra}
+                  onMantraToggle={handleMantraToggle}
+                  filterBalance={filterBalance}
+                  onBalanceToggle={handleBalanceToggle}
                   placedHexagrams={editMode ? editStage.filter(h => h !== null) : []}
                   onSelectHex={handleSelectHex}
                   setEditStage={setEditStage}

@@ -9,6 +9,8 @@ const HexagramGrid = ({
   onSelectHex,
   neighbors,
   filterSymmetry,
+  filterMantra,
+  filterBalance,
   currentSequence,
   customSequences = []
 }) => {
@@ -31,7 +33,9 @@ const HexagramGrid = ({
             }
           }
           const isFilteredBySymmetry = filterSymmetry.length > 0 && !filterSymmetry.includes(symmetryGroup);
-          if (isFilteredBySymmetry) {
+          const isFilteredByMantra = filterMantra.length > 0 && !filterMantra.includes(Yijing.yijing_mantraName(i));
+          const isFilteredByBalance = filterBalance.length > 0 && !filterBalance.includes(Yijing.yijing_balancedName(i));
+          if (isFilteredBySymmetry || isFilteredByMantra || isFilteredByBalance) {
             opacity = 'opacity-20';
           }
 

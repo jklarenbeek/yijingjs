@@ -10,6 +10,9 @@ const EditableHexagramGrid = ({
   selectedHex,
   onSelectHex,
   filterSymmetry,
+  filterMantra = [],
+  filterBalance = [],
+  neighbors = [],
 }) => {
   const handleDrop = (e, targetIndex) => {
     e.preventDefault();
@@ -85,43 +88,75 @@ const EditableHexagramGrid = ({
       >
         {editStage.map((hexIndex, i) => {
           const isEmpty = hexIndex === null;
-          return (
-            <div
-              key={i}
-              onDrop={(e) => handleDrop(e, i)}
-              onDragOver={handleDragOver}
-              className={cn(
-                "aspect-square rounded-lg border-2 border-dashed transition-all",
-                isEmpty
-                  ? "border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500"
-                  : "border-transparent"
-              )}
-            >
-              {hexIndex !== null ? (
-                <div
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, i)}
-                  onDoubleClick={() => handleDoubleClick(i)}
-                  onClick={() => onSelectHex(hexIndex)}
-                  className="cursor-move"
-                >
-                  <HexagramCard
-                    hexIndex={hexIndex}
-                    selected={selectedHex === hexIndex}
-                    onClick={() => { }}
-                    isNeighbor={false}
-                    symmetryGroup={Yijing.yijing_symmetryName(hexIndex)}
-                    filterSymmetry={filterSymmetry}
-                    inEditMode
-                  />
-                </div>
-              ) : (
+          if (isEmpty) {
+            return (
+              <div
+                key={i}
+                onDrop={(e) => handleDrop(e, i)}
+                onDragOver={handleDragOver}
+                className={cn(
+                  "aspect-square rounded-lg border-2 border-dashed transition-all",
+                  isEmpty
+                    ? "border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500"
+                    : "border-transparent"
+                )}
+              >
                 <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-600 text-xs">
                   Drop here
                 </div>
-              )}
-            </div>
-          );
+              </div>
+            );
+          } else {
+            let opacity = 'opacity-100';
+            if (selectedHex !== null) {
+              const isNeighbor = neighbors.includes(hexIndex);
+              if (!isNeighbor && selectedHex !== hexIndex) {
+                opacity = 'opacity-40';
+              }
+            }
+            const symmetryGroup = Yijing.yijing_symmetryName(hexIndex);
+            const isFilteredBySymmetry = filterSymmetry.length > 0 && !filterSymmetry.includes(symmetryGroup);
+            const isFilteredByMantra = filterMantra.length > 0 && !filterMantra.includes(Yijing.yijing_mantraName(hexIndex));
+            const isFilteredByBalance = filterBalance.length > 0 && !filterBalance.includes(Yijing.yijing_balancedName(hexIndex));
+            if (isFilteredBySymmetry || isFilteredByMantra || isFilteredByBalance) {
+              opacity = 'opacity-20';
+            }
+            return (
+              <div
+                key={i}
+                className={`transition-opacity duration-200 ${opacity}`}
+              >
+                <div
+                  onDrop={(e) => handleDrop(e, i)}
+                  onDragOver={handleDragOver}
+                  className={cn(
+                    "aspect-square rounded-lg border-2 border-dashed transition-all",
+                    isEmpty
+                      ? "border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500"
+                      : "border-transparent"
+                  )}
+                >
+                  <div
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, i)}
+                    onDoubleClick={() => handleDoubleClick(i)}
+                    onClick={() => onSelectHex(hexIndex)}
+                    className="cursor-move"
+                  >
+                    <HexagramCard
+                      hexIndex={hexIndex}
+                      selected={selectedHex === hexIndex}
+                      onClick={() => { }}
+                      isNeighbor={false}
+                      symmetryGroup={Yijing.yijing_symmetryName(hexIndex)}
+                      filterSymmetry={filterSymmetry}
+                      inEditMode
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          }
         })}
       </div>
     </div>
