@@ -373,7 +373,7 @@ export function yijing_symmetryName(hexagram) {
 }
 
 
-export function yijing_symmetryGroups() {
+function yijing_computeSymmetryGroups() {
   const breath = []; // balanced breath - 1
   const mothers = []; // balanced mothers - 3
   const directions = []; // balanced directions - 6
@@ -403,6 +403,8 @@ export function yijing_symmetryGroups() {
   }
   return { breath, mothers, directions, beginning, principles, titans, gigantes };
 }
+
+export const yijing_symmetryGroups = yijing_computeSymmetryGroups();
 
 //#endregion
 

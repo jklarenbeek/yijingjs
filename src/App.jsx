@@ -6,9 +6,8 @@ import { cn } from './globals.js';
 
 import HexagramGrid from './components/HexagramGrid';
 import EditableHexagramGrid from './components/EditableHexagramGrid';
-import HexagramPool from './components/HexagramPool';
-import SymmetryGroupsPanel from './components/SymmetryGroupsPanel';
 import InspectorPanel from './components/InspectorPanel';
+import FiltersPanel from './components/FiltersPanel.jsx';
 import SequenceDropdown from './components/SequenceDropdown';
 import SequenceManager from './components/SequenceManager';
 import { getAllSequences } from './utils/sequenceStorage';
@@ -24,8 +23,6 @@ function App() {
     const saved = localStorage.getItem('yijing_edit_stage');
     return saved ? JSON.parse(saved) : Array(64).fill(null);
   });
-
-  const symmetryGroups = useMemo(() => Yijing.yijing_symmetryGroups(), []);
 
   const neighbors = useMemo(() => {
     if (selectedHex === null) return [];
@@ -150,29 +147,13 @@ function App() {
                 onSelectHex={handleSelectHex}
                 filterSymmetry={filterSymmetry}
               />
-              <HexagramPool
-                placedHexagrams={editStage.filter(h => h !== null)}
-                filterSymmetry={filterSymmetry}
-                onSelectHex={handleSelectHex}
-                setEditStage={setEditStage}
-              />
             </div>
           ) : (
             <>
-              <div className="flex flex-col md:flex-row gap-4 mb-4">
-                <div className="flex-1">
-                  <SymmetryGroupsPanel
-                    groups={symmetryGroups}
-                    filterSymmetry={filterSymmetry}
-                    onFilterToggle={handleFilterToggle}
-                  />
-                </div>
-              </div>
               <HexagramGrid
                 selectedHex={selectedHex}
                 onSelectHex={handleSelectHex}
                 neighbors={neighbors}
-                symmetryData={symmetryGroups}
                 filterSymmetry={filterSymmetry}
                 currentSequence={currentSequence}
                 customSequences={customSequences}
@@ -233,14 +214,14 @@ function App() {
                 />
               )}
               {activeTab === 'filters' && (
-                <div className="p-4">
-                  <SymmetryGroupsPanel
-                    groups={symmetryGroups}
-                    filterSymmetry={filterSymmetry}
-                    onFilterToggle={handleFilterToggle}
-                  />
-                </div>
-              )}
+                <FiltersPanel
+                  filterSymmetry={filterSymmetry}
+                  onFilterToggle={handleFilterToggle}
+                  placedHexagrams={editMode ? editStage.filter(h => h !== null) : []}
+                  onSelectHex={handleSelectHex}
+                  setEditStage={setEditStage}
+                  editMode={editMode}
+                />)}
               {activeTab === 'manager' && editMode && (
                 <SequenceManager
                   editStage={editStage}

@@ -8,7 +8,6 @@ const HexagramGrid = ({
   selectedHex,
   onSelectHex,
   neighbors,
-  symmetryData,
   filterSymmetry,
   currentSequence,
   customSequences = []
