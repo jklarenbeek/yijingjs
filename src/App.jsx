@@ -18,7 +18,7 @@ function App() {
   const [filterMantra, setFilterMantra] = useState([]);
   const [filterBalance, setFilterBalance] = useState([]);
   const [darkMode, setDarkMode] = useState(true);
-  const [currentSequence, setCurrentSequence] = useState('bagua');
+  const [currentSequence, setCurrentSequence] = useState('kingwen');
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState('inspector');
   const [editStage, setEditStage] = useState(() => {
@@ -236,7 +236,6 @@ function App() {
               {activeTab === 'inspector' && (
                 <InspectorPanel
                   hexIndex={selectedHex}
-                  neighbors={neighbors}
                   onSelectHex={handleSelectHex}
                 />
               )}
