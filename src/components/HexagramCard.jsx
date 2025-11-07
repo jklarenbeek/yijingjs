@@ -3,9 +3,8 @@ import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
 
-import { BALANCED_COLORS, cn, MANTRA_COLORS } from '../globals.js';
-import { SYMMETRY_COLORS, getWuxingColor } from '../globals.js';
-import { Tooltip } from './Tooltip';               // <-- new import
+import { BALANCED_COLORS, cn, MANTRA_COLORS, SYMMETRY_COLORS, getWuxingColor } from '../globals.js';
+import { Tooltip } from './Tooltip';
 
 const HexagramCard = ({
   hexIndex,
@@ -15,6 +14,7 @@ const HexagramCard = ({
   neighborRelation,
   symmetryGroup,
   filterSymmetry,
+  inEditMode = false,
 }) => {
   const upper = Yijing.yijing_upper(hexIndex);
   const lower = Yijing.yijing_lower(hexIndex);
@@ -72,7 +72,8 @@ const HexagramCard = ({
           "hover:scale-105 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
           selected && "shadow-lg shadow-yellow-400/50 scale-105 z-10",
           isNeighbor && "glow-transition hexagram-glow z-20",
-          isNeighbor && "shadow-glow-lg"
+          isNeighbor && "shadow-glow-lg",
+          inEditMode && "cursor-move"
         )}
         style={{
           borderColor,

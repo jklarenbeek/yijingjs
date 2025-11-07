@@ -2,7 +2,7 @@
 
 import * as Yijing from '@yijingjs/core';
 import HexagramCard from './HexagramCard';
-import { getHexagramSequences } from '../globals';
+import { getHexagramSequences } from '../globals.js';
 
 const HexagramGrid = ({
   selectedHex,
@@ -10,28 +10,27 @@ const HexagramGrid = ({
   neighbors,
   symmetryData,
   filterSymmetry,
-  currentSequence
+  currentSequence,
+  customSequences = []
 }) => {
-  const sequence = getHexagramSequences()[currentSequence];
+  const baseSequences = { ...getHexagramSequences(), ...customSequences };
+  let sequence = baseSequences[currentSequence];
+
+  const values = sequence.values.filter(v => v !== null && v !== undefined);
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 transition-colors">
       <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
-        {sequence.values.map((i) => {
+        {values.map((i) => {
           const isNeighbor = neighbors.includes(i);
           const symmetryGroup = Yijing.yijing_symmetryName(i);
 
-          // Calculate opacity based on selection and symmetry filters
           let opacity = 'opacity-100';
-
           if (selectedHex !== null) {
-            // When a hexagram is selected, dim non-neighbors
             if (!isNeighbor && i !== selectedHex) {
               opacity = 'opacity-40';
             }
           }
-
-          // Apply symmetry filtering on top of neighbor dimming
           const isFilteredBySymmetry = filterSymmetry.length > 0 && !filterSymmetry.includes(symmetryGroup);
           if (isFilteredBySymmetry) {
             opacity = 'opacity-20';
@@ -49,11 +48,16 @@ const HexagramGrid = ({
                 isNeighbor={isNeighbor}
                 neighborRelation={selectedHex}
                 symmetryGroup={symmetryGroup}
-                filterSymmetry={filterSymmetry} // Pass filter to determine border color
+                filterSymmetry={filterSymmetry}
               />
             </div>
           );
         })}
+        {values.length < 64 && (
+          <div className="col-span-full text-center text-gray-500 dark:text-gray-400 text-sm py-4">
+            Incomplete sequence ({values.length}/64 hexagrams)
+          </div>
+        )}
       </div>
     </div>
   );
