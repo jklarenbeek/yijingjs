@@ -81,10 +81,10 @@ const FiltersPanel = ({
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
 
         {/* Tao Balance Filter */}
-        <section>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
+        <details open>
+          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
             Tao Balance
-          </h3>
+          </summary>
           <div className="flex flex-wrap gap-2">
             {balanceInfo.map(({ key, label, count }) => {
               const isActive = filterBalance.includes(key);
@@ -119,13 +119,13 @@ const FiltersPanel = ({
               );
             })}
           </div>
-        </section>
+        </details>
 
         {/* Mantra Levels Filter */}
-        <section>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
+        <details open>
+          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
             Mantra Levels
-          </h3>
+          </summary>
           <div className="flex flex-wrap gap-2">
             {mantraInfo.map(({ key, label, count }) => {
               const isActive = filterMantra.includes(key);
@@ -160,13 +160,13 @@ const FiltersPanel = ({
               );
             })}
           </div>
-        </section>
+        </details>
 
         {/* Symmetry Groups Filter */}
-        <section>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
+        <details open>
+          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
             Symmetry Groups
-          </h3>
+          </summary>
           <div className="flex flex-wrap gap-2">
             {symmetryGroups.map(({ key, label, count }) => {
               const isActive = filterSymmetry.includes(key);
@@ -201,7 +201,7 @@ const FiltersPanel = ({
               );
             })}
           </div>
-        </section>
+        </details>
 
         {/* Single Clear All Filters */}
         {hasActiveFilters && (

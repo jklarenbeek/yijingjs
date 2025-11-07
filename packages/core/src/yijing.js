@@ -240,7 +240,7 @@ export function yijing_relation(left = 0, right = 0) {
     return 'O';
   else if (yijing_reverse(left) === right) {
     if (yijing_lower(left) === yijing_upper(left))
-      return 'S';
+      return 'S'; // lower and upper trigram are equal
     else
       return 'M';
   }
@@ -268,6 +268,28 @@ export function yijing_relationEmojiChar(left = 0, right = 0) {
 
 //#region Yijing Hierarchy
 
+export const YIJING_BALANCED = "balanced"; // 20 hexagrams
+export const YIJING_UNBALANCED = "unbalanced"; // 44 hexagrams
+
+// Toa Balance - Divine equilibrium
+export function yijing_isBalanced(hexagram = 0) {
+  return (yijing_lineCount(hexagram) === 3);
+}
+
+export function yijing_balancedName(hexagram = 0) {
+  return yijing_isBalanced(hexagram) ? YIJING_BALANCED : YIJING_UNBALANCED;
+}
+
+export const YIJING_FOUNDATION = "foundation"; // 8 hexagrams
+
+export function yijing_isFoundation(hexagram) {
+  return yijing_upper(hexagram) === yijing_lower(hexagram);
+}
+
+export const YIJING_COSMIC = "cosmic"; // 4 hexagrams
+export const YIJING_KARMIC = "karmic"; // 12 hexagrams
+export const YIJING_ATOMIC = "atomic"; // 48 hexagrams
+
 // COSMIC (Primordial) - Chaos, Gaia, Erebus, Aether
 export function yijing_isCosmic(hexagram = 0) {
   return yijing_isRoot(hexagram);
@@ -283,22 +305,6 @@ export function yijing_isKarmic(hexagram = 0) {
 export function yijing_isAtomic(hexagram = 0) {
   return !(yijing_isCosmic(hexagram) || yijing_isKarmic(hexagram));
 }
-
-// OLYMPIAN (Balanced) - Divine equilibrium
-export function yijing_isBalanced(hexagram = 0) {
-  return (yijing_lineCount(hexagram) === 3);
-}
-
-export const YIJING_BALANCED = "balanced";
-export const YIJING_UNBALANCED = "unbalanced";
-
-export function yijing_balancedName(hexagram = 0) {
-  return yijing_isBalanced(hexagram) ? YIJING_BALANCED : YIJING_UNBALANCED;
-}
-
-export const YIJING_COSMIC = "cosmic";
-export const YIJING_KARMIC = "karmic";
-export const YIJING_ATOMIC = "atomic";
 
 export function yijing_mantraName(hexagram) {
   if (yijing_isCosmic(hexagram))
@@ -405,6 +411,144 @@ function yijing_computeSymmetryGroups() {
 }
 
 export const yijing_symmetryGroups = yijing_computeSymmetryGroups();
+
+//#endregion
+
+//#region Geno-Logic Coding
+
+/**
+ * Alphabetical binary mapping for DNA/RNA bases to 2-bit bigrams.
+ * A=00 (0b00), C=01 (0b01), G=10 (0b10), T/U=11 (0b11).
+ * This preserves dyadic group structure under XOR (modulo-2) for simulating genetic mutations.
+ */
+export const BASE_TO_BIN = {
+  'A': 0b00,
+  'C': 0b01,
+  'G': 0b10,
+  'T': 0b11,
+  'U': 0b11  // RNA equivalent to T
+};
+
+const BIN_TO_BASE = ['A', 'C', 'G', 'T'];  // Index by 2-bit value (0=A, 1=C, 2=G, 3=T)
+
+/**
+ * Standard genetic code mapping from codons to amino acids (one-letter codes).
+ * * denotes stop codons. For RNA, replace T with U in queries.
+ */
+export const CODON_TO_AA = {
+  'AAA': 'K', 'AAC': 'N', 'AAG': 'K', 'AAT': 'N',
+  'ACA': 'T', 'ACC': 'T', 'ACG': 'T', 'ACT': 'T',
+  'AGA': 'R', 'AGC': 'S', 'AGG': 'R', 'AGT': 'S',
+  'ATA': 'I', 'ATC': 'I', 'ATG': 'M', 'ATT': 'I',
+  'CAA': 'Q', 'CAC': 'H', 'CAG': 'Q', 'CAT': 'H',
+  'CCA': 'P', 'CCC': 'P', 'CCG': 'P', 'CCT': 'P',
+  'CGA': 'R', 'CGC': 'R', 'CGG': 'R', 'CGT': 'R',
+  'CTA': 'L', 'CTC': 'L', 'CTG': 'L', 'CTT': 'L',
+  'GAA': 'E', 'GAC': 'D', 'GAG': 'E', 'GAT': 'D',
+  'GCA': 'A', 'GCC': 'A', 'GCG': 'A', 'GCT': 'A',
+  'GGA': 'G', 'GGC': 'G', 'GGG': 'G', 'GGT': 'G',
+  'GTA': 'V', 'GTC': 'V', 'GTG': 'V', 'GTT': 'V',
+  'TAA': '*', 'TAC': 'Y', 'TAG': '*', 'TAT': 'Y',
+  'TCA': 'S', 'TCC': 'S', 'TCG': 'S', 'TCT': 'S',
+  'TGA': '*', 'TGC': 'W', 'TGG': 'W', 'TGT': 'C',
+  'TTA': 'L', 'TTC': 'F', 'TTG': 'L', 'TTT': 'F'
+};
+
+// AA one-letter to full name (*=Stop)
+const AA_TO_NAME = {
+  'A': 'alanine', 'C': 'cysteine', 'D': 'aspartic', 'E': 'glutamic',
+  'F': 'phenylalanine', 'G': 'glycine', 'H': 'histidine', 'I': 'isoleucine',
+  'K': 'lysine', 'L': 'leucine', 'M': 'methionine', 'N': 'asparagine',
+  'P': 'proline', 'Q': 'glutamine', 'R': 'arginine', 'S': 'serine',
+  'T': 'threonine', 'V': 'valine', 'W': 'tryptophan', 'Y': 'tyrosine',
+  '*': 'Stop'
+};
+
+/**
+ * Converts a genetic codon (3 bases, 5' to 3') to a hexagram number.
+ * Maps 5' base to MSB bits 5-4 (bottom lines), middle to bits 3-2, 3' to LSB bits 1-0 (top lines).
+ * Supports DNA (T) or RNA (U). Throws error on invalid input.
+ * @param {string} codon - Codon string (e.g., 'ATG')
+ * @returns {number} Hexagram (0-63)
+ */
+export function yijing_fromCodon(codon) {
+  codon = codon.toUpperCase();
+  if (codon.length !== 3)
+    throw new Error('Codon must be exactly 3 bases');
+
+  const first = BASE_TO_BIN[codon[0]];
+  const second = BASE_TO_BIN[codon[1]];
+  const third = BASE_TO_BIN[codon[2]];
+  return ((first << 4) | (second << 2) | third) & 63;
+}
+
+/**
+ * Converts a hexagram to a genetic codon (5' to 3').
+ * Maps MSB bits 5-4 (bottom) to 5' base, bits 3-2 to middle, LSB bits 1-0 (top) to 3' base.
+ * Uses DNA bases (T instead of U).
+ * @param {number} hex - Hexagram (0-63)
+ * @returns {string} Codon (e.g., 'ATG')
+ */
+export function yijing_toCodon(hex) {
+  hex = hex | 0;
+  if (hex < 0 || hex > 63) throw new Error('Invalid hexagram');
+  const first = (hex >> 4) & 3;  // Bottom pair (first base 5')
+  const second = (hex >> 2) & 3; // Middle pair
+  const third = hex & 3;         // Top pair (third base 3')
+  return BIN_TO_BASE[first]
+    + BIN_TO_BASE[second]
+    + BIN_TO_BASE[third];
+}
+
+/**
+ * Gets the amino acid (or stop) for a hexagram via its mapped codon.
+ * @param {number} hex - Hexagram (0-63)
+ * @returns {string} Amino acid one-letter code (e.g., 'M') or '*' for stop or 'Unknown'
+ */
+export function yijing_toAminoAcid(hex) {
+  const codon = yijing_toCodon(hex);
+  return CODON_TO_AA[codon] || '?';
+}
+
+/**
+ * Gets the short amino acid name for a hexagram.
+ * @param {number} hex - Hexagram (0-63)
+ * @returns {string} AA name (e.g., 'methionine', 'stop')
+ */
+export function yijing_toAminoAcidName(hex = 0) {
+  const aa = yijing_toAminoAcid(hex);
+  return AA_TO_NAME[aa] || 'Unknown';
+}
+
+/**
+ * Checks if a hexagram maps to a stop codon.
+ * @param {number} hex - Hexagram (0-63)
+ * @returns {boolean}
+ */
+export function yijing_isStopCodon(hex = 0) {
+  return yijing_toAminoAcid(hex) === '*';
+}
+
+/**
+ * Applies a dyadic mutation (XOR with another hexagram) to simulate genetic changes.
+ * This models geno-logic operations like base flips in dyadic groups.
+ * @param {number} hex - Original hexagram
+ * @param {number} mutation - Mutation mask (0-63)
+ * @returns {number} Mutated hexagram
+ */
+export function yijing_dyadicMutate(hex, mutation) {
+  return (hex ^ mutation) & 63;
+}
+
+/**
+ * Computes Hamming distance between two hexagrams' codons (mutation steps).
+ * @param {number} hex1
+ * @param {number} hex2
+ * @returns {number} Distance (0-6)
+ */
+export function yijing_codonDistance(hex1 = 0, hex2 = 0) {
+  return yijing_distance(hex1, hex2);  // Reuse existing distance
+}
 
 //#endregion
 

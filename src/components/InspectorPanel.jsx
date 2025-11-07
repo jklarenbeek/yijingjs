@@ -60,9 +60,15 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
       {/* ---------- SCROLLABLE CONTENT ---------- */}
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
 
+        {/* ---------- HEADER (sticky) ---------- */}
+        <div className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6 sticky top-0 bg-white dark:bg-gray-800 z-10">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Hexagram {currentHex}</h2>
+          <p className="text-sm font-mono text-gray-500 dark:text-gray-400 mt-1">{binary}</p>
+        </div>
+
         {/* ---------- BREADCRUMB + GO BUTTON ---------- */}
         {history.length > 1 && (
-          <div className="flex items-center justify-between gap-2 text-sm mb-4">
+          <div className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6 flex items-center justify-between gap-2 text-sm mb-4">
             <div className="flex items-center gap-2 flex-1 overflow-x-auto">
               {history.map((h, idx) => (
                 <React.Fragment key={idx}>
@@ -96,12 +102,6 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
             </button>
           </div>
         )}
-
-        {/* ---------- HEADER (sticky) ---------- */}
-        <div className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6 sticky top-0 bg-white dark:bg-gray-800 z-10">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Hexagram {currentHex}</h2>
-          <p className="text-sm font-mono text-gray-500 dark:text-gray-400 mt-1">{binary}</p>
-        </div>
 
         {/* ---------- BASIC INFO ---------- */}
         <section>
