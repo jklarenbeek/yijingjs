@@ -67,6 +67,14 @@ const FiltersPanel = ({
     { key: Yijing.YIJING_ATOMIC, label: 'Atomic', count: mantraCounts[Yijing.YIJING_ATOMIC] },
   ];
 
+  const hasActiveFilters = filterBalance.length > 0 || filterMantra.length > 0 || filterSymmetry.length > 0;
+
+  const clearAllFilters = () => {
+    filterBalance.forEach(onBalanceToggle);
+    filterMantra.forEach(onMantraToggle);
+    filterSymmetry.forEach(onSymmetryToggle);
+  };
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col h-full">
       {/* Scrollable Container */}
@@ -111,15 +119,6 @@ const FiltersPanel = ({
               );
             })}
           </div>
-
-          {filterBalance.length > 0 && (
-            <button
-              onClick={() => filterBalance.forEach(onBalanceToggle)}
-              className="mt-3 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 underline transition-colors"
-            >
-              Clear all filters
-            </button>
-          )}
         </section>
 
         {/* Mantra Levels Filter */}
@@ -161,15 +160,6 @@ const FiltersPanel = ({
               );
             })}
           </div>
-
-          {filterMantra.length > 0 && (
-            <button
-              onClick={() => filterMantra.forEach(onMantraToggle)}
-              className="mt-3 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 underline transition-colors"
-            >
-              Clear all filters
-            </button>
-          )}
         </section>
 
         {/* Symmetry Groups Filter */}
@@ -211,16 +201,17 @@ const FiltersPanel = ({
               );
             })}
           </div>
-
-          {filterSymmetry.length > 0 && (
-            <button
-              onClick={() => filterSymmetry.forEach(onSymmetryToggle)}
-              className="mt-3 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 underline transition-colors"
-            >
-              Clear all filters
-            </button>
-          )}
         </section>
+
+        {/* Single Clear All Filters */}
+        {hasActiveFilters && (
+          <button
+            onClick={clearAllFilters}
+            className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 underline transition-colors"
+          >
+            Clear all filters
+          </button>
+        )}
 
         {/* Hexagram Pool - Only in Edit Mode */}
         {editMode && (
