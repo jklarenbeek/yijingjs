@@ -13,7 +13,16 @@
     "test:ui": "npm run test:ui --workspace=packages/core",
     "deploy": "npm run build && npx gh-pages -d dist",
     "debug": "node --inspect-brk ./node_modules/vite/bin/vite.js",
-    "debug:test": "npm run test --workspace=packages/core -- --inspect-brk"
+    "debug:test": "npm run test --workspace=packages/core -- --inspect-brk",
+    "generate:amino": "vite-node scripts/generate.js amino",
+    "generate:sixiang": "vite-node scripts/generate.js sixiang",
+    "generate:transition": "vite-node scripts/generate.js transition",
+    "generate:symmetry": "vite-node scripts/generate.js symmetry",
+    "generate:mantra": "vite-node scripts/generate.js mantra",
+    "generate:tao": "vite-node scripts/generate.js tao",
+    "generate:trigram": "vite-node scripts/generate.js trigram",
+    "generate:sequences": "vite-node scripts/generate.js sequences",
+    "generate:all": "vite-node scripts/generate.js all"
   },
   "workspaces": [
     "packages/*"
@@ -28,6 +37,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@tailwindcss/vite": "^4.1.16",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@types/react": "^19.1.16",
@@ -43,8 +53,8 @@
     "jsdom": "^27.0.1",
     "prettier": "^3.6.2",
     "tailwindcss": "^4.1.16",
-    "@tailwindcss/vite": "^4.1.16",
     "vite": "^7.1.7",
+    "vite-node": "^5.0.0",
     "vitest": "^4.0.5"
   }
 }
