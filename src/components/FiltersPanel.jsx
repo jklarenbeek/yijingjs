@@ -1,30 +1,14 @@
 // src/components/FiltersPanel.jsx
-import React from 'react';
 import * as Yijing from '@yijingjs/core';
 import HexagramCard from './HexagramCard';
-import { cn, SYMMETRY_COLORS, BALANCED_COLORS, MANTRA_COLORS } from '../globals.js';
-
 import {
-  YIJING_BREATH,
-  YIJING_MOTHER,
-  YIJING_DIRECTION,
-  YIJING_BEGINNING,
-  YIJING_PRINCIPLE,
-  YIJING_TITAN,
-  YIJING_GIGANTE
-} from '@yijingjs/core';
+  SYMMETRY_COLORS,
+  BALANCED_COLORS,
+  MANTRA_COLORS,
+  cn,
+  generateSymmetryInfo
+} from '../globals.js';
 
-function generateSymmetryInfo(groups) {
-  return [
-    { key: YIJING_BREATH, label: 'Breath', count: groups.breath.length },
-    { key: YIJING_MOTHER, label: 'Mother', count: groups.mothers.length },
-    { key: YIJING_DIRECTION, label: 'Direction', count: groups.directions.length },
-    { key: YIJING_BEGINNING, label: 'Beginning', count: groups.beginning.length },
-    { key: YIJING_PRINCIPLE, label: 'Principle', count: groups.principles.length },
-    { key: YIJING_TITAN, label: 'Titan', count: groups.titans.length },
-    { key: YIJING_GIGANTE, label: 'Gigante', count: groups.gigantes.length }
-  ];
-}
 
 const symmetryGroups = generateSymmetryInfo(Yijing.yijing_symmetryGroups)
 

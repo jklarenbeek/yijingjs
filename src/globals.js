@@ -75,3 +75,16 @@ export function getHexagramSequences() {
   }
   return seq;
 }
+
+
+export function generateSymmetryInfo(groups) {
+  return [
+    { key: Yijing.YIJING_BREATH, label: 'Breath', count: groups.breath.length },
+    { key: Yijing.YIJING_MOTHER, label: 'Mother', count: groups.mothers.length },
+    { key: Yijing.YIJING_DIRECTION, label: 'Direction', count: groups.directions.length },
+    { key: Yijing.YIJING_BEGINNING, label: 'Beginning', count: groups.beginning.length },
+    { key: Yijing.YIJING_PRINCIPLE, label: 'Principle', count: groups.principles.length },
+    { key: Yijing.YIJING_TITAN, label: 'Titan', count: groups.titans.length },
+    { key: Yijing.YIJING_GIGANTE, label: 'Gigante', count: groups.gigantes.length }
+  ];
+}
