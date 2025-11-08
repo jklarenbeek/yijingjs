@@ -1,5 +1,5 @@
 // src/components/SequenceDropdown.jsx
-import { getHexagramSequences } from '../globals';
+import { getHexagramSequences } from '../utils/tools.js';
 
 const SequenceDropdown = ({ currentSequence, onSequenceChange, customSequences = [] }) => {
   const sequences = getHexagramSequences();

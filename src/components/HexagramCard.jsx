@@ -3,7 +3,7 @@ import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
 
-import { cn } from '../globals.js';
+import { cn } from '../utils/tools.js';
 import * as theme from '../utils/colors.js';
 
 import { Tooltip } from './Tooltip';

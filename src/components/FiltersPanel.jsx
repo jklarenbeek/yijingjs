@@ -6,7 +6,7 @@ import HexagramCard from './HexagramCard';
 import {
   cn,
   generateSymmetryInfo
-} from '../globals.js';
+} from '../utils/tools.js';
 
 import * as theme from '../utils/colors.js';
 

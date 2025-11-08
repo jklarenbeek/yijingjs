@@ -1,4 +1,4 @@
-// src/globals.js
+// src/utils/tools.js
 
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';

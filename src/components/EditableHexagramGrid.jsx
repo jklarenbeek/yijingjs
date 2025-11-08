@@ -2,7 +2,7 @@
 import React from 'react';
 import * as Yijing from '@yijingjs/core';
 import HexagramCard from './HexagramCard';
-import { cn } from '../globals.js';
+import { cn } from '../utils/tools.js';
 
 const EditableHexagramGrid = ({
   editStage,

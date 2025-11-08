@@ -1,6 +1,6 @@
 // src/components/Tooltip.jsx
 import { useState } from 'react';
-import { cn } from '../globals.js';
+import { cn } from '../utils/tools.js';
 
 export const Tooltip = ({
   children,

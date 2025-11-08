@@ -5,7 +5,7 @@ import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
 
 import HexagramCard from './HexagramCard';
-import { getHexagramSequences } from '../globals.js';
+import { getHexagramSequences } from '../utils/tools.js';
 
 const HexagramGrid = ({
   selectedHex,

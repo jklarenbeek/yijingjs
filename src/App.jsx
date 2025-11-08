@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Sun, Moon, Edit3, X } from 'lucide-react';
 import * as Yijing from '@yijingjs/core';
-import { cn } from './globals.js';
+import { cn } from './utils/tools.js';
 
 import HexagramGrid from './components/HexagramGrid';
 import EditableHexagramGrid from './components/EditableHexagramGrid';
