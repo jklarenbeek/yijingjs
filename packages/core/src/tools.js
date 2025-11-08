@@ -128,6 +128,7 @@ function yijing_computeAminoAcidGroups() {
     const name = yijing_toAminoAcidName(i);
     const members = aminos[name] || [];
     members[members.length] = i;
+    aminos[name] = members;
   }
   return aminos;
 }
