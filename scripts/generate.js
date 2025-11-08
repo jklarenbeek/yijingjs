@@ -37,7 +37,7 @@ const functions = {
 };
 
 if (!command || !functions[command]) {
-  console.error('Usage: node generate.js <command>');
+  console.error('Usage: vite-node generate.js <command>');
   console.error('Available commands: amino, sixiang, transition, symmetry, mantra, tao, trigram, sequences, all');
   // eslint-disable-next-line no-undef
   process.exit(1);
