@@ -268,6 +268,12 @@ export function yijing_relationEmojiChar(left = 0, right = 0) {
 
 //#region Yijing Hierarchy
 
+export const YIJING_FOUNDATION = "foundation"; // 8 hexagrams
+
+export function yijing_isFoundation(hexagram) {
+  return yijing_upper(hexagram) === yijing_lower(hexagram);
+}
+
 export const YIJING_BALANCED = "balanced"; // 20 hexagrams
 export const YIJING_UNBALANCED = "unbalanced"; // 44 hexagrams
 
@@ -278,12 +284,6 @@ export function yijing_isBalanced(hexagram = 0) {
 
 export function yijing_balancedName(hexagram = 0) {
   return yijing_isBalanced(hexagram) ? YIJING_BALANCED : YIJING_UNBALANCED;
-}
-
-export const YIJING_FOUNDATION = "foundation"; // 8 hexagrams
-
-export function yijing_isFoundation(hexagram) {
-  return yijing_upper(hexagram) === yijing_lower(hexagram);
 }
 
 export const YIJING_COSMIC = "cosmic"; // 4 hexagrams

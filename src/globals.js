@@ -88,3 +88,18 @@ export function generateSymmetryInfo(groups) {
     { key: Yijing.YIJING_GIGANTE, label: 'Gigante', count: groups.gigantes.length }
   ];
 }
+
+export const TRANSITION_COLORS = {
+  [Wuxing.WUXING_NEUTRAL]: '#6b7280',  // Gray
+  [Wuxing.WUXING_CREATES]: '#10b981',  // Green
+  [Wuxing.WUXING_DESTROYS]: '#ef4444', // Red
+  [Wuxing.WUXING_WEAKENS]: '#f97316',  // Orange
+  [Wuxing.WUXING_INSULTS]: '#8b5cf6',  // Purple
+};
+
+export const SIXIANG_COLORS = {
+  [Wuxing.SIXIANG_NORTH]: WUXING_COLORS[Wuxing.WUXING_WATER],
+  [Wuxing.SIXIANG_EAST]: WUXING_COLORS[Wuxing.WUXING_WOOD],
+  [Wuxing.SIXIANG_WEST]: WUXING_COLORS[Wuxing.WUXING_METAL],
+  [Wuxing.SIXIANG_SOUTH]: WUXING_COLORS[Wuxing.WUXING_FIRE],
+};

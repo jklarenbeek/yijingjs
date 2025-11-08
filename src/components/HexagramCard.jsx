@@ -35,6 +35,9 @@ const HexagramCard = ({
   const symmetryName = Yijing.yijing_symmetryName(hexIndex);
   const balancedName = Yijing.yijing_balancedName(hexIndex);
   const mantraName = Yijing.yijing_mantraName(hexIndex);
+  const foundation = Yijing.yijing_isFoundation(hexIndex)
+    ? "Foundational"
+    : null;
 
   // ---- border logic (unchanged) ----
   let borderColor;
@@ -116,6 +119,15 @@ const HexagramCard = ({
                 aria-hidden="true"
               />
             </Tooltip>
+
+            {(foundation && (<Tooltip title={`${foundation}: ${Bagua.bagua_toName(upper)}`} className="capitalize">
+              <div
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: '#FFFF00' }}
+                aria-hidden="true"
+              />
+            </Tooltip>))}
+
           </div>
         </div>
 

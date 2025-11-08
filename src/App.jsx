@@ -17,6 +17,13 @@ function App() {
   const [filterSymmetry, setFilterSymmetry] = useState([]);
   const [filterMantra, setFilterMantra] = useState([]);
   const [filterBalance, setFilterBalance] = useState([]);
+  const [filterUpperTrigram, setFilterUpperTrigram] = useState([]);
+  const [filterLowerTrigram, setFilterLowerTrigram] = useState([]);
+  const [filterTransition, setFilterTransition] = useState([]);
+  const [filterAmino, setFilterAmino] = useState([]);
+  const [filterBottomSixiang, setFilterBottomSixiang] = useState([]);
+  const [filterMiddleSixiang, setFilterMiddleSixiang] = useState([]);
+  const [filterTopSixiang, setFilterTopSixiang] = useState([]);
   const [darkMode, setDarkMode] = useState(true);
   const [currentSequence, setCurrentSequence] = useState('kingwen');
   const [editMode, setEditMode] = useState(false);
@@ -64,6 +71,28 @@ function App() {
       }
       return newFilter;
     });
+  };
+
+  const handleUpperTrigramToggle = (key) => {
+    setFilterUpperTrigram(prev => prev.includes(key) ? prev.filter(s => s !== key) : [...prev, key]);
+  };
+  const handleLowerTrigramToggle = (key) => {
+    setFilterLowerTrigram(prev => prev.includes(key) ? prev.filter(s => s !== key) : [...prev, key]);
+  };
+  const handleTransitionToggle = (key) => {
+    setFilterTransition(prev => prev.includes(key) ? prev.filter(s => s !== key) : [...prev, key]);
+  };
+  const handleAminoToggle = (key) => {
+    setFilterAmino(prev => prev.includes(key) ? prev.filter(s => s !== key) : [...prev, key]);
+  };
+  const handleBottomSixiangToggle = (key) => {
+    setFilterBottomSixiang(prev => prev.includes(key) ? prev.filter(s => s !== key) : [...prev, key]);
+  };
+  const handleMiddleSixiangToggle = (key) => {
+    setFilterMiddleSixiang(prev => prev.includes(key) ? prev.filter(s => s !== key) : [...prev, key]);
+  };
+  const handleTopSixiangToggle = (key) => {
+    setFilterTopSixiang(prev => prev.includes(key) ? prev.filter(s => s !== key) : [...prev, key]);
   };
 
   // Autosave edit stage
@@ -184,6 +213,13 @@ function App() {
                 filterBalance={filterBalance}
                 currentSequence={currentSequence}
                 customSequences={customSequences}
+                filterUpperTrigram={filterUpperTrigram}
+                filterLowerTrigram={filterLowerTrigram}
+                filterTransition={filterTransition}
+                filterAmino={filterAmino}
+                filterBottomSixiang={filterBottomSixiang}
+                filterMiddleSixiang={filterMiddleSixiang}
+                filterTopSixiang={filterTopSixiang}
               />
             </>
           )}
@@ -251,6 +287,20 @@ function App() {
                   onSelectHex={handleSelectHex}
                   setEditStage={setEditStage}
                   editMode={editMode}
+                  filterUpperTrigram={filterUpperTrigram}
+                  onUpperTrigramToggle={handleUpperTrigramToggle}
+                  filterLowerTrigram={filterLowerTrigram}
+                  onLowerTrigramToggle={handleLowerTrigramToggle}
+                  filterTransition={filterTransition}
+                  onTransitionToggle={handleTransitionToggle}
+                  filterAmino={filterAmino}
+                  onAminoToggle={handleAminoToggle}
+                  filterBottomSixiang={filterBottomSixiang}
+                  onBottomSixiangToggle={handleBottomSixiangToggle}
+                  filterMiddleSixiang={filterMiddleSixiang}
+                  onMiddleSixiangToggle={handleMiddleSixiangToggle}
+                  filterTopSixiang={filterTopSixiang}
+                  onTopSixiangToggle={handleTopSixiangToggle}
                 />)}
               {activeTab === 'manager' && editMode && (
                 <SequenceManager
