@@ -1,10 +1,10 @@
 // src/components/FiltersPanel.jsx
+import React from 'react';
 import * as Yijing from '@yijingjs/core';
 import * as Bagua from '@yijingjs/bagua';
 import * as Wuxing from '@yijingjs/wuxing';
-import HexagramCard from './HexagramCard';
+
 import {
-  cn,
   generateAminoAcidInfo,
   generateMantraInfo,
   generateSixiangInfo,
@@ -15,7 +15,11 @@ import {
 } from '../utils/tools.js';
 
 import * as theme from '../utils/colors.js';
+import FilterSection from './FilterSection';
+import FilterButton from './FilterButton';
+import HexagramPool from './HexagramPool';
 
+// Precompute filter groups (memoized in production)
 const trigramGroups = generateTrigramInfo();
 const taoGroups = generateTaoInfo();
 const mantraGroups = generateMantraInfo();
@@ -25,473 +29,223 @@ const sixiangGroups = generateSixiangInfo();
 const aminoAcidGroups = generateAminoAcidInfo();
 
 const FiltersPanel = ({
+  // Filter states
   filterSymmetry,
-  onSymmetryToggle,
   filterMantra,
-  onMantraToggle,
   filterBalance,
-  onBalanceToggle,
   filterUpperTrigram,
-  onUpperTrigramToggle,
   filterLowerTrigram,
-  onLowerTrigramToggle,
   filterTransition,
-  onTransitionToggle,
   filterAmino,
-  onAminoToggle,
-  filterBottomSixiang,     // (red/deus)
-  onBottomSixiangToggle,
-  filterMiddleSixiang,     // (white/homo)
-  onMiddleSixiangToggle,
-  filterTopSixiang,        // (blue/torah)
-  onTopSixiangToggle,
+  filterBottomSixiang,
+  filterMiddleSixiang,
+  filterTopSixiang,
+
+  // Filter handlers
+  handleSymmetryToggle,
+  handleMantraToggle,
+  handleBalanceToggle,
+  handleUpperTrigramToggle,
+  handleLowerTrigramToggle,
+  handleTransitionToggle,
+  handleAminoToggle,
+  handleBottomSixiangToggle,
+  handleMiddleSixiangToggle,
+  handleTopSixiangToggle,
+
+  // Other props
   placedHexagrams = [],
   onSelectHex,
   setEditStage,
   editMode = false,
+  clearAllFilters,
+  hasActiveFilters
 }) => {
-
-  // Check if any filters are active
-  const hasActiveFilters = filterBalance.length > 0 || filterMantra.length > 0 || filterSymmetry.length > 0 ||
-    filterUpperTrigram.length > 0 || filterLowerTrigram.length > 0 || filterTransition.length > 0 ||
-    filterAmino.length > 0 || filterBottomSixiang.length > 0 || filterMiddleSixiang.length > 0 ||
-    filterTopSixiang.length > 0;
-
-  const clearAllFilters = () => {
-    filterBalance.forEach(onBalanceToggle);
-    filterMantra.forEach(onMantraToggle);
-    filterSymmetry.forEach(onSymmetryToggle);
-    filterUpperTrigram.forEach(onUpperTrigramToggle);     // New
-    filterLowerTrigram.forEach(onLowerTrigramToggle);     // New
-    filterTransition.forEach(onTransitionToggle);         // New
-    filterAmino.forEach(onAminoToggle);                   // New
-    filterBottomSixiang.forEach(onBottomSixiangToggle);   // New
-    filterMiddleSixiang.forEach(onMiddleSixiangToggle);   // New
-    filterTopSixiang.forEach(onTopSixiangToggle);         // New
-  };
-
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col h-full">
       {/* Scrollable Container */}
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
 
-        {/* Existing: Tao Balance Filter */}
-        <details open>
-          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
-            Tao Balance
-          </summary>
+        {/* Tao Balance Filter */}
+        <FilterSection title="Tao Balance">
           <div className="flex flex-wrap gap-2">
-            {taoGroups.map(({ key, label, count }) => {
-              const isActive = filterBalance.includes(key);
-              return (
-                <button
-                  key={key}
-                  onClick={() => onBalanceToggle(key)}
-                  className={cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-all",
-                    "flex items-center gap-2",
-                    "hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                    isActive
-                      ? "ring-2 ring-white dark:ring-gray-900 shadow-lg scale-105"
-                      : "opacity-70 hover:opacity-100"
-                  )}
-                  style={{
-                    backgroundColor: theme.balancedColors[key],
-                    color: 'white'
-                  }}
-                  aria-pressed={isActive}
-                  aria-label={`${isActive ? 'Hide' : 'Show'} ${label}`}
-                >
-                  <div
-                    className={cn(
-                      "w-3 h-3 rounded-full transition-colors",
-                      isActive ? "bg-white" : "bg-white/30"
-                    )}
-                  />
-                  <span>{label}</span>
-                  <span className="text-xs opacity-80">({count})</span>
-                </button>
-              );
-            })}
+            {taoGroups.map(({ key, label, count }) => (
+              <FilterButton
+                key={key}
+                isActive={filterBalance.includes(key)}
+                onClick={() => handleBalanceToggle(key)}
+                label={label}
+                count={count}
+                color={theme.balancedColors[key]}
+                ariaLabel={`${filterBalance.includes(key) ? 'Hide' : 'Show'} ${label}`}
+              />
+            ))}
           </div>
-        </details>
+        </FilterSection>
 
-        {/* Existing: Mantra Levels Filter */}
-        <details open>
-          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
-            Mantra Levels
-          </summary>
+        {/* Mantra Levels Filter */}
+        <FilterSection title="Mantra Levels">
           <div className="flex flex-wrap gap-2">
-            {mantraGroups.map(({ key, label, count }) => {
-              const isActive = filterMantra.includes(key);
-              return (
-                <button
-                  key={key}
-                  onClick={() => onMantraToggle(key)}
-                  className={cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-all",
-                    "flex items-center gap-2",
-                    "hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                    isActive
-                      ? "ring-2 ring-white dark:ring-gray-900 shadow-lg scale-105"
-                      : "opacity-70 hover:opacity-100"
-                  )}
-                  style={{
-                    backgroundColor: theme.mantraColors[key],
-                    color: 'white'
-                  }}
-                  aria-pressed={isActive}
-                  aria-label={`${isActive ? 'Hide' : 'Show'} ${label}`}
-                >
-                  <div
-                    className={cn(
-                      "w-3 h-3 rounded-full transition-colors",
-                      isActive ? "bg-white" : "bg-white/30"
-                    )}
-                  />
-                  <span>{label}</span>
-                  <span className="text-xs opacity-80">({count})</span>
-                </button>
-              );
-            })}
+            {mantraGroups.map(({ key, label, count }) => (
+              <FilterButton
+                key={key}
+                isActive={filterMantra.includes(key)}
+                onClick={() => handleMantraToggle(key)}
+                label={label}
+                count={count}
+                color={theme.mantraColors[key]}
+                ariaLabel={`${filterMantra.includes(key) ? 'Hide' : 'Show'} ${label}`}
+              />
+            ))}
           </div>
-        </details>
+        </FilterSection>
 
-        {/* Existing: Symmetry Groups Filter */}
-        <details open>
-          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
-            Symmetry Groups
-          </summary>
+        {/* Symmetry Groups Filter */}
+        <FilterSection title="Symmetry Groups">
           <div className="flex flex-wrap gap-2">
-            {symmetryGroups.map(({ key, label, count }) => {
-              const isActive = filterSymmetry.includes(key);
-              return (
-                <button
-                  key={key}
-                  onClick={() => onSymmetryToggle(key)}
-                  className={cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-all",
-                    "flex items-center gap-2",
-                    "hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                    isActive
-                      ? "ring-2 ring-white dark:ring-gray-900 shadow-lg scale-105"
-                      : "opacity-70 hover:opacity-100"
-                  )}
-                  style={{
-                    backgroundColor: theme.symmetryColors[key],
-                    color: 'white'
-                  }}
-                  aria-pressed={isActive}
-                  aria-label={`${isActive ? 'Hide' : 'Show'} ${label} symmetry group`}
-                >
-                  <div
-                    className={cn(
-                      "w-3 h-3 rounded-full transition-colors",
-                      isActive ? "bg-white" : "bg-white/30"
-                    )}
-                  />
-                  <span>{label}</span>
-                  <span className="text-xs opacity-80">({count})</span>
-                </button>
-              );
-            })}
+            {symmetryGroups.map(({ key, label, count }) => (
+              <FilterButton
+                key={key}
+                isActive={filterSymmetry.includes(key)}
+                onClick={() => handleSymmetryToggle(key)}
+                label={label}
+                count={count}
+                color={theme.symmetryColors[key]}
+                ariaLabel={`${filterSymmetry.includes(key) ? 'Hide' : 'Show'} ${label} symmetry group`}
+              />
+            ))}
           </div>
-        </details>
+        </FilterSection>
 
         {/* Upper Trigram Filter */}
-        <details>
-          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
-            Upper Trigram
-          </summary>
+        <FilterSection title="Upper Trigram">
           <div className="flex flex-wrap gap-2">
             {trigramGroups.map(({ key, label, count }) => {
-              const isActive = filterUpperTrigram.includes(key);
               const wuxing = Bagua.bagua_toWuxing(Bagua.bagua_fromName(key));
               return (
-                <button
+                <FilterButton
                   key={key}
-                  onClick={() => onUpperTrigramToggle(key)}
-                  className={cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-all",
-                    "flex items-center gap-2",
-                    "hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                    isActive
-                      ? "ring-2 ring-white dark:ring-gray-900 shadow-lg scale-105"
-                      : "opacity-70 hover:opacity-100"
-                  )}
-                  style={{
-                    backgroundColor: theme.wuxingColors[wuxing],
-                    color: 'white'
-                  }}
-                  aria-pressed={isActive}
-                  aria-label={`${isActive ? 'Hide' : 'Show'} ${label}`}
-                >
-                  <div
-                    className={cn(
-                      "w-3 h-3 rounded-full transition-colors",
-                      isActive ? "bg-white" : "bg-white/30"
-                    )}
-                  />
-                  <span>{label}</span>
-                  <span className="text-xs opacity-80">({count})</span>
-                </button>
+                  isActive={filterUpperTrigram.includes(key)}
+                  onClick={() => handleUpperTrigramToggle(key)}
+                  label={label}
+                  count={count}
+                  color={theme.wuxingColors[wuxing]}
+                  ariaLabel={`${filterUpperTrigram.includes(key) ? 'Hide' : 'Show'} ${label}`}
+                />
               );
             })}
           </div>
-        </details>
+        </FilterSection>
 
         {/* Lower Trigram Filter */}
-        <details>
-          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
-            Lower Trigram
-          </summary>
+        <FilterSection title="Lower Trigram">
           <div className="flex flex-wrap gap-2">
             {trigramGroups.map(({ key, label, count }) => {
-              const isActive = filterLowerTrigram.includes(key);
               const wuxing = Bagua.bagua_toWuxing(Bagua.bagua_fromName(key));
               return (
-                <button
+                <FilterButton
                   key={key}
-                  onClick={() => onLowerTrigramToggle(key)}
-                  className={cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-all",
-                    "flex items-center gap-2",
-                    "hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                    isActive
-                      ? "ring-2 ring-white dark:ring-gray-900 shadow-lg scale-105"
-                      : "opacity-70 hover:opacity-100"
-                  )}
-                  style={{
-                    backgroundColor: theme.wuxingColors[wuxing],
-                    color: 'white'
-                  }}
-                  aria-pressed={isActive}
-                  aria-label={`${isActive ? 'Hide' : 'Show'} ${label}`}
-                >
-                  <div
-                    className={cn(
-                      "w-3 h-3 rounded-full transition-colors",
-                      isActive ? "bg-white" : "bg-white/30"
-                    )}
-                  />
-                  <span>{label}</span>
-                  <span className="text-xs opacity-80">({count})</span>
-                </button>
+                  isActive={filterLowerTrigram.includes(key)}
+                  onClick={() => handleLowerTrigramToggle(key)}
+                  label={label}
+                  count={count}
+                  color={theme.wuxingColors[wuxing]}
+                  ariaLabel={`${filterLowerTrigram.includes(key) ? 'Hide' : 'Show'} ${label}`}
+                />
               );
             })}
           </div>
-        </details>
+        </FilterSection>
 
         {/* Transition Types Filter */}
-        <details>
-          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
-            Wuxing Transitions
-          </summary>
+        <FilterSection title="Wuxing Transitions">
           <div className="flex flex-wrap gap-2">
-            {transitionGroups.map(({ key, label, count }) => {
-              const isActive = filterTransition.includes(key);
-              return (
-                <button
-                  key={key}
-                  onClick={() => onTransitionToggle(key)}
-                  className={cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-all",
-                    "flex items-center gap-2",
-                    "hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                    isActive
-                      ? "ring-2 ring-white dark:ring-gray-900 shadow-lg scale-105"
-                      : "opacity-70 hover:opacity-100"
-                  )}
-                  style={{
-                    backgroundColor: theme.transitionColors[key],
-                    color: 'white'
-                  }}
-                  aria-pressed={isActive}
-                  aria-label={`${isActive ? 'Hide' : 'Show'} ${label}`}
-                >
-                  <div
-                    className={cn(
-                      "w-3 h-3 rounded-full transition-colors",
-                      isActive ? "bg-white" : "bg-white/30"
-                    )}
-                  />
-                  <span>{label}</span>
-                  <span className="text-xs opacity-80">({count})</span>
-                </button>
-              );
-            })}
+            {transitionGroups.map(({ key, label, count }) => (
+              <FilterButton
+                key={key}
+                isActive={filterTransition.includes(key)}
+                onClick={() => handleTransitionToggle(key)}
+                label={label}
+                count={count}
+                color={theme.transitionColors[key]}
+                ariaLabel={`${filterTransition.includes(key) ? 'Hide' : 'Show'} ${label}`}
+              />
+            ))}
           </div>
-        </details>
+        </FilterSection>
 
-        {/* Top Sixiang (Deus/Red) Filter */}
-        <details>
-          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
-            Top Layer (Deus)
-          </summary>
+        {/* Sixiang Filters */}
+        <FilterSection title="Top Layer (Deus)">
           <div className="flex flex-wrap gap-2">
-            {sixiangGroups.map(({ key, label, count }) => {
-              const isActive = filterBottomSixiang.includes(key);
-              return (
-                <button
-                  key={key}
-                  onClick={() => onBottomSixiangToggle(key)}
-                  className={cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-all",
-                    "flex items-center gap-2",
-                    "hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                    isActive
-                      ? "ring-2 ring-white dark:ring-gray-900 shadow-lg scale-105"
-                      : "opacity-70 hover:opacity-100"
-                  )}
-                  style={{
-                    backgroundColor: theme.sixiangColors[key],
-                    color: 'white'
-                  }}
-                  aria-pressed={isActive}
-                  aria-label={`${isActive ? 'Hide' : 'Show'} ${label}`}
-                >
-                  <div
-                    className={cn(
-                      "w-3 h-3 rounded-full transition-colors",
-                      isActive ? "bg-white" : "bg-white/30"
-                    )}
-                  />
-                  <span>{label}</span>
-                  <span className="text-xs opacity-80">({count})</span>
-                </button>
-              );
-            })}
+            {sixiangGroups.map(({ key, label, count }) => (
+              <FilterButton
+                key={key}
+                isActive={filterBottomSixiang.includes(key)}
+                onClick={() => handleBottomSixiangToggle(key)}
+                label={label}
+                count={count}
+                color={theme.sixiangColors[key]}
+                ariaLabel={`${filterBottomSixiang.includes(key) ? 'Hide' : 'Show'} ${label}`}
+              />
+            ))}
           </div>
-        </details>
+        </FilterSection>
 
-        {/* Middle Sixiang (Homo/White) Filter */}
-        <details>
-          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
-            Middle Layer (Homo)
-          </summary>
+        <FilterSection title="Middle Layer (Homo)">
           <div className="flex flex-wrap gap-2">
-            {sixiangGroups.map(({ key, label, count }) => {
-              const isActive = filterMiddleSixiang.includes(key);
-              return (
-                <button
-                  key={key}
-                  onClick={() => onMiddleSixiangToggle(key)}
-                  className={cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-all",
-                    "flex items-center gap-2",
-                    "hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                    isActive
-                      ? "ring-2 ring-white dark:ring-gray-900 shadow-lg scale-105"
-                      : "opacity-70 hover:opacity-100"
-                  )}
-                  style={{
-                    backgroundColor: theme.sixiangColors[key],
-                    color: 'white'
-                  }}
-                  aria-pressed={isActive}
-                  aria-label={`${isActive ? 'Hide' : 'Show'} ${label}`}
-                >
-                  <div
-                    className={cn(
-                      "w-3 h-3 rounded-full transition-colors",
-                      isActive ? "bg-white" : "bg-white/30"
-                    )}
-                  />
-                  <span>{label}</span>
-                  <span className="text-xs opacity-80">({count})</span>
-                </button>
-              );
-            })}
+            {sixiangGroups.map(({ key, label, count }) => (
+              <FilterButton
+                key={key}
+                isActive={filterMiddleSixiang.includes(key)}
+                onClick={() => handleMiddleSixiangToggle(key)}
+                label={label}
+                count={count}
+                color={theme.sixiangColors[key]}
+                ariaLabel={`${filterMiddleSixiang.includes(key) ? 'Hide' : 'Show'} ${label}`}
+              />
+            ))}
           </div>
-        </details>
+        </FilterSection>
 
-        {/* Bottom Sixiang (Torah/Blue) Filter */}
-        <details>
-          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
-            Bottom Layer (Torah)
-          </summary>
+        <FilterSection title="Bottom Layer (Torah)">
           <div className="flex flex-wrap gap-2">
-            {sixiangGroups.map(({ key, label, count }) => {
-              const isActive = filterTopSixiang.includes(key);
-              return (
-                <button
-                  key={key}
-                  onClick={() => onTopSixiangToggle(key)}
-                  className={cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-all",
-                    "flex items-center gap-2",
-                    "hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                    isActive
-                      ? "ring-2 ring-white dark:ring-gray-900 shadow-lg scale-105"
-                      : "opacity-70 hover:opacity-100"
-                  )}
-                  style={{
-                    backgroundColor: theme.sixiangColors[key],
-                    color: 'white'
-                  }}
-                  aria-pressed={isActive}
-                  aria-label={`${isActive ? 'Hide' : 'Show'} ${label}`}
-                >
-                  <div
-                    className={cn(
-                      "w-3 h-3 rounded-full transition-colors",
-                      isActive ? "bg-white" : "bg-white/30"
-                    )}
-                  />
-                  <span>{label}</span>
-                  <span className="text-xs opacity-80">({count})</span>
-                </button>
-              );
-            })}
+            {sixiangGroups.map(({ key, label, count }) => (
+              <FilterButton
+                key={key}
+                isActive={filterTopSixiang.includes(key)}
+                onClick={() => handleTopSixiangToggle(key)}
+                label={label}
+                count={count}
+                color={theme.sixiangColors[key]}
+                ariaLabel={`${filterTopSixiang.includes(key) ? 'Hide' : 'Show'} ${label}`}
+              />
+            ))}
           </div>
-        </details>
+        </FilterSection>
 
         {/* Amino Acids Filter */}
-        <details>
-          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
-            Amino Acids
-          </summary>
+        <FilterSection title="Amino Acids">
           <div className="flex flex-wrap gap-2">
-            {aminoAcidGroups.map(({ key, label, count }) => {
-              const isActive = filterAmino.includes(key);
-              return (
-                <button
-                  key={key}
-                  onClick={() => onAminoToggle(key)}
-                  className={cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-all",
-                    "flex items-center gap-2",
-                    "hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                    isActive
-                      ? "ring-2 ring-white dark:ring-gray-900 shadow-lg scale-105"
-                      : "opacity-70 hover:opacity-100"
-                  )}
-                  style={{
-                    backgroundColor: '#3b82f6', // Default blue for amino acids
-                    color: 'white'
-                  }}
-                  aria-pressed={isActive}
-                  aria-label={`${isActive ? 'Hide' : 'Show'} ${label}`}
-                >
-                  <div
-                    className={cn(
-                      "w-3 h-3 rounded-full transition-colors",
-                      isActive ? "bg-white" : "bg-white/30"
-                    )}
-                  />
-                  <span>{label}</span>
-                  <span className="text-xs opacity-80">({count})</span>
-                </button>
-              );
-            })}
+            {aminoAcidGroups.map(({ key, label, count }) => (
+              <FilterButton
+                key={key}
+                isActive={filterAmino.includes(key)}
+                onClick={() => handleAminoToggle(key)}
+                label={label}
+                count={count}
+                color={theme.additionalColors.amino}
+                ariaLabel={`${filterAmino.includes(key) ? 'Hide' : 'Show'} ${label}`}
+              />
+            ))}
           </div>
-        </details>
+        </FilterSection>
 
-        {/* Single Clear All Filters */}
+        {/* Clear All Filters Button */}
         {hasActiveFilters && (
           <button
             onClick={clearAllFilters}
             className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 underline transition-colors"
+            aria-label="Clear all filters"
           >
             Clear all filters
           </button>
@@ -505,70 +259,20 @@ const FiltersPanel = ({
                 Available Hexagrams
               </h3>
             </div>
-            {(() => {
-              const available = Array.from({ length: 64 }, (_, i) => i).filter(
-                (i) =>
-                  !placedHexagrams.includes(i) &&
-                  (filterSymmetry.length === 0 ||
-                    filterSymmetry.includes(Yijing.yijing_symmetryName(i))) &&
-                  (filterMantra.length === 0 ||
-                    filterMantra.includes(Yijing.yijing_mantraName(i))) &&
-                  (filterBalance.length === 0 ||
-                    filterBalance.includes(Yijing.yijing_taoName(i))) &&
-                  // New filters
-                  (filterUpperTrigram.length === 0 ||
-                    filterUpperTrigram.includes(Bagua.bagua_toName(Yijing.yijing_upper(i)))) &&
-                  (filterLowerTrigram.length === 0 ||
-                    filterLowerTrigram.includes(Bagua.bagua_toName(Yijing.yijing_lower(i)))) &&
-                  (filterTransition.length === 0 ||
-                    filterTransition.includes(
-                      Wuxing.wuxing_transitionType(
-                        Bagua.bagua_toWuxing(Yijing.yijing_upper(i)),
-                        Bagua.bagua_toWuxing(Yijing.yijing_lower(i))
-                      )
-                    )) &&
-                  (filterAmino.length === 0 ||
-                    filterAmino.includes(Yijing.yijing_toAminoAcidName(i))) &&
-                  (filterBottomSixiang.length === 0 ||
-                    filterBottomSixiang.includes(Wuxing.sixiang_toName(Yijing.yijing_red(i)))) &&
-                  (filterMiddleSixiang.length === 0 ||
-                    filterMiddleSixiang.includes(Wuxing.sixiang_toName(Yijing.yijing_white(i)))) &&
-                  (filterTopSixiang.length === 0 ||
-                    filterTopSixiang.includes(Wuxing.sixiang_toName(Yijing.yijing_blue(i))))
-              );
-
-              const handleDragStart = (e, hexIndex) => {
-                e.dataTransfer.setData('text/plain', `pool:${hexIndex}`);
-              };
-
-              return available.length === 0 ? (
-                <p className="text-center text-gray-500 dark:text-gray-400 py-8">
-                  No hexagrams match current filters
-                </p>
-              ) : (
-                <div className="grid grid-cols-4 gap-2">
-                  {available.map((hexIndex) => (
-                    <div
-                      key={hexIndex}
-                      draggable
-                      onDragStart={(e) => handleDragStart(e, hexIndex)}
-                      onClick={() => onSelectHex(hexIndex)}
-                      className="cursor-grab active:cursor-grabbing"
-                    >
-                      <HexagramCard
-                        hexIndex={hexIndex}
-                        selected={false}
-                        onClick={() => { }}
-                        isNeighbor={false}
-                        symmetryGroup={Yijing.yijing_symmetryName(hexIndex)}
-                        filterSymmetry={filterSymmetry}
-                        inEditMode
-                      />
-                    </div>
-                  ))}
-                </div>
-              );
-            })()}
+            <HexagramPool
+              placedHexagrams={placedHexagrams}
+              onSelectHex={onSelectHex}
+              filterSymmetry={filterSymmetry}
+              filterMantra={filterMantra}
+              filterBalance={filterBalance}
+              filterUpperTrigram={filterUpperTrigram}
+              filterLowerTrigram={filterLowerTrigram}
+              filterTransition={filterTransition}
+              filterAmino={filterAmino}
+              filterBottomSixiang={filterBottomSixiang}
+              filterMiddleSixiang={filterMiddleSixiang}
+              filterTopSixiang={filterTopSixiang}
+            />
           </section>
         )}
 

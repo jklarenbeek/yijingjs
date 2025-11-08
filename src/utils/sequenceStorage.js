@@ -1,28 +1,49 @@
 // src/utils/sequenceStorage.js
-const STORAGE_KEY = 'yijing_custom_sequences';
+
+import { LOCAL_STORAGE_KEYS } from './constants.js';
+
+const STORAGE_KEY = LOCAL_STORAGE_KEYS.CUSTOM_SEQUENCES;
 
 export function getAllSequences() {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : {};
-  } catch {
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error('Error loading sequences from storage:', error);
     return [];
   }
 }
 
 export function addSequence(sequenceObj) {
-  const sequences = getAllSequences();
-  sequences.push(sequenceObj);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(sequences));
+  try {
+    const sequences = getAllSequences();
+    sequences.push(sequenceObj);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(sequences));
+    return true;
+  } catch (error) {
+    console.error('Error saving sequence to storage:', error);
+    return false;
+  }
 }
 
 export function getSequenceById(id) {
-  const sequences = getAllSequences();
-  return sequences.find(s => s.id === id) || null;
+  try {
+    const sequences = getAllSequences();
+    return sequences.find(s => s.id === id) || null;
+  } catch (error) {
+    console.error('Error getting sequence by ID:', error);
+    return null;
+  }
 }
 
 export function removeSequence(id) {
-  const sequences = getAllSequences();
-  const filtered = sequences.filter(s => s.id !== id);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+  try {
+    const sequences = getAllSequences();
+    const filtered = sequences.filter(s => s.id !== id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+    return true;
+  } catch (error) {
+    console.error('Error removing sequence from storage:', error);
+    return false;
+  }
 }

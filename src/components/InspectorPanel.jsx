@@ -1,5 +1,6 @@
 // src/components/InspectorPanel.jsx
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useMemo } from 'react';
 import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
@@ -10,6 +11,46 @@ import * as theme from '../utils/colors.js';
 const InspectorPanel = ({ hexIndex, onSelectHex }) => {
   const [history, setHistory] = useState([]);
 
+  // Memoize expensive calculations
+  const currentData = useMemo(() => {
+    if (hexIndex === null) return null;
+
+    const upper = Yijing.yijing_upper(hexIndex);
+    const lower = Yijing.yijing_lower(hexIndex);
+    const upperSymbol = Bagua.bagua_toSymbolChar(upper);
+    const lowerSymbol = Bagua.bagua_toSymbolChar(lower);
+    const upperWuxing = Bagua.bagua_toWuxing(upper);
+    const lowerWuxing = Bagua.bagua_toWuxing(lower);
+    const transitionType = Wuxing.wuxing_transitionType(upperWuxing, lowerWuxing);
+
+    return {
+      upper, lower, upperSymbol, lowerSymbol, upperWuxing, lowerWuxing, transitionType,
+      symmetry: Yijing.yijing_symmetryName(hexIndex),
+      foundation: Yijing.yijing_isFoundation(hexIndex) ? "Foundational" : null,
+      balanced: Yijing.yijing_taoName(hexIndex),
+      mantra: Yijing.yijing_mantraName(hexIndex),
+      lineCount: Yijing.yijing_lineCount(hexIndex),
+      binary: toBinary(hexIndex),
+      orbit: Yijing.yijing_orbitClass(hexIndex),
+      centerChain: Yijing.yijing_getCenterChain(hexIndex),
+      localNeighbors: Yijing.yijing_neighbors(hexIndex),
+      red: Yijing.yijing_red(hexIndex),
+      white: Yijing.yijing_white(hexIndex),
+      blue: Yijing.yijing_blue(hexIndex),
+      kingWenNumber: Yijing.YIJING_KINGWEN_SEQUENCE[hexIndex] + 1,
+      grayCode: Yijing.yijing_toGray(hexIndex),
+      grayPosition: Yijing.yijing_fromGray(hexIndex),
+      entropy: Yijing.yijing_entropy(hexIndex).toFixed(3),
+      balance: Yijing.yijing_balance(hexIndex).toFixed(3),
+      depth: Yijing.yijing_depth(hexIndex),
+      root: Yijing.yijing_root(hexIndex),
+      distanceToRoot: Yijing.yijing_distance(hexIndex, Yijing.yijing_root(hexIndex)),
+      codon: Yijing.yijing_toCodon(hexIndex),
+      aaName: Yijing.yijing_toAminoAcidName(hexIndex),
+      isStop: Yijing.yijing_isStopCodon(hexIndex)
+    };
+  }, [hexIndex]);
+
   // Sync history when global selection changes
   useEffect(() => {
     if (hexIndex !== null) {
@@ -19,7 +60,20 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
     }
   }, [hexIndex]);
 
-  if (history.length === 0) {
+  const handleLocalSelect = (newHex) => {
+    if (newHex !== (history[history.length - 1] || null)) {
+      setHistory(prev => [...prev, newHex]);
+    }
+  };
+
+  const handleGoToGlobal = () => {
+    if (currentData) {
+      onSelectHex(history[history.length - 1]);
+      setHistory([history[history.length - 1]]);
+    }
+  };
+
+  if (!currentData || history.length === 0) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-lg p-6 text-center text-gray-500 dark:text-gray-400 shadow-sm border border-gray-200 dark:border-gray-700">
         <p>Select a hexagram to view details</p>
@@ -29,79 +83,16 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
 
   const currentHex = history[history.length - 1];
 
-  const handleLocalSelect = (newHex) => {
-    if (newHex !== currentHex) {
-      setHistory(prev => [...prev, newHex]);
-    }
-  };
-
-  const handleGoToGlobal = () => {
-    onSelectHex(currentHex);
-    // History is automatically reset by useEffect on hexIndex change
-    // But we can be explicit:
-    setHistory([currentHex]);
-  };
-
-  const upper = Yijing.yijing_upper(currentHex);
-  const lower = Yijing.yijing_lower(currentHex);
-  const upperSymbol = Bagua.bagua_toSymbolChar(upper);
-  const lowerSymbol = Bagua.bagua_toSymbolChar(lower);
-  const upperWuxing = Bagua.bagua_toWuxing(upper);
-  const lowerWuxing = Bagua.bagua_toWuxing(lower);
-  const symmetry = Yijing.yijing_symmetryName(currentHex);
-  const foundation = Yijing.yijing_isFoundation(currentHex)
-    ? "Foundational"
-    : null;
-  const balanced = Yijing.yijing_taoName(currentHex);
-  const mantra = Yijing.yijing_mantraName(currentHex);
-  const lineCount = Yijing.yijing_lineCount(currentHex);
-  const binary = toBinary(currentHex);
-  const transitionType = Wuxing.wuxing_transitionType(upperWuxing, lowerWuxing);
-  const orbit = Yijing.yijing_orbitClass(currentHex);
-  const centerChain = Yijing.yijing_getCenterChain(currentHex);
-  const localNeighbors = Yijing.yijing_neighbors(currentHex);
-
-  const red = Yijing.yijing_red(currentHex);
-  const white = Yijing.yijing_white(currentHex);
-  const blue = Yijing.yijing_blue(currentHex);
-
-  const kingWenNumber = Yijing.YIJING_KINGWEN_SEQUENCE[currentHex] + 1;
-
-  const grayCode = Yijing.yijing_toGray(currentHex);
-  const grayPosition = Yijing.yijing_fromGray(currentHex);
-
-  const entropy = Yijing.yijing_entropy(currentHex).toFixed(3);
-  const balance = Yijing.yijing_balance(currentHex).toFixed(3);
-  const depth = Yijing.yijing_depth(currentHex);
-  const root = Yijing.yijing_root(currentHex);
-  const distanceToRoot = Yijing.yijing_distance(currentHex, root);
-
-  const codon = Yijing.yijing_toCodon(currentHex);
-  const aaName = Yijing.yijing_toAminoAcidName(currentHex);
-  const isStop = Yijing.yijing_isStopCodon(currentHex);
-
-  // Placeholder for amino acid SVGs - replace with actual inline SVG strings
-  const getAASvg = (name) => {
-    // Example placeholder SVG
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100"><rect width="200" height="100" fill="#f0f0f0"/><text x="10" y="50" font-size="16">${name} Structure</text></svg>`;
-    // For real implementation, use something like:
-    // if (name === 'glycine') return '<svg ... full code ... </svg>';
-    // Get SVGs from sources like Wikimedia Commons individual files, e.g., for glycine: https://upload.wikimedia.org/wikipedia/commons/6/6c/Glycine-skeletal.svg
-    // But since extraction was difficult, use placeholders or fetch dynamically if possible.
-  };
-
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col h-full">
-      {/* ---------- SCROLLABLE CONTENT ---------- */}
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
-
-        {/* ---------- HEADER (sticky) ---------- */}
+        {/* Header */}
         <div className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6 sticky top-0 bg-white dark:bg-gray-800 z-10">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Hexagram {currentHex}</h2>
-          <p className="text-sm font-mono text-gray-500 dark:text-gray-400 mt-1">{binary}</p>
+          <p className="text-sm font-mono text-gray-500 dark:text-gray-400 mt-1">{currentData.binary}</p>
         </div>
 
-        {/* ---------- BREADCRUMB + GO BUTTON ---------- */}
+        {/* Breadcrumb Navigation */}
         {history.length > 1 && (
           <div className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6 flex items-center justify-between gap-2 text-sm mb-4">
             <div className="flex items-center gap-2 flex-1 overflow-x-auto">
@@ -116,14 +107,13 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
                         ? "text-gray-900 dark:text-white"
                         : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                     )}
+                    aria-label={`Navigate to hexagram ${h} in history`}
                   >
                     {h}
                   </button>
                 </React.Fragment>
               ))}
             </div>
-
-            {/* Go Button */}
             <button
               onClick={handleGoToGlobal}
               className={cn(
@@ -131,112 +121,115 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
                 "bg-blue-500 hover:bg-blue-600 text-white",
                 "shadow-sm hover:shadow"
               )}
-              title="Set as main selection"
+              aria-label="Set as main selection"
             >
               Go
             </button>
           </div>
         )}
 
-        {/* ---------- BASIC INFO ---------- */}
+        {/* Basic Info */}
         <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6" open>
           <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Geometry</summary>
-          {foundation && (
+          {currentData.foundation && (
             <div className="flex items-center gap-2 p-2 mb-1 bg-gray-50 dark:bg-gray-700/50 rounded">
               <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#FFFF00' }} />
-              <span className="capitalize font-medium">{foundation}</span>
+              <span className="capitalize font-medium">{currentData.foundation}</span>
             </div>
           )}
           <div className="flex items-center gap-2 p-2 mb-1 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: theme.balancedColors[balanced] }} />
-            <span className="capitalize font-medium">{balanced}</span>
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: theme.balancedColors[currentData.balanced] }} />
+            <span className="capitalize font-medium">{currentData.balanced}</span>
           </div>
           <div className="flex items-center gap-2 p-2 mb-1 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: theme.mantraColors[mantra] }} />
-            <span className="capitalize font-medium">{mantra}</span>
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: theme.mantraColors[currentData.mantra] }} />
+            <span className="capitalize font-medium">{currentData.mantra}</span>
           </div>
           <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: theme.symmetryColors[symmetry] }} />
-            <span className="capitalize font-medium">{symmetry}</span>
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: theme.symmetryColors[currentData.symmetry] }} />
+            <span className="capitalize font-medium">{currentData.symmetry}</span>
           </div>
         </details>
 
-        {/* ---------- TRIGRAM FLOW ---------- */}
+        {/* Trigram Flow */}
         <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6" open>
           <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
             Trigram Flow
           </summary>
-
           <div className="flex items-center justify-center gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-            {/* Upper Trigram */}
             <div className="flex flex-col items-center">
               <span className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Upper</span>
               <div className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded">
-                <span className="text-lg">{Wuxing.wuxing_toEmojiChar(upperWuxing)}</span>
-                <span className="capitalize text-sm font-medium">{upperWuxing}<br />{upperSymbol}</span>
-                <span className="text-xs text-gray-500 ml-1">({upper})</span>
+                <span className="text-lg">{Wuxing.wuxing_toEmojiChar(currentData.upperWuxing)}</span>
+                <span className="capitalize text-sm font-medium">{currentData.upperWuxing}<br />{currentData.upperSymbol}</span>
+                <span className="text-xs text-gray-500 ml-1">({currentData.upper})</span>
               </div>
             </div>
-
-            {/* Transition Arrow + Symbol */}
             <div className="flex flex-col items-center">
               <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">Transition</span>
               <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 rounded">
                 <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
-                  {Wuxing.wuxing_transitionSymbolChar(transitionType)}
+                  {Wuxing.wuxing_transitionSymbolChar(currentData.transitionType)}
                 </span>
                 <span className="capitalize text-sm font-medium text-blue-700 dark:text-blue-300">
-                  {transitionType}
+                  {currentData.transitionType}
                 </span>
               </div>
             </div>
-
-            {/* Lower Trigram */}
             <div className="flex flex-col items-center">
               <span className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Lower</span>
               <div className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded">
-                <span className="text-lg">{Wuxing.wuxing_toEmojiChar(lowerWuxing)}</span>
-                <span className="capitalize text-sm font-medium">{lowerWuxing}<br />{lowerSymbol}</span>
-                <span className="text-xs text-gray-500 ml-1">({lower})</span>
+                <span className="text-lg">{Wuxing.wuxing_toEmojiChar(currentData.lowerWuxing)}</span>
+                <span className="capitalize text-sm font-medium">{currentData.lowerWuxing}<br />{currentData.lowerSymbol}</span>
+                <span className="text-xs text-gray-500 ml-1">({currentData.lower})</span>
               </div>
             </div>
           </div>
         </details>
 
-        {/* ---------- GENETIC MAPPING ---------- */}
+        {/* Genetic Mapping */}
         <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6" open>
           <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Genetic Mapping</summary>
           <div className="space-y-2 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
             <div className="flex items-center gap-2">
-              <span className="">Deus (Red):</span>
-              <span className="capitalize">{Wuxing.sixiang_toName(red)} {Wuxing.sixiang_toSymbolChar(red)} {Wuxing.sixiang_toEmojiChar(red)}</span>
+              <span>Deus (Red):</span>
+              <span className="capitalize">
+                {Wuxing.sixiang_toName(currentData.red)}
+                {Wuxing.sixiang_toSymbolChar(currentData.red)}
+                {Wuxing.sixiang_toEmojiChar(currentData.red)}
+              </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="">Homo (White):</span>
-              <span className="capitalize">{Wuxing.sixiang_toName(white)} {Wuxing.sixiang_toSymbolChar(white)} {Wuxing.sixiang_toEmojiChar(white)}</span>
+              <span>Homo (White):</span>
+              <span className="capitalize">
+                {Wuxing.sixiang_toName(currentData.white)}
+                {Wuxing.sixiang_toSymbolChar(currentData.white)}
+                {Wuxing.sixiang_toEmojiChar(currentData.white)}
+              </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="">Torah (Blue):</span>
-              <span className="capitalize">{Wuxing.sixiang_toName(blue)} {Wuxing.sixiang_toSymbolChar(blue)} {Wuxing.sixiang_toEmojiChar(blue)}</span>
+              <span>Torah (Blue):</span>
+              <span className="capitalize">
+                {Wuxing.sixiang_toName(currentData.blue)}
+                {Wuxing.sixiang_toSymbolChar(currentData.blue)}
+                {Wuxing.sixiang_toEmojiChar(currentData.blue)}
+              </span>
             </div>
           </div>
           <div className="space-y-2 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-            <p>Codon: {codon}</p>
-            <p>Amino Acid: {aaName} {isStop ? '(Stop)' : ''}</p>
-            {!isStop && (
-              <div className="flex justify-center">
-                <div dangerouslySetInnerHTML={{ __html: getAASvg(aaName) }} />
-              </div>
-            )}
+            <p>Codon: {currentData.codon}</p>
+            <p>Amino Acid: {currentData.aaName} {currentData.isStop ? '(Stop)' : ''}</p>
           </div>
         </details>
 
-        {/* ---------- PATH TO ROOT ---------- */}
-        {centerChain.length > 1 && (
+        {/* Path to Root */}
+        {currentData.centerChain.length > 1 && (
           <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6" open>
-            <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Path to Root ({centerChain.length - 1} steps)</summary>
+            <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
+              Path to Root ({currentData.centerChain.length - 1} steps)
+            </summary>
             <div className="grid grid-cols-3 gap-0.75">
-              {centerChain.map((h, idx) => (
+              {currentData.centerChain.map((h, idx) => (
                 <div
                   key={h}
                   className="group flex flex-col items-center p-0.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
@@ -246,12 +239,12 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
                     selected={h === currentHex}
                     onClick={() => handleLocalSelect(h)}
                     isNeighbor={idx > 0}
-                    neighborRelation={idx > 0 ? centerChain[idx - 1] : null}
+                    neighborRelation={idx > 0 ? currentData.centerChain[idx - 1] : null}
                     symmetryGroup={Yijing.yijing_symmetryName(h)}
                     filterSymmetry={[]}
                   />
                   <span className="text-xs text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">
-                    {idx === centerChain.length - 1 ? 'Cosmic' : (idx === centerChain.length - 2 ? 'Karmic' : 'Atomic')}&nbsp;
+                    {idx === currentData.centerChain.length - 1 ? 'Cosmic' : (idx === currentData.centerChain.length - 2 ? 'Karmic' : 'Atomic')}&nbsp;
                     ({Yijing.yijing_relationEmojiChar(currentHex, h)})
                   </span>
                 </div>
@@ -260,11 +253,11 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
           </details>
         )}
 
-        {/* ---------- TRANSFORMATIONS ---------- */}
+        {/* Transformations */}
         <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6">
           <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Transformations</summary>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-0.75">
-            {Object.entries(orbit).map(([key, value]) => (
+            {Object.entries(currentData.orbit).map(([key, value]) => (
               <div
                 key={key}
                 className="group flex flex-col items-center p-0.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
@@ -279,7 +272,6 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
                   filterSymmetry={[]}
                 />
 
-                {/* CAPTION – always visible */}
                 <span className="text-xs capitalize text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">
                   {key} ({Yijing.yijing_relationEmojiChar(currentHex, value)})
                 </span>
@@ -288,12 +280,14 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
           </div>
         </details>
 
-        {/* ---------- NEIGHBORS ---------- */}
-        {localNeighbors.length > 0 && (
+        {/* Neighbors */}
+        {currentData.localNeighbors.length > 0 && (
           <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6">
-            <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Neighbors ({localNeighbors.length})</summary>
+            <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
+              Neighbors ({currentData.localNeighbors.length})
+            </summary>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-0.75">
-              {localNeighbors.map(n => (
+              {currentData.localNeighbors.map(n => (
                 <div
                   key={n}
                   className="group flex flex-col items-center p-0.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
@@ -316,21 +310,20 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
           </details>
         )}
 
-        {/* ---------- ADVANCED METRICS ---------- */}
+        {/* Advanced Metrics */}
         <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6">
           <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Advanced Metrics</summary>
           <div className="space-y-2 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-            <p>King Wen: {kingWenNumber}</p>
-            <p>Gray Code: {grayCode} (Position: {grayPosition})</p>
-            <p>Yang Lines: {lineCount} / 6</p>
-            <p>Root: {root}</p>
-            <p>Distance to Root: {distanceToRoot}</p>
-            <p>Depth: {depth}</p>
-            <p>Entropy: {entropy}</p>
-            <p>Balance: {balance}</p>
+            <p>King Wen: {currentData.kingWenNumber}</p>
+            <p>Gray Code: {currentData.grayCode} (Position: {currentData.grayPosition})</p>
+            <p>Yang Lines: {currentData.lineCount} / 6</p>
+            <p>Root: {currentData.root}</p>
+            <p>Distance to Root: {currentData.distanceToRoot}</p>
+            <p>Depth: {currentData.depth}</p>
+            <p>Entropy: {currentData.entropy}</p>
+            <p>Balance: {currentData.balance}</p>
           </div>
         </details>
-
       </div>
     </div>
   );
