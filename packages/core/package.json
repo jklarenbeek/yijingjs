@@ -8,7 +8,8 @@
     ".": "./src/index.js",
     "./wuxing": "./src/wuxing.js",
     "./bagua": "./src/bagua.js",
-    "./yijing": "./src/yijing.js"
+    "./yijing": "./src/yijing.js",
+    "./tools": "./src/tools.js"
   },
   "scripts": {
     "test": "vitest run",

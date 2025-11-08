@@ -52,7 +52,7 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
   const foundation = Yijing.yijing_isFoundation(currentHex)
     ? "Foundational"
     : null;
-  const balanced = Yijing.yijing_balancedName(currentHex);
+  const balanced = Yijing.yijing_taoName(currentHex);
   const mantra = Yijing.yijing_mantraName(currentHex);
   const lineCount = Yijing.yijing_lineCount(currentHex);
   const binary = toBinary(currentHex);

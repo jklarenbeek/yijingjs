@@ -6,18 +6,32 @@
       "request": "launch",
       "name": "Debug Vite Dev Server",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "console": "integratedTerminal",
-      "skipFiles": ["<node_internals>/**"]
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_OPTIONS": "--inspect"
+      }
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Debug Tests",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "test"],
-      "cwd": "${workspaceFolder}/packages/yijing-core",
-      "console": "integratedTerminal"
+      "runtimeArgs": [
+        "run",
+        "test"
+      ],
+      "cwd": "${workspaceFolder}/packages/core",
+      "console": "integratedTerminal",
+      "env": {
+        "NODE_OPTIONS": "--inspect"
+      }
     },
     {
       "type": "chrome",
@@ -25,7 +39,23 @@
       "name": "Debug Chrome",
       "url": "http://localhost:5173",
       "webRoot": "${workspaceFolder}/src",
+      "sourceMapPathOverrides": {
+        "webpack:///./src/*": "${webRoot}/*",
+        "webpack:///src/*": "${webRoot}/*"
+      },
       "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Current Test File",
+      "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+      "args": [
+        "run",
+        "${relativeFile}"
+      ],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/packages/core"
     }
   ]
 }

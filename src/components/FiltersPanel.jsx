@@ -5,14 +5,24 @@ import * as Wuxing from '@yijingjs/wuxing';
 import HexagramCard from './HexagramCard';
 import {
   cn,
-  generateSymmetryInfo
+  generateAminoAcidInfo,
+  generateMantraInfo,
+  generateSixiangInfo,
+  generateSymmetryInfo,
+  generateTaoInfo,
+  generateTransitionInfo,
+  generateTrigramInfo
 } from '../utils/tools.js';
 
 import * as theme from '../utils/colors.js';
 
-import { useMemo } from 'react';
-
-const symmetryGroups = generateSymmetryInfo(Yijing.yijing_symmetryGroups);
+const trigramGroups = generateTrigramInfo();
+const taoGroups = generateTaoInfo();
+const mantraGroups = generateMantraInfo();
+const symmetryGroups = generateSymmetryInfo();
+const transitionGroups = generateTransitionInfo();
+const sixiangGroups = generateSixiangInfo();
+const aminoAcidGroups = generateAminoAcidInfo();
 
 const FiltersPanel = ({
   filterSymmetry,
@@ -40,88 +50,6 @@ const FiltersPanel = ({
   setEditStage,
   editMode = false,
 }) => {
-
-  const mantraCounts = useMemo(() => ({
-    [Yijing.YIJING_COSMIC]: 0,
-    [Yijing.YIJING_KARMIC]: 0,
-    [Yijing.YIJING_ATOMIC]: 0,
-  }), []);
-  const balanceCounts = useMemo(() => ({
-    [Yijing.YIJING_BALANCED]: 0,
-    [Yijing.YIJING_UNBALANCED]: 0,
-  }), []);
-  for (let i = 0; i < 64; i++) {
-    mantraCounts[Yijing.yijing_mantraName(i)]++;
-    balanceCounts[Yijing.yijing_balancedName(i)]++;
-  }
-
-  const transitionCounts = useMemo(() => ({
-    [Wuxing.WUXING_NEUTRAL]: 0,
-    [Wuxing.WUXING_CREATES]: 0,
-    [Wuxing.WUXING_DESTROYS]: 0,
-    [Wuxing.WUXING_WEAKENS]: 0,
-    [Wuxing.WUXING_INSULTS]: 0,
-  }), []);
-  for (let i = 0; i < 64; i++) {
-    const upper = Yijing.yijing_upper(i);
-    const lower = Yijing.yijing_lower(i);
-    const uw = Bagua.bagua_toWuxing(upper);
-    const lw = Bagua.bagua_toWuxing(lower);
-    const t = Wuxing.wuxing_transitionType(uw, lw);
-    transitionCounts[t]++;
-  }
-
-  const aaCounts = useMemo(() => {
-    const counts = {};
-    for (let i = 0; i < 64; i++) {
-      const aa = Yijing.yijing_toAminoAcidName(i);
-      counts[aa] = (counts[aa] || 0) + 1;
-    }
-    return counts;
-  }, []);
-
-  const balanceInfo = [
-    { key: Yijing.YIJING_BALANCED, label: 'Balanced', count: balanceCounts[Yijing.YIJING_BALANCED] },
-    { key: Yijing.YIJING_UNBALANCED, label: 'Unbalanced', count: balanceCounts[Yijing.YIJING_UNBALANCED] },
-  ];
-
-  const mantraInfo = [
-    { key: Yijing.YIJING_COSMIC, label: 'Cosmic', count: mantraCounts[Yijing.YIJING_COSMIC] },
-    { key: Yijing.YIJING_KARMIC, label: 'Karmic', count: mantraCounts[Yijing.YIJING_KARMIC] },
-    { key: Yijing.YIJING_ATOMIC, label: 'Atomic', count: mantraCounts[Yijing.YIJING_ATOMIC] },
-  ];
-
-  const trigramInfo = [
-    { key: Bagua.BAGUA_EARTH, label: `Earth ☷`, count: 8 },
-    { key: Bagua.BAGUA_MOUNTAIN, label: `Mountain ☶`, count: 8 },
-    { key: Bagua.BAGUA_WATER, label: `Water ☵`, count: 8 },
-    { key: Bagua.BAGUA_WIND, label: `Wind ☴`, count: 8 },
-    { key: Bagua.BAGUA_THUNDER, label: `Thunder ☳`, count: 8 },
-    { key: Bagua.BAGUA_FIRE, label: `Fire ☲`, count: 8 },
-    { key: Bagua.BAGUA_LAKE, label: `Lake ☱`, count: 8 },
-    { key: Bagua.BAGUA_HEAVEN, label: `Heaven ☰`, count: 8 },
-  ];
-
-  const transitionInfo = [
-    { key: Wuxing.WUXING_NEUTRAL, label: 'Neutral', count: transitionCounts[Wuxing.WUXING_NEUTRAL] },
-    { key: Wuxing.WUXING_CREATES, label: 'Creates', count: transitionCounts[Wuxing.WUXING_CREATES] },
-    { key: Wuxing.WUXING_DESTROYS, label: 'Destroys', count: transitionCounts[Wuxing.WUXING_DESTROYS] },
-    { key: Wuxing.WUXING_WEAKENS, label: 'Weakens', count: transitionCounts[Wuxing.WUXING_WEAKENS] },
-    { key: Wuxing.WUXING_INSULTS, label: 'Insults', count: transitionCounts[Wuxing.WUXING_INSULTS] },
-  ];
-
-  const aminoInfo = Object.keys(aaCounts).sort().map(key => ({
-    key,
-    label: key.charAt(0).toUpperCase() + key.slice(1),
-    count: aaCounts[key],
-  }));
-
-  const sixiangInfo = [
-    { key: Wuxing.SIXIANG_NORTH, label: `North ⚏ 🐢`, count: 16 },
-    { key: Wuxing.SIXIANG_EAST, label: `East ⚎ 🐉`, count: 16 },
-    { key: Wuxing.SIXIANG_WEST, label: `West ⚍ 🐅`, count: 16 },
-    { key: Wuxing.SIXIANG_SOUTH, label: `South ⚌ 🐦`, count: 16 },
-  ];
 
   // Check if any filters are active
   const hasActiveFilters = filterBalance.length > 0 || filterMantra.length > 0 || filterSymmetry.length > 0 ||
@@ -153,7 +81,7 @@ const FiltersPanel = ({
             Tao Balance
           </summary>
           <div className="flex flex-wrap gap-2">
-            {balanceInfo.map(({ key, label, count }) => {
+            {taoGroups.map(({ key, label, count }) => {
               const isActive = filterBalance.includes(key);
               return (
                 <button
@@ -194,7 +122,7 @@ const FiltersPanel = ({
             Mantra Levels
           </summary>
           <div className="flex flex-wrap gap-2">
-            {mantraInfo.map(({ key, label, count }) => {
+            {mantraGroups.map(({ key, label, count }) => {
               const isActive = filterMantra.includes(key);
               return (
                 <button
@@ -276,7 +204,7 @@ const FiltersPanel = ({
             Upper Trigram
           </summary>
           <div className="flex flex-wrap gap-2">
-            {trigramInfo.map(({ key, label, count }) => {
+            {trigramGroups.map(({ key, label, count }) => {
               const isActive = filterUpperTrigram.includes(key);
               const wuxing = Bagua.bagua_toWuxing(Bagua.bagua_fromName(key));
               return (
@@ -318,7 +246,7 @@ const FiltersPanel = ({
             Lower Trigram
           </summary>
           <div className="flex flex-wrap gap-2">
-            {trigramInfo.map(({ key, label, count }) => {
+            {trigramGroups.map(({ key, label, count }) => {
               const isActive = filterLowerTrigram.includes(key);
               const wuxing = Bagua.bagua_toWuxing(Bagua.bagua_fromName(key));
               return (
@@ -360,7 +288,7 @@ const FiltersPanel = ({
             Wuxing Transitions
           </summary>
           <div className="flex flex-wrap gap-2">
-            {transitionInfo.map(({ key, label, count }) => {
+            {transitionGroups.map(({ key, label, count }) => {
               const isActive = filterTransition.includes(key);
               return (
                 <button
@@ -395,13 +323,13 @@ const FiltersPanel = ({
           </div>
         </details>
 
-        {/* Bottom Sixiang (Deus/Red) Filter */}
+        {/* Top Sixiang (Deus/Red) Filter */}
         <details>
           <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
             Top Layer (Deus)
           </summary>
           <div className="flex flex-wrap gap-2">
-            {sixiangInfo.map(({ key, label, count }) => {
+            {sixiangGroups.map(({ key, label, count }) => {
               const isActive = filterBottomSixiang.includes(key);
               return (
                 <button
@@ -442,7 +370,7 @@ const FiltersPanel = ({
             Middle Layer (Homo)
           </summary>
           <div className="flex flex-wrap gap-2">
-            {sixiangInfo.map(({ key, label, count }) => {
+            {sixiangGroups.map(({ key, label, count }) => {
               const isActive = filterMiddleSixiang.includes(key);
               return (
                 <button
@@ -477,13 +405,13 @@ const FiltersPanel = ({
           </div>
         </details>
 
-        {/* Top Sixiang (Torah/Blue) Filter */}
+        {/* Bottom Sixiang (Torah/Blue) Filter */}
         <details>
           <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
             Bottom Layer (Torah)
           </summary>
           <div className="flex flex-wrap gap-2">
-            {sixiangInfo.map(({ key, label, count }) => {
+            {sixiangGroups.map(({ key, label, count }) => {
               const isActive = filterTopSixiang.includes(key);
               return (
                 <button
@@ -524,7 +452,7 @@ const FiltersPanel = ({
             Amino Acids
           </summary>
           <div className="flex flex-wrap gap-2">
-            {aminoInfo.map(({ key, label, count }) => {
+            {aminoAcidGroups.map(({ key, label, count }) => {
               const isActive = filterAmino.includes(key);
               return (
                 <button
@@ -586,7 +514,7 @@ const FiltersPanel = ({
                   (filterMantra.length === 0 ||
                     filterMantra.includes(Yijing.yijing_mantraName(i))) &&
                   (filterBalance.length === 0 ||
-                    filterBalance.includes(Yijing.yijing_balancedName(i))) &&
+                    filterBalance.includes(Yijing.yijing_taoName(i))) &&
                   // New filters
                   (filterUpperTrigram.length === 0 ||
                     filterUpperTrigram.includes(Bagua.bagua_toName(Yijing.yijing_upper(i)))) &&

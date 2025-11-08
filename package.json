@@ -11,7 +11,9 @@
     "test": "npm run test --workspace=packages/core",
     "test:watch": "npm run test:watch --workspace=packages/core",
     "test:ui": "npm run test:ui --workspace=packages/core",
-    "deploy": "npm run build && npx gh-pages -d dist"
+    "deploy": "npm run build && npx gh-pages -d dist",
+    "debug": "node --inspect-brk ./node_modules/vite/bin/vite.js",
+    "debug:test": "npm run test --workspace=packages/core -- --inspect-brk"
   },
   "workspaces": [
     "packages/*"

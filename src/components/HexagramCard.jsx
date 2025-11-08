@@ -30,12 +30,12 @@ const HexagramCard = ({
   const transitionName = transitionType.charAt(0).toUpperCase() + transitionType.slice(1);
 
   const symmetryColor = theme.symmetryColors[symmetryGroup];
-  const balancedColor = theme.balancedColors[Yijing.yijing_balancedName(hexIndex)];
+  const balancedColor = theme.balancedColors[Yijing.yijing_taoName(hexIndex)];
   const mantraColor = theme.mantraColors[Yijing.yijing_mantraName(hexIndex)];
 
   // ---- tooltip texts ----
   const symmetryName = Yijing.yijing_symmetryName(hexIndex);
-  const balancedName = Yijing.yijing_balancedName(hexIndex);
+  const balancedName = Yijing.yijing_taoName(hexIndex);
   const mantraName = Yijing.yijing_mantraName(hexIndex);
   const foundation = Yijing.yijing_isFoundation(hexIndex)
     ? "Foundational"

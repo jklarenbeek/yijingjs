@@ -117,7 +117,7 @@ const EditableHexagramGrid = ({
             const symmetryGroup = Yijing.yijing_symmetryName(hexIndex);
             const isFilteredBySymmetry = filterSymmetry.length > 0 && !filterSymmetry.includes(symmetryGroup);
             const isFilteredByMantra = filterMantra.length > 0 && !filterMantra.includes(Yijing.yijing_mantraName(hexIndex));
-            const isFilteredByBalance = filterBalance.length > 0 && !filterBalance.includes(Yijing.yijing_balancedName(hexIndex));
+            const isFilteredByBalance = filterBalance.length > 0 && !filterBalance.includes(Yijing.yijing_taoName(hexIndex));
             if (isFilteredBySymmetry || isFilteredByMantra || isFilteredByBalance) {
               opacity = 'opacity-20';
             }

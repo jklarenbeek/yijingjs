@@ -274,17 +274,19 @@ export function yijing_isFoundation(hexagram) {
   return yijing_upper(hexagram) === yijing_lower(hexagram);
 }
 
+// Toa Balance - Divine equilibrium
 export const YIJING_BALANCED = "balanced"; // 20 hexagrams
 export const YIJING_UNBALANCED = "unbalanced"; // 44 hexagrams
 
-// Toa Balance - Divine equilibrium
 export function yijing_isBalanced(hexagram = 0) {
   return (yijing_lineCount(hexagram) === 3);
 }
 
-export function yijing_balancedName(hexagram = 0) {
+export function yijing_taoName(hexagram = 0) {
   return yijing_isBalanced(hexagram) ? YIJING_BALANCED : YIJING_UNBALANCED;
 }
+
+// Mantra's
 
 export const YIJING_COSMIC = "cosmic"; // 4 hexagrams
 export const YIJING_KARMIC = "karmic"; // 12 hexagrams
@@ -377,40 +379,6 @@ export function yijing_symmetryName(hexagram) {
   if (yijing_isGigante(hexagram)) return YIJING_GIGANTE;
   throw new Error("value is out of range");
 }
-
-
-function yijing_computeSymmetryGroups() {
-  const breath = []; // balanced breath - 1
-  const mothers = []; // balanced mothers - 3
-  const directions = []; // balanced directions - 6
-  const beginning = []; // unbalanced beginning	- 1
-  const principles = []; // unbalanced principle - 3
-  const titans = []; // unbalanced titan - 6
-  const gigantes = []; // unbalanced gigantes - 12
-  for (var i = 0; i < 64; i++) {
-    if (yijing_isBalanced(i)) {
-      if (yijing_isBreath(i))
-        breath[breath.length] = i;
-      else if (yijing_isMother(i))
-        mothers[mothers.length] = i;
-      else
-        directions[directions.length] = i;
-    }
-    else { // unbalanced
-      if (yijing_isBeginning(i))
-        beginning[beginning.length] = i;
-      else if (yijing_isPrinciple(i))
-        principles[principles.length] = i;
-      else if (yijing_isTitan(i))
-        titans[titans.length] = i;
-      else
-        gigantes[gigantes.length] = i;
-    }
-  }
-  return { breath, mothers, directions, beginning, principles, titans, gigantes };
-}
-
-export const yijing_symmetryGroups = yijing_computeSymmetryGroups();
 
 //#endregion
 

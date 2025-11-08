@@ -45,7 +45,7 @@ const HexagramGrid = ({
 
           const isFilteredBySymmetry = filterSymmetry.length > 0 && !filterSymmetry.includes(symmetryGroup);
           const isFilteredByMantra = filterMantra.length > 0 && !filterMantra.includes(Yijing.yijing_mantraName(i));
-          const isFilteredByBalance = filterBalance.length > 0 && !filterBalance.includes(Yijing.yijing_balancedName(i));
+          const isFilteredByBalance = filterBalance.length > 0 && !filterBalance.includes(Yijing.yijing_taoName(i));
           const isFilteredByUpperTrigram = filterUpperTrigram.length > 0 && !filterUpperTrigram.includes(Bagua.bagua_toName(Yijing.yijing_upper(i)));
           const isFilteredByLowerTrigram = filterLowerTrigram.length > 0 && !filterLowerTrigram.includes(Bagua.bagua_toName(Yijing.yijing_lower(i)));
           const isFilteredByTransition = filterTransition.length > 0 && !filterTransition.includes(

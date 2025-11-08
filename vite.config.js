@@ -15,16 +15,26 @@ export default defineConfig({
   resolve: {
     alias: {
       '@yijingjs/core': resolve(__dirname, './packages/core/src/yijing.js'),
+      '@yijingjs/yijing': resolve(__dirname, './packages/core/src/yijing.js'),
       '@yijingjs/wuxing': resolve(__dirname, './packages/core/src/wuxing.js'),
-      '@yijingjs/bagua': resolve(__dirname, './packages/core/src/bagua.js')
+      '@yijingjs/bagua': resolve(__dirname, './packages/core/src/bagua.js'),
+      '@yijingjs/tools': resolve(__dirname, './packages/core/src/tools.js')
     }
   },
   server: {
     port: 5173,
-    open: true
+    open: true,
+    cors: true
   },
   build: {
     sourcemap: true,
-    outDir: 'dist'
+    outDir: 'demo'
+  },
+  // Better for debugging
+  define: {
+    'process.env': {}
+  },
+  esbuild: {
+    keepNames: true
   }
 })
