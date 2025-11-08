@@ -4,15 +4,12 @@ import * as Bagua from '@yijingjs/bagua';
 import * as Wuxing from '@yijingjs/wuxing';
 import HexagramCard from './HexagramCard';
 import {
-  SYMMETRY_COLORS,
-  BALANCED_COLORS,
-  MANTRA_COLORS,
-  WUXING_COLORS,
-  TRANSITION_COLORS, // Add to globals.js
-  SIXIANG_COLORS,    // Add to globals.js
   cn,
   generateSymmetryInfo
 } from '../globals.js';
+
+import * as theme from '../utils/colors.js';
+
 import { useMemo } from 'react';
 
 const symmetryGroups = generateSymmetryInfo(Yijing.yijing_symmetryGroups);
@@ -171,7 +168,7 @@ const FiltersPanel = ({
                       : "opacity-70 hover:opacity-100"
                   )}
                   style={{
-                    backgroundColor: BALANCED_COLORS[key],
+                    backgroundColor: theme.balancedColors[key],
                     color: 'white'
                   }}
                   aria-pressed={isActive}
@@ -212,7 +209,7 @@ const FiltersPanel = ({
                       : "opacity-70 hover:opacity-100"
                   )}
                   style={{
-                    backgroundColor: MANTRA_COLORS[key],
+                    backgroundColor: theme.mantraColors[key],
                     color: 'white'
                   }}
                   aria-pressed={isActive}
@@ -253,7 +250,7 @@ const FiltersPanel = ({
                       : "opacity-70 hover:opacity-100"
                   )}
                   style={{
-                    backgroundColor: SYMMETRY_COLORS[key],
+                    backgroundColor: theme.symmetryColors[key],
                     color: 'white'
                   }}
                   aria-pressed={isActive}
@@ -295,7 +292,7 @@ const FiltersPanel = ({
                       : "opacity-70 hover:opacity-100"
                   )}
                   style={{
-                    backgroundColor: WUXING_COLORS[wuxing],
+                    backgroundColor: theme.wuxingColors[wuxing],
                     color: 'white'
                   }}
                   aria-pressed={isActive}
@@ -337,7 +334,7 @@ const FiltersPanel = ({
                       : "opacity-70 hover:opacity-100"
                   )}
                   style={{
-                    backgroundColor: WUXING_COLORS[wuxing],
+                    backgroundColor: theme.wuxingColors[wuxing],
                     color: 'white'
                   }}
                   aria-pressed={isActive}
@@ -378,7 +375,7 @@ const FiltersPanel = ({
                       : "opacity-70 hover:opacity-100"
                   )}
                   style={{
-                    backgroundColor: TRANSITION_COLORS[key],
+                    backgroundColor: theme.transitionColors[key],
                     color: 'white'
                   }}
                   aria-pressed={isActive}
@@ -419,7 +416,7 @@ const FiltersPanel = ({
                       : "opacity-70 hover:opacity-100"
                   )}
                   style={{
-                    backgroundColor: SIXIANG_COLORS[key],
+                    backgroundColor: theme.sixiangColors[key],
                     color: 'white'
                   }}
                   aria-pressed={isActive}
@@ -460,7 +457,7 @@ const FiltersPanel = ({
                       : "opacity-70 hover:opacity-100"
                   )}
                   style={{
-                    backgroundColor: SIXIANG_COLORS[key],
+                    backgroundColor: theme.sixiangColors[key],
                     color: 'white'
                   }}
                   aria-pressed={isActive}
@@ -501,7 +498,7 @@ const FiltersPanel = ({
                       : "opacity-70 hover:opacity-100"
                   )}
                   style={{
-                    backgroundColor: SIXIANG_COLORS[key],
+                    backgroundColor: theme.sixiangColors[key],
                     color: 'white'
                   }}
                   aria-pressed={isActive}

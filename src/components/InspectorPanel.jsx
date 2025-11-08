@@ -4,7 +4,8 @@ import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
 import HexagramCard from './HexagramCard';
-import { BALANCED_COLORS, MANTRA_COLORS, SYMMETRY_COLORS, toBinary, cn } from '../globals.js';
+import { toBinary, cn } from '../globals.js';
+import * as theme from '../utils/colors.js';
 
 const InspectorPanel = ({ hexIndex, onSelectHex }) => {
   const [history, setHistory] = useState([]);
@@ -147,15 +148,15 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
             </div>
           )}
           <div className="flex items-center gap-2 p-2 mb-1 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: BALANCED_COLORS[balanced] }} />
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: theme.balancedColors[balanced] }} />
             <span className="capitalize font-medium">{balanced}</span>
           </div>
           <div className="flex items-center gap-2 p-2 mb-1 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: MANTRA_COLORS[mantra] }} />
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: theme.mantraColors[mantra] }} />
             <span className="capitalize font-medium">{mantra}</span>
           </div>
           <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: SYMMETRY_COLORS[symmetry] }} />
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: theme.symmetryColors[symmetry] }} />
             <span className="capitalize font-medium">{symmetry}</span>
           </div>
         </details>

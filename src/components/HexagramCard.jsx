@@ -3,7 +3,9 @@ import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
 
-import { BALANCED_COLORS, cn, MANTRA_COLORS, SYMMETRY_COLORS, getWuxingColor } from '../globals.js';
+import { cn } from '../globals.js';
+import * as theme from '../utils/colors.js';
+
 import { Tooltip } from './Tooltip';
 
 const HexagramCard = ({
@@ -20,16 +22,16 @@ const HexagramCard = ({
   const lower = Yijing.yijing_lower(hexIndex);
   const upperWuxing = Bagua.bagua_toWuxing(upper);
   const lowerWuxing = Bagua.bagua_toWuxing(lower);
-  const upperColor = getWuxingColor(upperWuxing);
-  const lowerColor = getWuxingColor(lowerWuxing);
+  const upperColor = theme.getWuxingColor(upperWuxing);
+  const lowerColor = theme.getWuxingColor(lowerWuxing);
 
   const transitionType = Wuxing.wuxing_transitionType(upperWuxing, lowerWuxing);
   const transitionSymbol = Wuxing.wuxing_transitionSymbolChar(transitionType);
   const transitionName = transitionType.charAt(0).toUpperCase() + transitionType.slice(1);
 
-  const symmetryColor = SYMMETRY_COLORS[symmetryGroup];
-  const balancedColor = BALANCED_COLORS[Yijing.yijing_balancedName(hexIndex)];
-  const mantraColor = MANTRA_COLORS[Yijing.yijing_mantraName(hexIndex)];
+  const symmetryColor = theme.symmetryColors[symmetryGroup];
+  const balancedColor = theme.balancedColors[Yijing.yijing_balancedName(hexIndex)];
+  const mantraColor = theme.mantraColors[Yijing.yijing_mantraName(hexIndex)];
 
   // ---- tooltip texts ----
   const symmetryName = Yijing.yijing_symmetryName(hexIndex);
@@ -39,14 +41,14 @@ const HexagramCard = ({
     ? "Foundational"
     : null;
 
-  // ---- border logic (unchanged) ----
+  // ---- border logic ----
   let borderColor;
   if (selected) {
-    borderColor = '#fbbf24';
+    borderColor = theme.additionalColors.selected;
   } else if (filterSymmetry.includes(symmetryGroup)) {
-    borderColor = symmetryColor;
+    borderColor = theme.symmetryColors[symmetryGroup];
   } else {
-    borderColor = '#3b82f6';
+    borderColor = theme.additionalColors.defaultBorder;
   }
 
   const renderLine = (position) => {
@@ -123,7 +125,7 @@ const HexagramCard = ({
             {(foundation && (<Tooltip title={`${foundation}: ${Bagua.bagua_toName(upper)}`} className="capitalize">
               <div
                 className="w-2 h-2 rounded-full"
-                style={{ backgroundColor: '#FFFF00' }}
+                style={{ backgroundColor: theme.additionalColors.foundation }}
                 aria-hidden="true"
               />
             </Tooltip>))}
