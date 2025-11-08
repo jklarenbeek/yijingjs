@@ -2,8 +2,8 @@
 
 //#region Sixiang Layers
 
-// Torah -> Bits 0-1: top sixiang
-export function yijing_blue(hexagram = 0) {
+// Deus -> Bits 0-1: top sixiang
+export function yijing_red(hexagram = 0) {
   hexagram = hexagram | 0;
   return (hexagram & 3) | 0;
 }
@@ -14,8 +14,8 @@ export function yijing_white(hexagram = 0) {
   return ((hexagram >> 2) & 3) | 0;
 }
 
-// Deus -> Bits 4-5: bottom sixiang
-export function yijing_red(hexagram = 0) {
+// Torah -> Bits 4-5: bottom sixiang
+export function yijing_blue(hexagram = 0) {
   hexagram = hexagram | 0;
   return ((hexagram >> 4) & 3) | 0;
 }
@@ -641,6 +641,9 @@ export const YIJING_KINGWEN_SEQUENCE = [
   0b101010 /* 63 Ji Ji (After Completion) */,
   0b010101 /* 64 Wei Ji (Before Completion) */
 ];
+
+export const YIJING_KINGWEN_INVERTED =
+  (() => yijing_invertSequence(YIJING_KINGWEN_SEQUENCE));
 
 /**
  * Generates 64 hexagrams from a Bagua sequence.

@@ -4,7 +4,7 @@ import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
 import HexagramCard from './HexagramCard';
-import { MANTRA_COLORS, SYMMETRY_COLORS, toBinary, cn } from '../globals.js';
+import { BALANCED_COLORS, MANTRA_COLORS, SYMMETRY_COLORS, toBinary, cn } from '../globals.js';
 
 const InspectorPanel = ({ hexIndex, onSelectHex }) => {
   const [history, setHistory] = useState([]);
@@ -43,9 +43,14 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
 
   const upper = Yijing.yijing_upper(currentHex);
   const lower = Yijing.yijing_lower(currentHex);
+  const upperSymbol = Bagua.bagua_toSymbolChar(upper);
+  const lowerSymbol = Bagua.bagua_toSymbolChar(lower);
   const upperWuxing = Bagua.bagua_toWuxing(upper);
   const lowerWuxing = Bagua.bagua_toWuxing(lower);
   const symmetry = Yijing.yijing_symmetryName(currentHex);
+  const foundation = Yijing.yijing_isFoundation(currentHex)
+    ? "Foundational"
+    : null;
   const balanced = Yijing.yijing_balancedName(currentHex);
   const mantra = Yijing.yijing_mantraName(currentHex);
   const lineCount = Yijing.yijing_lineCount(currentHex);
@@ -54,6 +59,35 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
   const orbit = Yijing.yijing_orbitClass(currentHex);
   const centerChain = Yijing.yijing_getCenterChain(currentHex);
   const localNeighbors = Yijing.yijing_neighbors(currentHex);
+
+  const red = Yijing.yijing_red(currentHex);
+  const white = Yijing.yijing_white(currentHex);
+  const blue = Yijing.yijing_blue(currentHex);
+
+  const kingWenNumber = Yijing.YIJING_KINGWEN_SEQUENCE[currentHex] + 1;
+
+  const grayCode = Yijing.yijing_toGray(currentHex);
+  const grayPosition = Yijing.yijing_fromGray(currentHex);
+
+  const entropy = Yijing.yijing_entropy(currentHex).toFixed(3);
+  const balance = Yijing.yijing_balance(currentHex).toFixed(3);
+  const depth = Yijing.yijing_depth(currentHex);
+  const root = Yijing.yijing_root(currentHex);
+  const distanceToRoot = Yijing.yijing_distance(currentHex, root);
+
+  const codon = Yijing.yijing_toCodon(currentHex);
+  const aaName = Yijing.yijing_toAminoAcidName(currentHex);
+  const isStop = Yijing.yijing_isStopCodon(currentHex);
+
+  // Placeholder for amino acid SVGs - replace with actual inline SVG strings
+  const getAASvg = (name) => {
+    // Example placeholder SVG
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100"><rect width="200" height="100" fill="#f0f0f0"/><text x="10" y="50" font-size="16">${name} Structure</text></svg>`;
+    // For real implementation, use something like:
+    // if (name === 'glycine') return '<svg ... full code ... </svg>';
+    // Get SVGs from sources like Wikimedia Commons individual files, e.g., for glycine: https://upload.wikimedia.org/wikipedia/commons/6/6c/Glycine-skeletal.svg
+    // But since extraction was difficult, use placeholders or fetch dynamically if possible.
+  };
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col h-full">
@@ -104,31 +138,33 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
         )}
 
         {/* ---------- BASIC INFO ---------- */}
-        <section>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Mantra</h3>
-          <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: MANTRA_COLORS[mantra] }} />
-            <span className="capitalize font-medium">{balanced} {mantra}</span>
+        <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6" open>
+          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Geometry</summary>
+          {foundation && (
+            <div className="flex items-center gap-2 p-2 mb-1 bg-gray-50 dark:bg-gray-700/50 rounded">
+              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#FFFF00' }} />
+              <span className="capitalize font-medium">{foundation}</span>
+            </div>
+          )}
+          <div className="flex items-center gap-2 p-2 mb-1 bg-gray-50 dark:bg-gray-700/50 rounded">
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: BALANCED_COLORS[balanced] }} />
+            <span className="capitalize font-medium">{balanced}</span>
           </div>
-        </section>
-
-        <section>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Symmetry</h3>
+          <div className="flex items-center gap-2 p-2 mb-1 bg-gray-50 dark:bg-gray-700/50 rounded">
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: MANTRA_COLORS[mantra] }} />
+            <span className="capitalize font-medium">{mantra}</span>
+          </div>
           <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
             <div className="w-4 h-4 rounded-full" style={{ backgroundColor: SYMMETRY_COLORS[symmetry] }} />
             <span className="capitalize font-medium">{symmetry}</span>
           </div>
-        </section>
+        </details>
 
-        <section>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Yang Lines</h3>
-          <div className="p-2 bg-gray-50 dark:bg-gray-700/50 rounded"><p className="font-medium">{lineCount} / 6</p></div>
-        </section>
-
-        <section>
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
+        {/* ---------- TRIGRAM FLOW ---------- */}
+        <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6" open>
+          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">
             Trigram Flow
-          </h3>
+          </summary>
 
           <div className="flex items-center justify-center gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
             {/* Upper Trigram */}
@@ -136,7 +172,7 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
               <span className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Upper</span>
               <div className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded">
                 <span className="text-lg">{Wuxing.wuxing_toEmojiChar(upperWuxing)}</span>
-                <span className="capitalize text-sm font-medium">{upperWuxing}</span>
+                <span className="capitalize text-sm font-medium">{upperWuxing}<br />{upperSymbol}</span>
                 <span className="text-xs text-gray-500 ml-1">({upper})</span>
               </div>
             </div>
@@ -159,16 +195,73 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
               <span className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Lower</span>
               <div className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded">
                 <span className="text-lg">{Wuxing.wuxing_toEmojiChar(lowerWuxing)}</span>
-                <span className="capitalize text-sm font-medium">{lowerWuxing}</span>
+                <span className="capitalize text-sm font-medium">{lowerWuxing}<br />{lowerSymbol}</span>
                 <span className="text-xs text-gray-500 ml-1">({lower})</span>
               </div>
             </div>
           </div>
-        </section>
+        </details>
+
+        {/* ---------- GENETIC MAPPING ---------- */}
+        <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6" open>
+          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Genetic Mapping</summary>
+          <div className="space-y-2 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+            <div className="flex items-center gap-2">
+              <span className="">Deus (Red):</span>
+              <span className="capitalize">{Wuxing.sixiang_toName(red)} {Wuxing.sixiang_toSymbolChar(red)} {Wuxing.sixiang_toEmojiChar(red)}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="">Homo (White):</span>
+              <span className="capitalize">{Wuxing.sixiang_toName(white)} {Wuxing.sixiang_toSymbolChar(white)} {Wuxing.sixiang_toEmojiChar(white)}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="">Torah (Blue):</span>
+              <span className="capitalize">{Wuxing.sixiang_toName(blue)} {Wuxing.sixiang_toSymbolChar(blue)} {Wuxing.sixiang_toEmojiChar(blue)}</span>
+            </div>
+          </div>
+          <div className="space-y-2 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+            <p>Codon: {codon}</p>
+            <p>Amino Acid: {aaName} {isStop ? '(Stop)' : ''}</p>
+            {!isStop && (
+              <div className="flex justify-center">
+                <div dangerouslySetInnerHTML={{ __html: getAASvg(aaName) }} />
+              </div>
+            )}
+          </div>
+        </details>
+
+        {/* ---------- PATH TO ROOT ---------- */}
+        {centerChain.length > 1 && (
+          <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6" open>
+            <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Path to Root ({centerChain.length - 1} steps)</summary>
+            <div className="grid grid-cols-3 gap-0.75">
+              {centerChain.map((h, idx) => (
+                <div
+                  key={h}
+                  className="group flex flex-col items-center p-0.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <HexagramCard
+                    hexIndex={h}
+                    selected={h === currentHex}
+                    onClick={() => handleLocalSelect(h)}
+                    isNeighbor={idx > 0}
+                    neighborRelation={idx > 0 ? centerChain[idx - 1] : null}
+                    symmetryGroup={Yijing.yijing_symmetryName(h)}
+                    filterSymmetry={[]}
+                  />
+                  <span className="text-xs text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">
+                    {idx === centerChain.length - 1 ? 'Cosmic' : (idx === centerChain.length - 2 ? 'Karmic' : 'Atomic')}&nbsp;
+                    ({Yijing.yijing_relationEmojiChar(currentHex, h)})
+                  </span>
+                </div>
+              ))}
+            </div>
+          </details>
+        )}
 
         {/* ---------- TRANSFORMATIONS ---------- */}
-        <section className="border-t border-gray-200 dark:border-gray-700 pt-4">
-          <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Transformations</h3>
+        <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6">
+          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Transformations</summary>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-0.75">
             {Object.entries(orbit).map(([key, value]) => (
               <div
@@ -192,41 +285,12 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
               </div>
             ))}
           </div>
-        </section>
-
-        {/* ---------- PATH TO ROOT ---------- */}
-        {centerChain.length > 1 && (
-          <section className="border-t border-gray-200 dark:border-gray-700 pt-4">
-            <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Path to Root ({centerChain.length - 1} steps)</h3>
-            <div className="grid grid-cols-3 gap-0.75">
-              {centerChain.map((h, idx) => (
-                <div
-                  key={h}
-                  className="group flex flex-col items-center p-0.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                >
-                  <HexagramCard
-                    hexIndex={h}
-                    selected={h === currentHex}
-                    onClick={() => handleLocalSelect(h)}
-                    isNeighbor={idx > 0}
-                    neighborRelation={idx > 0 ? centerChain[idx - 1] : null}
-                    symmetryGroup={Yijing.yijing_symmetryName(h)}
-                    filterSymmetry={[]}
-                  />
-                  <span className="text-xs text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">
-                    {idx === centerChain.length - 1 ? 'Cosmic' : (idx === centerChain.length - 2 ? 'Karmic' : 'Atomic')}&nbsp;
-                    ({Yijing.yijing_relationEmojiChar(currentHex, h)})
-                  </span>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+        </details>
 
         {/* ---------- NEIGHBORS ---------- */}
         {localNeighbors.length > 0 && (
-          <section className="border-t border-gray-200 dark:border-gray-700 pt-4">
-            <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Neighbors ({localNeighbors.length})</h3>
+          <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6">
+            <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Neighbors ({localNeighbors.length})</summary>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-0.75">
               {localNeighbors.map(n => (
                 <div
@@ -248,8 +312,24 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
                 </div>
               ))}
             </div>
-          </section>
+          </details>
         )}
+
+        {/* ---------- ADVANCED METRICS ---------- */}
+        <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6">
+          <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3">Advanced Metrics</summary>
+          <div className="space-y-2 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+            <p>King Wen: {kingWenNumber}</p>
+            <p>Gray Code: {grayCode} (Position: {grayPosition})</p>
+            <p>Yang Lines: {lineCount} / 6</p>
+            <p>Root: {root}</p>
+            <p>Distance to Root: {distanceToRoot}</p>
+            <p>Depth: {depth}</p>
+            <p>Entropy: {entropy}</p>
+            <p>Balance: {balance}</p>
+          </div>
+        </details>
+
       </div>
     </div>
   );
