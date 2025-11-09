@@ -1,6 +1,162 @@
-# @yijingjs/core
+# Yijing Explorer
 
-Core library for Yijing (I Ching) hexagram calculations, transformations, and analysis.
+> A modern, interactive exploration of the I Ching (Yijing) through mathematical, computational, and philosophical lenses
+
+[![Live Demo](https://img.shields.io/badge/demo-live-green.svg)](https://jklarenbeek.github.io/yijingjs/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+## 🌟 What is Yijing Explorer?
+
+Yijing Explorer is an interactive web application that reimagines the ancient Chinese divination system of the I Ching (Yijing) through modern computational and mathematical frameworks. It transforms the 64 hexagrams from static symbols into dynamic, interconnected nodes in a multidimensional exploration space.
+
+This project bridges ancient wisdom with modern technology, offering:
+
+- **Mathematical Foundations**: Hexagrams as 6-bit binary numbers (0-63)
+- **Interactive Visualization**: Real-time exploration of hexagram relationships
+- **Multiple Sequencing Systems**: Traditional King Wen, Early/Later Heaven, and mathematical sequences like Gray Code
+- **Genetic Mapping**: Direct correlation between hexagrams and genetic codons
+- **Custom Sequence Creation**: Build and save your own hexagram arrangements
+
+## 🎯 Live Demo
+
+**[Explore the Yijing Explorer Live!](https://jklarenbeek.github.io/yijingjs/)**
+
+Experience the full interactive application with all features available in your browser.
+
+## 🔬 Key Features
+
+### Interactive Hexagram Grid
+- **Multiple Views**: Switch between trigram and sixiang (4-line symbol) representations
+- **Real-time Filtering**: Filter by symmetry groups, elemental transitions, mantra levels, and more
+- **Visual Relationships**: See neighboring hexagrams and transformation paths
+- **Keyboard Navigation**: Navigate the grid with arrow keys
+
+### Mathematical Frameworks
+
+#### Binary Representation
+Each hexagram is represented as a 6-bit binary number:
+- **Top line** = bit 0 (LSB)
+- **Bottom line** = bit 5 (MSB)
+
+This consistent representation applies to:
+- **Hexagrams**: 6 lines = 6 bits (0-63)
+- **Trigrams**: 3 lines = 3 bits (0-7)
+- **Sixiangs**: 2 lines = 2 bits (0-3)
+
+#### Multiple Sequencing Systems
+- **King Wen Sequence**: Traditional divination order
+- **Early Heaven Sequence**: Cosmic arrangement
+- **Later Heaven Sequence**: Temporal arrangement
+- **Gray Code Sequence**: Mathematical sequence where adjacent values differ by exactly one bit
+- **Binary Sequence**: Natural counting order
+
+### Advanced Analysis Tools
+
+#### Symmetry Classification
+Hexagrams are categorized into 7 symmetry groups:
+- **Breath**, **Mother**, **Direction** (balanced)
+- **Beginning**, **Principle**, **Titan**, **Gigante** (unbalanced)
+
+#### Elemental Transitions
+Wuxing (Five Element) analysis between upper and lower trigrams:
+- **Creates** (generative cycle)
+- **Destroys** (controlling cycle)
+- **Weakens** (reverse generative)
+- **Insults** (reverse controlling)
+- **Neutral** (same element)
+
+#### Genetic Mapping
+Direct correlation to the genetic code:
+- Each hexagram maps to a 3-base codon
+- Shows corresponding amino acids
+- Stop codon identification
+- Dyadic mutation simulation
+
+### Custom Sequence Editor
+- **Drag & Drop Interface**: Build custom hexagram arrangements
+- **Undo/Redo Support**: Complete edit history
+- **Save & Load**: Persistent custom sequences
+- **Real-time Validation**: Visual feedback and constraints
+
+## 🧠 Philosophical & Mathematical Depth
+
+### Computational Taoism
+The project implements several innovative frameworks:
+
+#### Three-Layer Architecture (Deus/Homo/Torah)
+- **Deus** (Red): Top two lines - spiritual dimension
+- **Homo** (White): Middle two lines - human dimension
+- **Torah** (Blue): Bottom two lines - foundational dimension
+
+#### Nuclear Convergence
+- Every hexagram converges to one of 4 cosmic roots through center operations
+- **Cosmic** (4 hexagrams): Primordial states
+- **Karmic** (12 hexagrams): Direct descendants of cosmic
+- **Atomic** (48 hexagrams): Further descendants
+
+#### Entropy & Balance Metrics
+- **Information Entropy**: Measures balance/chaos (0 = pure, 1 = perfect balance)
+- **Yang Balance Ratio**: Proportion of yang lines (0.0 - 1.0)
+- **Transformation Distance**: Hamming distance between hexagrams
+
+## 🚀 Why Use Yijing Explorer?
+
+### For I Ching Practitioners
+- **Modern Interface**: Move beyond static book interpretations
+- **Relationship Mapping**: Visualize how hexagrams transform into each other
+- **Multiple Perspectives**: Switch between traditional and mathematical views
+- **Personal Sequences**: Create and save meaningful arrangements
+
+### For Mathematicians & Computer Scientists
+- **Group Theory**: Explore the symmetric group S₆₄ and its subgroups
+- **Information Theory**: Study entropy and information content
+- **Graph Theory**: Hexagrams as nodes in a 6-dimensional hypercube
+- **Genetic Algorithms**: Understand the mathematical structure of the genetic code
+
+### For Philosophers & Spiritual Seekers
+- **Pattern Recognition**: Discover deeper symbolic relationships
+- **Meditative Tool**: Use custom sequences for contemplation
+- **Cross-cultural Bridge**: Connect ancient Chinese wisdom with modern science
+- **Personal Insight**: Interactive exploration of life situations and transformations
+
+## 🛠 Technical Implementation
+
+Built with modern web technologies:
+- **React 19** with hooks for state management
+- **Custom mathematical libraries** for Yijing operations
+- **Tailwind CSS** for responsive design
+- **Local storage** for sequence persistence
+- **Modular architecture** for extensibility
+
+## 📚 Learning Resources
+
+The project includes comprehensive documentation within the code:
+- Mathematical proofs of symmetry classifications
+- Genetic code mapping tables
+- Transformation operation definitions
+- Philosophical framework explanations
+
+## 🔮 Future Development
+
+Potential extensions include:
+- Mobile application
+- API for developers
+- Advanced visualization modes
+- Community sequence sharing
+- Historical sequence analysis
+
+## 🎓 Getting Started
+
+### For Users
+Visit the [live demo](https://jklarenbeek.github.io/yijingjs/) to start exploring immediately.
+
+### For Developers
+```bash
+git clone https://github.com/jklarenbeek/yijingjs.git
+cd yijingjs
+npm install
+npm run dev
+```
 
 ## Installation
 ```bash
@@ -10,8 +166,8 @@ npm install @yijingjs/core
 ## Usage
 ```javascript
 import * as Yijing from '@yijingjs/core';
-import * as Wuxing from '@yijingjs/core/wuxing';
-import * as Bagua from '@yijingjs/core/bagua';
+import * as Wuxing from '@yijingjs/wuxing';
+import * as Bagua from '@yijingjs/bagua';
 
 // Get hexagram properties
 const hex = 21;
@@ -30,10 +186,12 @@ const element = Bagua.bagua_toWuxing(upper);
 const emoji = Wuxing.wuxing_toEmojiChar(element);
 ```
 
-## API Documentation
+## 📜 License
 
-See [full documentation](https://github.com/jklarenbeek/yijingjs).
+MIT License - feel free to use this project for personal, educational, or commercial purposes.
 
-## License
+---
 
-MIT
+**Yijing Explorer** transforms ancient divination into a modern tool for pattern recognition, mathematical exploration, and personal insight. Whether you're studying the I Ching, exploring mathematical symmetry, or seeking personal guidance, this project offers a unique bridge between ancient wisdom and modern computational thinking.
+
+*"The patterns of change are universal - from the shifting lines of the I Ching to the binary code of modern computation."*
