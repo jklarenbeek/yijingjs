@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *), @media (prefers-color-scheme: dark) { &:not(.light, .light *) });
+/* @custom-variant dark (&:where(.dark, .dark *), @media (prefers-color-scheme: dark) { &:not(.light, .light *) }); */
 
 :root {
   /* Custom properties for theme switching */
