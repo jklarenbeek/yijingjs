@@ -14,6 +14,8 @@ const EditableHexagramGrid = ({
   filters,
   neighbors = [],
   hasUnsavedChanges = false,
+  showSixiangs = false,
+  showKingWenNumbers = false,
 }) => {
   const [dragState, setDragState] = useState({
     isDragging: false,
@@ -502,6 +504,8 @@ const EditableHexagramGrid = ({
               isNeighbor={false}
               filters={filters}
               inEditMode
+              showSixiangs={showSixiangs}
+              showKingWenNumbers={showKingWenNumbers}
             />
           </div>
         </div>

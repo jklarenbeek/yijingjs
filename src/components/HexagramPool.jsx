@@ -10,6 +10,8 @@ const HexagramPool = ({
   placedHexagrams = [],
   onSelectHex,
   filters,
+  showSixiangs = false,
+  showKingWenNumbers = false
 }) => {
 
   const available = Array.from({ length: 64 }, (_, i) => i).filter(
@@ -46,6 +48,8 @@ const HexagramPool = ({
             isNeighbor={false}
             filters={filters}
             inEditMode
+            showSixiangs={showSixiangs}
+            showKingWenNumbers={showKingWenNumbers}
           />
         </div>
       ))}

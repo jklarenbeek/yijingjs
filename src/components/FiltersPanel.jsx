@@ -32,6 +32,8 @@ const FiltersPanel = ({
   onSelectHex,
   setEditStage,
   editMode = false,
+  showSixiangs = false,
+  showKingWenNumbers = false
 }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col h-full">
@@ -235,6 +237,8 @@ const FiltersPanel = ({
               placedHexagrams={placedHexagrams}
               onSelectHex={onSelectHex}
               filters={filters}
+              showSixiangs={showSixiangs}
+              showKingWenNumbers={showKingWenNumbers}
             />
           </section>
         )}

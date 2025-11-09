@@ -15,7 +15,11 @@ const AppHeader = ({
   currentSequence,
   setCurrentSequence,
   customSequences,
-  hasUnsavedChanges = false
+  hasUnsavedChanges = false,
+  showSixiangs = false,
+  setShowSixiangs,
+  showKingWenNumbers = false,
+  setShowKingWenNumbers
 }) => {
   return (
     <header className="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 px-6 py-4 transition-colors">
@@ -48,6 +52,31 @@ const AppHeader = ({
           >
             {editMode ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
             {editMode ? 'Exit Edit' : 'Edit Mode'}
+          </button>
+          <button
+            onClick={() => setShowSixiangs(!showSixiangs)}
+            className={cn(
+              "p-2 rounded-lg transition-colors",
+              showSixiangs
+                ? "bg-purple-500 hover:bg-purple-600 text-white"
+                : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100"
+            )}
+            aria-label={showSixiangs ? 'Show trigrams' : 'Show sixiangs'}
+          >
+            {showSixiangs ? '䷀' : '☰'}
+          </button>
+
+          <button
+            onClick={() => setShowKingWenNumbers(!showKingWenNumbers)}
+            className={cn(
+              "p-2 rounded-lg transition-colors",
+              showKingWenNumbers
+                ? "bg-green-500 hover:bg-green-600 text-white"
+                : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100"
+            )}
+            aria-label={showKingWenNumbers ? 'Show decimal numbers' : 'Show King Wen numbers'}
+          >
+            {showKingWenNumbers ? 'KW' : 'Dec'}
           </button>
           <button
             onClick={toggleDarkMode}

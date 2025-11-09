@@ -158,7 +158,7 @@ export function getHexagramData(hexIndex) {
   const red = Yijing.yijing_red(hexIndex);
   const white = Yijing.yijing_white(hexIndex);
   const blue = Yijing.yijing_blue(hexIndex);
-  const kingWenNumber = Yijing.YIJING_KINGWEN_SEQUENCE[hexIndex] + 1;
+  const kingWenNumber = Yijing.YIJING_KINGWEN_SEQUENCE.findIndex(num => num === hexIndex) + 1;
   const grayCode = Yijing.yijing_toGray(hexIndex);
   const grayPosition = Yijing.yijing_fromGray(hexIndex);
   const entropy = Yijing.yijing_entropy(hexIndex).toFixed(3);
@@ -179,10 +179,18 @@ export function getHexagramData(hexIndex) {
     symmetryName, symmetryColor,
     balancedName, balancedColor,
     mantraName, mantraColor,
-    lineCount, binary: binaryString, orbit, centerChain, localNeighbors,
+    lineCount, binaryString, orbit, centerChain, localNeighbors,
     red, white, blue,
     kingWenNumber, grayCode, grayPosition,
     entropy, balance, depth, root, distanceToRoot,
     codon, aaName, isStop
   };
+}
+
+export function getSixiangData(sixiangValue) {
+  const name = Wuxing.sixiang_toName(sixiangValue);
+  const symbol = Wuxing.sixiang_toSymbolChar(sixiangValue);
+  const color = colorSystem.sixiang[name];
+
+  return { name, symbol, color };
 }

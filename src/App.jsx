@@ -19,6 +19,8 @@ import AppTabs from './components/AppTabs';
 
 function App() {
   const [selectedHex, setSelectedHex] = useState(null);
+  const [showSixiangs, setShowSixiangs] = useState(false);
+  const [showKingWenNumbers, setShowKingWenNumbers] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState(TAB_NAMES.INSPECTOR);
   const [editStage, setEditStage] = useState(() => {
@@ -176,6 +178,10 @@ function App() {
         setCurrentSequence={sequences.setCurrentSequence}
         customSequences={sequences.customSequences}
         hasUnsavedChanges={hasUnsavedChanges}
+        showSixiangs={showSixiangs}
+        setShowSixiangs={setShowSixiangs}
+        showKingWenNumbers={showKingWenNumbers}
+        setShowKingWenNumbers={setShowKingWenNumbers}
       />
 
       <div className="flex flex-col lg:flex-row gap-4 p-4 max-w-screen-2xl mx-auto">
@@ -190,6 +196,8 @@ function App() {
               filters={filters}
               neighbors={neighbors}
               hasUnsavedChanges={hasUnsavedChanges}
+              showSixiangs={showSixiangs}
+              showKingWenNumbers={showKingWenNumbers}
             />
           ) : (
             <HexagramGrid
@@ -199,6 +207,8 @@ function App() {
               filters={filters}
               currentSequence={sequences.currentSequence}
               customSequences={sequences.customSequences}
+              showSixiangs={showSixiangs}
+              showKingWenNumbers={showKingWenNumbers}
             />
           )}
         </div>
@@ -218,6 +228,8 @@ function App() {
                 <InspectorPanel
                   hexIndex={selectedHex}
                   onSelectHex={handleSelectHex}
+                  showSixiangs={showSixiangs}
+                  showKingWenNumbers={showKingWenNumbers}
                 />
               )}
               {activeTab === TAB_NAMES.FILTERS && (
@@ -227,6 +239,8 @@ function App() {
                   onSelectHex={handleSelectHex}
                   setEditStage={handleEditStageChange}
                   editMode={editMode}
+                  showSixiangs={showSixiangs}
+                  showKingWenNumbers={showKingWenNumbers}
                 />
               )}
               {activeTab === TAB_NAMES.MANAGER && editMode && (

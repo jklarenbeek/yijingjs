@@ -8,7 +8,12 @@ import * as Wuxing from '@yijingjs/wuxing';
 import HexagramCard from './HexagramCard';
 import { cn, getHexagramData } from '../utils/tools.js';
 
-const InspectorPanel = ({ hexIndex, onSelectHex }) => {
+const InspectorPanel = ({
+  hexIndex,
+  onSelectHex,
+  showSixiangs = false,
+  showKingWenNumbers = false
+}) => {
   const [history, setHistory] = useState([]);
 
   // Define currentHex early, with fallback to hexIndex for initial sync
@@ -52,8 +57,8 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {/* Header */}
         <div className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6 sticky top-0 bg-white dark:bg-gray-800 z-10">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Hexagram {currentHex}</h2>
-          <p className="text-sm font-mono text-gray-500 dark:text-gray-400 mt-1">{currentData.binaryString}</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Hexagram {showKingWenNumbers ? currentData.kingWenNumber : currentHex}</h2>
+          <p className="text-sm font-mono text-gray-500 dark:text-gray-400 mt-1">{currentData.binaryString || "booh"}</p>
         </div>
 
         {/* Breadcrumb Navigation */}
@@ -204,6 +209,8 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
                     onClick={() => handleLocalSelect(h)}
                     isNeighbor={idx > 0}
                     filters={{}}
+                    showSixiangs={showSixiangs}
+                    showKingWenNumbers={showKingWenNumbers}
                   />
                   <span className="text-xs text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">
                     {idx === currentData.centerChain.length - 1 ? 'Cosmic' : (idx === currentData.centerChain.length - 2 ? 'Karmic' : 'Atomic')}&nbsp;
@@ -230,6 +237,8 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
                   onClick={() => handleLocalSelect(value)}
                   isNeighbor={false}
                   filters={{}}
+                  showSixiangs={showSixiangs}
+                  showKingWenNumbers={showKingWenNumbers}
                 />
 
                 <span className="text-xs capitalize text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">
@@ -258,6 +267,8 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
                     onClick={() => handleLocalSelect(n)}
                     isNeighbor={true}
                     filters={{}}
+                    showSixiangs={showSixiangs}
+                    showKingWenNumbers={showKingWenNumbers}
                   />
                   <span className="text-xs text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">
                     {Yijing.yijing_relationEmojiChar(currentHex, n)}

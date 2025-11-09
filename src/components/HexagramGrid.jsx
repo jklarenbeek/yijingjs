@@ -12,6 +12,8 @@ const HexagramGrid = ({
   filters,
   currentSequence,
   customSequences = [],
+  showSixiangs = false,
+  showKingWenNumbers = false,
 }) => {
 
   const customMap = customSequences.reduce((acc, seq) => {
@@ -80,6 +82,8 @@ const HexagramGrid = ({
                 onClick={onSelectHex}
                 isNeighbor={isNeighbor}
                 filters={filters}
+                showSixiangs={showSixiangs}
+                showKingWenNumbers={showKingWenNumbers}
               />
             </div>
           );
