@@ -15,7 +15,7 @@ const HexagramCard = ({
   isNeighbor,
   neighborRelation,
   symmetryGroup,
-  filterSymmetry,
+  filterSymmetry = [],
   inEditMode = false,
 }) => {
   const upper = Yijing.yijing_upper(hexIndex);

@@ -114,27 +114,17 @@ function App() {
               setEditStage={setEditStage}
               selectedHex={selectedHex}
               onSelectHex={handleSelectHex}
-              filterSymmetry={filters.filterSymmetry}
-              filterMantra={filters.filterMantra}
-              filterBalance={filters.filterBalance}
+              isFiltered={filters.isFiltered}
+              neighbors={neighbors}
             />
           ) : (
             <HexagramGrid
               selectedHex={selectedHex}
               onSelectHex={handleSelectHex}
               neighbors={neighbors}
-              filterSymmetry={filters.filterSymmetry}
-              filterMantra={filters.filterMantra}
-              filterBalance={filters.filterBalance}
+              isFiltered={filters.isFiltered}
               currentSequence={sequences.currentSequence}
               customSequences={sequences.customSequences}
-              filterUpperTrigram={filters.filterUpperTrigram}
-              filterLowerTrigram={filters.filterLowerTrigram}
-              filterTransition={filters.filterTransition}
-              filterAmino={filters.filterAmino}
-              filterBottomSixiang={filters.filterBottomSixiang}
-              filterMiddleSixiang={filters.filterMiddleSixiang}
-              filterTopSixiang={filters.filterTopSixiang}
             />
           )}
         </div>
@@ -158,7 +148,7 @@ function App() {
               )}
               {activeTab === TAB_NAMES.FILTERS && (
                 <FiltersPanel
-                  {...filters}
+                  filters={filters}
                   placedHexagrams={editMode ? editStage.filter(h => h !== null) : []}
                   onSelectHex={handleSelectHex}
                   setEditStage={setEditStage}

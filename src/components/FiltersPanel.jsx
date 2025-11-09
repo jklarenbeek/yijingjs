@@ -1,4 +1,5 @@
 // src/components/FiltersPanel.jsx
+
 import React from 'react';
 import * as Yijing from '@yijingjs/core';
 import * as Bagua from '@yijingjs/bagua';
@@ -29,37 +30,11 @@ const sixiangGroups = generateSixiangInfo();
 const aminoAcidGroups = generateAminoAcidInfo();
 
 const FiltersPanel = ({
-  // Filter states
-  filterSymmetry,
-  filterMantra,
-  filterBalance,
-  filterUpperTrigram,
-  filterLowerTrigram,
-  filterTransition,
-  filterAmino,
-  filterBottomSixiang,
-  filterMiddleSixiang,
-  filterTopSixiang,
-
-  // Filter handlers
-  handleSymmetryToggle,
-  handleMantraToggle,
-  handleBalanceToggle,
-  handleUpperTrigramToggle,
-  handleLowerTrigramToggle,
-  handleTransitionToggle,
-  handleAminoToggle,
-  handleBottomSixiangToggle,
-  handleMiddleSixiangToggle,
-  handleTopSixiangToggle,
-
-  // Other props
+  filters,
   placedHexagrams = [],
   onSelectHex,
   setEditStage,
   editMode = false,
-  clearAllFilters,
-  hasActiveFilters
 }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col h-full">
@@ -72,12 +47,12 @@ const FiltersPanel = ({
             {taoGroups.map(({ key, label, count }) => (
               <FilterButton
                 key={key}
-                isActive={filterBalance.includes(key)}
-                onClick={() => handleBalanceToggle(key)}
+                isActive={filters.filterBalance?.includes(key) ?? false}
+                onClick={() => filters.handleBalanceToggle(key)}
                 label={label}
                 count={count}
                 color={theme.balancedColors[key]}
-                ariaLabel={`${filterBalance.includes(key) ? 'Hide' : 'Show'} ${label}`}
+                ariaLabel={`${filters.filterBalance?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}
           </div>
@@ -89,12 +64,12 @@ const FiltersPanel = ({
             {mantraGroups.map(({ key, label, count }) => (
               <FilterButton
                 key={key}
-                isActive={filterMantra.includes(key)}
-                onClick={() => handleMantraToggle(key)}
+                isActive={filters.filterMantra?.includes(key) ?? false}
+                onClick={() => filters.handleMantraToggle(key)}
                 label={label}
                 count={count}
                 color={theme.mantraColors[key]}
-                ariaLabel={`${filterMantra.includes(key) ? 'Hide' : 'Show'} ${label}`}
+                ariaLabel={`${filters.filterMantra?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}
           </div>
@@ -106,12 +81,12 @@ const FiltersPanel = ({
             {symmetryGroups.map(({ key, label, count }) => (
               <FilterButton
                 key={key}
-                isActive={filterSymmetry.includes(key)}
-                onClick={() => handleSymmetryToggle(key)}
+                isActive={filters.filterSymmetry?.includes(key) ?? false}
+                onClick={() => filters.handleSymmetryToggle(key)}
                 label={label}
                 count={count}
                 color={theme.symmetryColors[key]}
-                ariaLabel={`${filterSymmetry.includes(key) ? 'Hide' : 'Show'} ${label} symmetry group`}
+                ariaLabel={`${filters.filterSymmetry?.includes(key) ? 'Hide' : 'Show'} ${label} symmetry group`}
               />
             ))}
           </div>
@@ -125,12 +100,12 @@ const FiltersPanel = ({
               return (
                 <FilterButton
                   key={key}
-                  isActive={filterUpperTrigram.includes(key)}
-                  onClick={() => handleUpperTrigramToggle(key)}
+                  isActive={filters.filterUpperTrigram?.includes(key) ?? false}
+                  onClick={() => filters.handleUpperTrigramToggle(key)}
                   label={label}
                   count={count}
                   color={theme.wuxingColors[wuxing]}
-                  ariaLabel={`${filterUpperTrigram.includes(key) ? 'Hide' : 'Show'} ${label}`}
+                  ariaLabel={`${filters.filterUpperTrigram?.includes(key) ? 'Hide' : 'Show'} ${label}`}
                 />
               );
             })}
@@ -145,12 +120,12 @@ const FiltersPanel = ({
               return (
                 <FilterButton
                   key={key}
-                  isActive={filterLowerTrigram.includes(key)}
-                  onClick={() => handleLowerTrigramToggle(key)}
+                  isActive={filters.filterLowerTrigram?.includes(key) ?? false}
+                  onClick={() => filters.handleLowerTrigramToggle(key)}
                   label={label}
                   count={count}
                   color={theme.wuxingColors[wuxing]}
-                  ariaLabel={`${filterLowerTrigram.includes(key) ? 'Hide' : 'Show'} ${label}`}
+                  ariaLabel={`${filters.filterLowerTrigram?.includes(key) ? 'Hide' : 'Show'} ${label}`}
                 />
               );
             })}
@@ -163,12 +138,12 @@ const FiltersPanel = ({
             {transitionGroups.map(({ key, label, count }) => (
               <FilterButton
                 key={key}
-                isActive={filterTransition.includes(key)}
-                onClick={() => handleTransitionToggle(key)}
+                isActive={filters.filterTransition?.includes(key) ?? false}
+                onClick={() => filters.handleTransitionToggle(key)}
                 label={label}
                 count={count}
                 color={theme.transitionColors[key]}
-                ariaLabel={`${filterTransition.includes(key) ? 'Hide' : 'Show'} ${label}`}
+                ariaLabel={`${filters.filterTransition?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}
           </div>
@@ -180,12 +155,12 @@ const FiltersPanel = ({
             {sixiangGroups.map(({ key, label, count }) => (
               <FilterButton
                 key={key}
-                isActive={filterBottomSixiang.includes(key)}
-                onClick={() => handleBottomSixiangToggle(key)}
+                isActive={filters.filterBottomSixiang?.includes(key) ?? false}
+                onClick={() => filters.handleBottomSixiangToggle(key)}
                 label={label}
                 count={count}
                 color={theme.sixiangColors[key]}
-                ariaLabel={`${filterBottomSixiang.includes(key) ? 'Hide' : 'Show'} ${label}`}
+                ariaLabel={`${filters.filterBottomSixiang?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}
           </div>
@@ -196,12 +171,12 @@ const FiltersPanel = ({
             {sixiangGroups.map(({ key, label, count }) => (
               <FilterButton
                 key={key}
-                isActive={filterMiddleSixiang.includes(key)}
-                onClick={() => handleMiddleSixiangToggle(key)}
+                isActive={filters.filterMiddleSixiang?.includes(key) ?? false}
+                onClick={() => filters.handleMiddleSixiangToggle(key)}
                 label={label}
                 count={count}
                 color={theme.sixiangColors[key]}
-                ariaLabel={`${filterMiddleSixiang.includes(key) ? 'Hide' : 'Show'} ${label}`}
+                ariaLabel={`${filters.filterMiddleSixiang?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}
           </div>
@@ -212,12 +187,12 @@ const FiltersPanel = ({
             {sixiangGroups.map(({ key, label, count }) => (
               <FilterButton
                 key={key}
-                isActive={filterTopSixiang.includes(key)}
-                onClick={() => handleTopSixiangToggle(key)}
+                isActive={filters.filterTopSixiang?.includes(key) ?? false}
+                onClick={() => filters.handleTopSixiangToggle(key)}
                 label={label}
                 count={count}
                 color={theme.sixiangColors[key]}
-                ariaLabel={`${filterTopSixiang.includes(key) ? 'Hide' : 'Show'} ${label}`}
+                ariaLabel={`${filters.filterTopSixiang?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}
           </div>
@@ -229,21 +204,21 @@ const FiltersPanel = ({
             {aminoAcidGroups.map(({ key, label, count }) => (
               <FilterButton
                 key={key}
-                isActive={filterAmino.includes(key)}
-                onClick={() => handleAminoToggle(key)}
+                isActive={filters.filterAmino?.includes(key) ?? false}
+                onClick={() => filters.handleAminoToggle(key)}
                 label={label}
                 count={count}
                 color={theme.additionalColors.amino}
-                ariaLabel={`${filterAmino.includes(key) ? 'Hide' : 'Show'} ${label}`}
+                ariaLabel={`${filters.filterAmino?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}
           </div>
         </FilterSection>
 
         {/* Clear All Filters Button */}
-        {hasActiveFilters && (
+        {filters.hasActiveFilters && (
           <button
-            onClick={clearAllFilters}
+            onClick={filters.clearAllFilters}
             className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 underline transition-colors"
             aria-label="Clear all filters"
           >
@@ -262,16 +237,7 @@ const FiltersPanel = ({
             <HexagramPool
               placedHexagrams={placedHexagrams}
               onSelectHex={onSelectHex}
-              filterSymmetry={filterSymmetry}
-              filterMantra={filterMantra}
-              filterBalance={filterBalance}
-              filterUpperTrigram={filterUpperTrigram}
-              filterLowerTrigram={filterLowerTrigram}
-              filterTransition={filterTransition}
-              filterAmino={filterAmino}
-              filterBottomSixiang={filterBottomSixiang}
-              filterMiddleSixiang={filterMiddleSixiang}
-              filterTopSixiang={filterTopSixiang}
+              filters={filters}
             />
           </section>
         )}
