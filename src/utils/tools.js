@@ -8,7 +8,7 @@ import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
 import * as Tools from '@yijingjs/tools';
 
-import * as theme from './colors.js';
+import colorSystem, { getWuxingColor } from './colors.js';
 
 export const cn = (...inputs) => twMerge(clsx(inputs));
 
@@ -140,12 +140,12 @@ export function getHexagramData(hexIndex) {
   const mantraName = Yijing.yijing_mantraName(hexIndex);
 
   // Derived colors (for HexagramCard)
-  const upperColor = theme.getWuxingColor(upperWuxing);
-  const lowerColor = theme.getWuxingColor(lowerWuxing);
-  const symmetryColor = theme.symmetryColors[symmetryName];
-  const balancedColor = theme.balancedColors[balancedName];
-  const mantraColor = theme.mantraColors[mantraName];
-  const foundationColor = theme.additionalColors.foundation;
+  const upperColor = getWuxingColor(upperWuxing);
+  const lowerColor = getWuxingColor(lowerWuxing);
+  const symmetryColor = colorSystem.symmetry[symmetryName];
+  const balancedColor = colorSystem.balanced[balancedName];
+  const mantraColor = colorSystem.mantra[mantraName];
+  const foundationColor = colorSystem.ui.foundation;
 
   // Derived Texts
 

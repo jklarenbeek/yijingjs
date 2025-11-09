@@ -1,13 +1,13 @@
 // src/components/HexagramCard.jsx
 
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 
 import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
 
 import { cn, getHexagramData } from '../utils/tools.js';
-import * as theme from '../utils/colors.js';
+import colorSystem, { getColor } from '../utils/colors.js';
 
 import { Tooltip } from './Tooltip';
 
@@ -22,19 +22,26 @@ const HexagramCard = ({
 
   const data = useMemo(() => getHexagramData(hexIndex), [hexIndex]);
 
-  // ---- border logic ----
-  let borderColor;
-  if (selected) {
-    borderColor = theme.additionalColors.selected;
-  }
-  else if (filters?.filterSymmetry?.includes(data.symmetryName)) {
-    borderColor = data.symmetryColor;
-  }
-  else {
-    borderColor = theme.additionalColors.defaultBorder;
-  }
+  const { borderColor /*, glowColor */ } = useMemo(() => {
+    if (selected) {
+      return {
+        borderColor: getColor('ui', 'selected'),
+        glowColor: getColor('ui', 'selected')
+      };
+    }
 
-  const renderLine = (position) => {
+    if (filters?.filterSymmetry?.includes(data.symmetryName)) {
+      const color = getColor('symmetry', data.symmetryName);
+      return { borderColor: color, glowColor: color };
+    }
+
+    return {
+      borderColor: getColor('ui', 'defaultBorder'),
+      glowColor: getColor('ui', 'defaultBorder')
+    };
+  }, [selected, filters, data.symmetryName]);
+
+  const renderLine = useCallback((position) => {
     const isYang = (hexIndex >> position) & 1;
     return (
       <div key={position} className="w-full h-2 flex justify-center gap-1">
@@ -48,7 +55,7 @@ const HexagramCard = ({
         )}
       </div>
     );
-  };
+  }, [hexIndex]);
 
   return (
     <div className="relative w-full">
@@ -108,7 +115,7 @@ const HexagramCard = ({
             {(data.foundationName && (<Tooltip title={`Foundational: ${data.foundationName}`} className="capitalize">
               <div
                 className="w-2 h-2 rounded-full"
-                style={{ backgroundColor: theme.additionalColors.foundation }}
+                style={{ backgroundColor: colorSystem.ui.foundation }}
                 aria-hidden="true"
               />
             </Tooltip>))}

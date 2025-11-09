@@ -12,7 +12,7 @@ import {
   generateTrigramInfo
 } from '../utils/tools.js';
 
-import * as theme from '../utils/colors.js';
+import colorSystem from '../utils/colors.js';
 import FilterSection from './FilterSection';
 import FilterButton from './FilterButton';
 import HexagramPool from './HexagramPool';
@@ -48,7 +48,7 @@ const FiltersPanel = ({
                 onClick={() => filters.handleBalanceToggle(key)}
                 label={label}
                 count={count}
-                color={theme.balancedColors[key]}
+                color={colorSystem.balanced[key]}
                 ariaLabel={`${filters.filterBalance?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}
@@ -65,7 +65,7 @@ const FiltersPanel = ({
                 onClick={() => filters.handleMantraToggle(key)}
                 label={label}
                 count={count}
-                color={theme.mantraColors[key]}
+                color={colorSystem.mantra[key]}
                 ariaLabel={`${filters.filterMantra?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}
@@ -82,7 +82,7 @@ const FiltersPanel = ({
                 onClick={() => filters.handleSymmetryToggle(key)}
                 label={label}
                 count={count}
-                color={theme.symmetryColors[key]}
+                color={colorSystem.symmetry[key]}
                 ariaLabel={`${filters.filterSymmetry?.includes(key) ? 'Hide' : 'Show'} ${label} symmetry group`}
               />
             ))}
@@ -101,7 +101,7 @@ const FiltersPanel = ({
                   onClick={() => filters.handleUpperTrigramToggle(key)}
                   label={label}
                   count={count}
-                  color={theme.wuxingColors[wuxing]}
+                  color={colorSystem.wuxing[wuxing]}
                   ariaLabel={`${filters.filterUpperTrigram?.includes(key) ? 'Hide' : 'Show'} ${label}`}
                 />
               );
@@ -121,7 +121,7 @@ const FiltersPanel = ({
                   onClick={() => filters.handleLowerTrigramToggle(key)}
                   label={label}
                   count={count}
-                  color={theme.wuxingColors[wuxing]}
+                  color={colorSystem.wuxing[wuxing]}
                   ariaLabel={`${filters.filterLowerTrigram?.includes(key) ? 'Hide' : 'Show'} ${label}`}
                 />
               );
@@ -139,7 +139,7 @@ const FiltersPanel = ({
                 onClick={() => filters.handleTransitionToggle(key)}
                 label={label}
                 count={count}
-                color={theme.transitionColors[key]}
+                color={colorSystem.transition[key]}
                 ariaLabel={`${filters.filterTransition?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}
@@ -156,7 +156,7 @@ const FiltersPanel = ({
                 onClick={() => filters.handleBottomSixiangToggle(key)}
                 label={label}
                 count={count}
-                color={theme.sixiangColors[key]}
+                color={colorSystem.sixiang[key]}
                 ariaLabel={`${filters.filterBottomSixiang?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}
@@ -172,7 +172,7 @@ const FiltersPanel = ({
                 onClick={() => filters.handleMiddleSixiangToggle(key)}
                 label={label}
                 count={count}
-                color={theme.sixiangColors[key]}
+                color={colorSystem.sixiang[key]}
                 ariaLabel={`${filters.filterMiddleSixiang?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}
@@ -188,7 +188,7 @@ const FiltersPanel = ({
                 onClick={() => filters.handleTopSixiangToggle(key)}
                 label={label}
                 count={count}
-                color={theme.sixiangColors[key]}
+                color={colorSystem.sixiang[key]}
                 ariaLabel={`${filters.filterTopSixiang?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}
@@ -205,7 +205,7 @@ const FiltersPanel = ({
                 onClick={() => filters.handleAminoToggle(key)}
                 label={label}
                 count={count}
-                color={theme.additionalColors.amino}
+                color={colorSystem.ui.amino}
                 ariaLabel={`${filters.filterAmino?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}

@@ -2,15 +2,7 @@
 // tailwindcss version 4.1.16
 /** @type {import('tailwindcss').Config} */
 
-import {
-  balancedColors,
-  mantraColors,
-  symmetryColors,
-  wuxingColors,
-  transitionColors,
-  sixiangColors,
-  additionalColors
-} from './src/utils/colors.js';
+import colorSystem from './src/utils/colors.js';
 
 export default {
   content: [
@@ -20,15 +12,7 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
-      colors: {
-        balanced: balancedColors,
-        mantra: mantraColors,
-        symmetry: symmetryColors,
-        wuxing: wuxingColors,
-        transition: transitionColors,
-        sixiang: sixiangColors,
-        ...additionalColors
-      },
+      colors: colorSystem,
       fontFamily: {
         sans: [
           '-apple-system',
