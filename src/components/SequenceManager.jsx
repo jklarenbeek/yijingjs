@@ -12,7 +12,10 @@ const SequenceManager = ({
   addSequence,
   removeSequence,
   customSequences = [],
-  currentSequence
+  currentSequence,
+  onLoadSequence,
+  hasUnsavedChanges = false,
+  setHasUnsavedChanges
 }) => {
   const [name, setName] = useState('');
   const [title, setTitle] = useState('');
@@ -53,17 +56,24 @@ const SequenceManager = ({
       return;
     }
 
+    const placementCount = editStage.filter(h => h !== null).length;
+    if (placementCount === 0) {
+      alert('Please place at least one hexagram in the grid before saving');
+      return;
+    }
+
     const seqObj = {
       id: Date.now(),
       name: name.trim(),
       title: title.trim(),
-      values: [...editStage],
+      values: [...editStage], // This will be exactly 64 in length with null for empty slots
     };
 
     try {
       if (addSequence(seqObj)) {
         setName('');
         setTitle('');
+        setHasUnsavedChanges(false);
         // Switch to the new sequence
         setCurrentSequence(`custom-${seqObj.id}`);
         setEditMode(false);
@@ -75,10 +85,15 @@ const SequenceManager = ({
   };
 
   const handleLoad = (seq) => {
+    if (onLoadSequence && !onLoadSequence(seq)) {
+      return; // Load was cancelled due to unsaved changes
+    }
+
     try {
       setEditStage(seq.values);
       setCurrentSequence(`custom-${seq.id}`);
       setEditMode(false);
+      setHasUnsavedChanges(false);
     }
     catch (error) {
       console.error('Error loading sequence:', error);
@@ -103,6 +118,7 @@ const SequenceManager = ({
     try {
       localStorage.removeItem(LOCAL_STORAGE_KEYS.EDIT_STAGE);
       setEditStage(Array(64).fill(null));
+      setHasUnsavedChanges(false);
     }
     catch (error) {
       console.error('Error clearing staging:', error);
@@ -117,6 +133,15 @@ const SequenceManager = ({
       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
         Sequence Manager
       </h3>
+
+      {hasUnsavedChanges && (
+        <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg">
+          <div className="flex items-center gap-2 text-amber-800 dark:text-amber-200 text-sm">
+            <span>💡</span>
+            <span>You have unsaved changes in your current edit session</span>
+          </div>
+        </div>
+      )}
 
       {/* Save Section */}
       <div className="space-y-3 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">

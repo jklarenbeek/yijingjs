@@ -1,6 +1,6 @@
 // src/App.jsx
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import * as Yijing from '@yijingjs/core';
 
 import useFilters from './hooks/useFilters.js';
@@ -30,6 +30,8 @@ function App() {
       return Array(64).fill(null);
     }
   });
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const initialEditStageRef = useRef([]);
 
   // Custom hooks
   const filters = useFilters();
@@ -47,20 +49,49 @@ function App() {
     setSelectedHex(prev => prev === hexIndex ? null : hexIndex);
   }, []);
 
-  // Handle edit mode toggle with proper sequence synchronization
+  // Handle edit stage changes with dirty tracking
+  const handleEditStageChange = useCallback((newEditStage) => {
+    setEditStage(newEditStage);
+    // Check if there are unsaved changes compared to initial state
+    const hasChanges = JSON.stringify(newEditStage) !== JSON.stringify(initialEditStageRef.current);
+    setHasUnsavedChanges(hasChanges);
+  }, []);
+
+  // Handle edit mode toggle with proper sequence synchronization and dirty state management
   const handleToggleEditMode = useCallback(() => {
     const newEditMode = !editMode;
 
     if (newEditMode) {
-      // Entering edit mode - ensure we're using a custom sequence context
+      // Entering edit mode - save current state for dirty checking
+      const currentSeqData = sequences.getCurrentSequenceData();
+      if (currentSeqData && currentSeqData.values) {
+        initialEditStageRef.current = [...currentSeqData.values];
+      } else {
+        initialEditStageRef.current = [...editStage];
+      }
+      setHasUnsavedChanges(false);
+
+      // Ensure we're using a custom sequence context
       if (!sequences.currentSequence.startsWith('custom-')) {
         // If current sequence is not custom, initialize edit stage with current sequence data
-        const currentSeqData = sequences.getCurrentSequenceData();
         if (currentSeqData && currentSeqData.values) {
           setEditStage(currentSeqData.values);
         }
       }
     } else {
+      // Exiting edit mode - check for unsaved changes
+      if (hasUnsavedChanges) {
+        const confirmExit = window.confirm(
+          'You have unsaved changes in your edit session. Are you sure you want to exit edit mode?'
+        );
+        if (!confirmExit) {
+          return; // Don't exit edit mode
+        }
+      }
+
+      // Reset dirty state
+      setHasUnsavedChanges(false);
+
       // Exiting edit mode - update current sequence if we have a custom sequence loaded
       if (sequences.currentSequence.startsWith('custom-')) {
         // Refresh the grid to show the updated custom sequence
@@ -69,7 +100,23 @@ function App() {
     }
 
     setEditMode(newEditMode);
-  }, [editMode, sequences]);
+  }, [editMode, sequences, hasUnsavedChanges, editStage]);
+
+  // Handle sequence loading from manager with confirmation
+  const handleLoadSequence = useCallback((sequence) => {
+    if (hasUnsavedChanges) {
+      const confirmLoad = window.confirm(
+        'You have unsaved changes in your current edit session. Loading a new sequence will discard these changes. Continue?'
+      );
+      if (!confirmLoad) {
+        return false;
+      }
+    }
+
+    setEditStage(sequence.values);
+    setHasUnsavedChanges(false);
+    return true;
+  }, [hasUnsavedChanges]);
 
   // Autosave edit stage
   useEffect(() => {
@@ -128,6 +175,7 @@ function App() {
         currentSequence={sequences.currentSequence}
         setCurrentSequence={sequences.setCurrentSequence}
         customSequences={sequences.customSequences}
+        hasUnsavedChanges={hasUnsavedChanges}
       />
 
       <div className="flex flex-col lg:flex-row gap-4 p-4 max-w-screen-2xl mx-auto">
@@ -136,11 +184,12 @@ function App() {
           {editMode ? (
             <EditableHexagramGrid
               editStage={editStage}
-              setEditStage={setEditStage}
+              setEditStage={handleEditStageChange}
               selectedHex={selectedHex}
               onSelectHex={handleSelectHex}
               filters={filters}
               neighbors={neighbors}
+              hasUnsavedChanges={hasUnsavedChanges}
             />
           ) : (
             <HexagramGrid
@@ -176,20 +225,23 @@ function App() {
                   filters={filters}
                   placedHexagrams={editMode ? editStage.filter(h => h !== null) : []}
                   onSelectHex={handleSelectHex}
-                  setEditStage={setEditStage}
+                  setEditStage={handleEditStageChange}
                   editMode={editMode}
                 />
               )}
               {activeTab === TAB_NAMES.MANAGER && editMode && (
                 <SequenceManager
                   editStage={editStage}
-                  setEditStage={setEditStage}
+                  setEditStage={handleEditStageChange}
                   setCurrentSequence={sequences.setCurrentSequence}
                   setEditMode={setEditMode}
                   addSequence={sequences.addSequence}
                   removeSequence={sequences.removeSequence}
                   customSequences={sequences.customSequences}
                   currentSequence={sequences.currentSequence}
+                  onLoadSequence={handleLoadSequence}
+                  hasUnsavedChanges={hasUnsavedChanges}
+                  setHasUnsavedChanges={setHasUnsavedChanges}
                 />
               )}
             </div>
@@ -201,9 +253,14 @@ function App() {
       <footer className="bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700 px-6 py-4 mt-8 text-center text-sm text-gray-500 dark:text-gray-400 transition-colors">
         <p>
           {editMode
-            ? 'Drag hexagrams from pool to grid • Double-click to remove • Save in Manager'
+            ? 'Drag hexagrams from pool to grid • Drag placed hexagrams to move or swap • Double-click to remove • Save in Manager'
             : 'Use arrow keys to navigate • Click hexagrams to explore relationships'}
         </p>
+        {editMode && hasUnsavedChanges && (
+          <p className="text-amber-600 dark:text-amber-400 font-medium mt-1">
+            • You have unsaved changes •
+          </p>
+        )}
       </footer>
     </div>
   );

@@ -1,6 +1,6 @@
 // src/components/AppHeader.jsx
 
-import { Sun, Moon, Edit3, X } from 'lucide-react';
+import { Sun, Moon, Edit3, X, Save } from 'lucide-react';
 import SequenceDropdown from './SequenceDropdown.jsx';
 import { cn } from '../utils/tools.js';
 
@@ -14,7 +14,8 @@ const AppHeader = ({
   setEditMode,
   currentSequence,
   setCurrentSequence,
-  customSequences
+  customSequences,
+  hasUnsavedChanges = false
 }) => {
   return (
     <header className="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 px-6 py-4 transition-colors">
@@ -29,6 +30,12 @@ const AppHeader = ({
           />
         </div>
         <div className="flex items-center gap-2">
+          {editMode && hasUnsavedChanges && (
+            <div className="flex items-center gap-2 px-3 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 rounded-md text-sm">
+              <Save className="w-4 h-4" />
+              Unsaved
+            </div>
+          )}
           <button
             onClick={() => setEditMode(!editMode)}
             className={cn(

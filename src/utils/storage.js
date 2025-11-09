@@ -21,7 +21,19 @@ export function addSequence(sequenceObj) {
     if (sequences.some(s => s.name === sequenceObj.name))
       return false;
 
-    sequences.push(sequenceObj);
+    // Ensure the sequence has exactly 64 values, filling with null if necessary
+    const values = Array.from({ length: 64 }, (_, index) => {
+      return sequenceObj.values && index < sequenceObj.values.length
+        ? sequenceObj.values[index]
+        : null;
+    });
+
+    const sequenceWithFixedLength = {
+      ...sequenceObj,
+      values: values
+    };
+
+    sequences.push(sequenceWithFixedLength);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(sequences));
 
     return true;

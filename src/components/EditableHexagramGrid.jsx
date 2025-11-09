@@ -13,6 +13,7 @@ const EditableHexagramGrid = ({
   onSelectHex,
   filters,
   neighbors = [],
+  hasUnsavedChanges = false,
 }) => {
   const [dragState, setDragState] = useState({
     isDragging: false,
@@ -91,11 +92,20 @@ const EditableHexagramGrid = ({
           return;
         }
         if (localStage[targetIndex] !== null) {
-          console.warn('Target position already occupied');
-          return;
+          // If target is occupied, swap the hexagrams
+          const temp = newStage[targetIndex];
+          newStage[targetIndex] = sourceIndex;
+          // Find an empty slot for the displaced hexagram
+          const emptyIndex = newStage.findIndex(val => val === null);
+          if (emptyIndex !== -1) {
+            newStage[emptyIndex] = temp;
+          }
+          // If no empty slot, we just replace (user will be warned about losing one)
         }
-
-        newStage[targetIndex] = sourceIndex;
+        else {
+          // Target is empty, simply place
+          newStage[targetIndex] = sourceIndex;
+        }
       } else if (dragType === 'grid') {
         const sourceHex = localStage[sourceIndex];
 
@@ -105,12 +115,13 @@ const EditableHexagramGrid = ({
         }
 
         if (localStage[targetIndex] !== null) {
-          // Swap operation
+          // Swap operation - both positions are occupied
           const temp = localStage[targetIndex];
           newStage[targetIndex] = sourceHex;
           newStage[sourceIndex] = temp;
-        } else {
-          // Move to empty
+        }
+        else {
+          // Move to empty - source becomes empty, target gets the hexagram
           newStage[sourceIndex] = null;
           newStage[targetIndex] = sourceHex;
         }
@@ -304,7 +315,7 @@ const EditableHexagramGrid = ({
               "cursor-grab active:cursor-grabbing transition-transform w-full h-full",
               isHovered && "scale-105"
             )}
-            aria-label={`Hexagram ${hexIndex} at position ${Math.floor(gridIndex / 8)}, ${gridIndex % 8}. Double-click to remove.`}
+            aria-label={`Hexagram ${hexIndex} at position ${Math.floor(gridIndex / 8)}, ${gridIndex % 8}. Drag to move or swap. Double-click to remove.`}
           >
             <HexagramCard
               hexIndex={hexIndex}
@@ -354,6 +365,7 @@ const EditableHexagramGrid = ({
           </h2>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
             {placementCount}/64 hexagrams placed • History: {currentIndex}/{historySize}
+            {hasUnsavedChanges && " • Unsaved changes"}
             {dragState.isDragging && " • Dragging..."}
           </p>
         </div>
@@ -455,7 +467,7 @@ const EditableHexagramGrid = ({
         </div>
         <div className="flex items-center gap-1">
           <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-          <span>Drag & drop</span>
+          <span>Drag & drop to move/swap</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-2 h-2 bg-red-500 rounded-full"></div>
