@@ -28,7 +28,7 @@ export default defineConfig({
   },
   build: {
     sourcemap: true,
-    outDir: 'demo'  // Keep as 'demo' for consistency
+    outDir: 'dist'
   },
   // Better for debugging
   define: {
