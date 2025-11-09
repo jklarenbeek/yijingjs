@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { LOCAL_STORAGE_KEYS } from '../utils/constants';
+import { getHexagramSequences } from '../utils/tools.js';
 
 const SequenceManager = ({
   editStage,
@@ -10,15 +11,45 @@ const SequenceManager = ({
   setEditMode,
   addSequence,
   removeSequence,
-  customSequences = []
+  customSequences = [],
+  currentSequence
 }) => {
   const [name, setName] = useState('');
   const [title, setTitle] = useState('');
   const [showConfirm, setShowConfirm] = useState(null);
 
+  const validateSequenceName = (name) => {
+    if (!name.trim()) return 'Name is required';
+
+    // Check if name is valid JavaScript property name
+    const validPropertyRegex = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/;
+    if (!validPropertyRegex.test(name)) {
+      return 'Name must be a valid JavaScript identifier (letters, numbers, _, $, no spaces)';
+    }
+
+    // Check if name conflicts with standard sequences
+    const standardSequences = getHexagramSequences();
+    if (name in standardSequences) {
+      return 'Name conflicts with a standard sequence';
+    }
+
+    // Check if name already exists in custom sequences
+    if (customSequences.some(seq => seq.name === name)) {
+      return 'Name already exists in custom sequences';
+    }
+
+    return null;
+  };
+
   const handleSave = () => {
-    if (!name.trim() || !title.trim()) {
-      alert('Please enter both name and title');
+    const nameError = validateSequenceName(name);
+    if (nameError) {
+      alert(nameError);
+      return;
+    }
+
+    if (!title.trim()) {
+      alert('Please enter a display title');
       return;
     }
 
@@ -29,12 +60,17 @@ const SequenceManager = ({
       values: [...editStage],
     };
 
-    if (addSequence(seqObj)) {
-      setName('');
-      setTitle('');
+    try {
+      if (addSequence(seqObj)) {
+        setName('');
+        setTitle('');
+        // Switch to the new sequence
+        setCurrentSequence(`custom-${seqObj.id}`);
+        setEditMode(false);
+      }
     }
-    else {
-      alert('Error saving sequence');
+    catch (error) {
+      alert(`Error saving sequence: ${error.message}`);
     }
   };
 
@@ -53,6 +89,10 @@ const SequenceManager = ({
   const handleDelete = (id) => {
     if (removeSequence(id)) {
       setShowConfirm(null);
+      // If we're currently viewing the deleted sequence, switch to default
+      if (currentSequence === `custom-${id}`) {
+        setCurrentSequence('kingwen');
+      }
     }
     else {
       alert('Error deleting sequence');
@@ -83,14 +123,19 @@ const SequenceManager = ({
         <p className="text-sm text-gray-600 dark:text-gray-400">
           Current placement: {getPlacementCount()}/64 hexagrams
         </p>
-        <input
-          type="text"
-          placeholder="Short name (e.g. flow1)"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-          aria-label="Sequence short name"
-        />
+        <div>
+          <input
+            type="text"
+            placeholder="Short name (e.g. flow1)"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            aria-label="Sequence short name"
+          />
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            Must be a valid JavaScript identifier (no spaces, starts with letter)
+          </p>
+        </div>
         <input
           type="text"
           placeholder="Display title"

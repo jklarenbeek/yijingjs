@@ -2,7 +2,7 @@
 
 import { getHexagramSequences } from '../utils/tools.js';
 
-const SequenceDropdown = ({ currentSequence, onSequenceChange, customSequences = [] }) => {
+const SequenceDropdown = ({ currentSequence, onSequenceChange, customSequences = [], disabled = false }) => {
   const sequences = getHexagramSequences();
 
   return (
@@ -10,7 +10,17 @@ const SequenceDropdown = ({ currentSequence, onSequenceChange, customSequences =
       <select
         value={currentSequence}
         onChange={(e) => onSequenceChange(e.target.value)}
-        className="w-full p-2 pr-8 border-0 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg cursor-pointer appearance-none"
+        disabled={disabled}
+        className={`
+          w-full p-2 pr-8 border-0 bg-white dark:bg-gray-800
+          text-gray-900 dark:text-gray-100 focus:outline-none
+          focus:ring-2 focus:ring-blue-500 rounded-lg
+          ${disabled
+            ? 'cursor-not-allowed opacity-50'
+            : 'cursor-pointer'
+          }
+          appearance-none
+        `}
       >
         <optgroup
           label="Standard Sequences"

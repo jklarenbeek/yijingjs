@@ -47,6 +47,30 @@ function App() {
     setSelectedHex(prev => prev === hexIndex ? null : hexIndex);
   }, []);
 
+  // Handle edit mode toggle with proper sequence synchronization
+  const handleToggleEditMode = useCallback(() => {
+    const newEditMode = !editMode;
+
+    if (newEditMode) {
+      // Entering edit mode - ensure we're using a custom sequence context
+      if (!sequences.currentSequence.startsWith('custom-')) {
+        // If current sequence is not custom, initialize edit stage with current sequence data
+        const currentSeqData = sequences.getCurrentSequenceData();
+        if (currentSeqData && currentSeqData.values) {
+          setEditStage(currentSeqData.values);
+        }
+      }
+    } else {
+      // Exiting edit mode - update current sequence if we have a custom sequence loaded
+      if (sequences.currentSequence.startsWith('custom-')) {
+        // Refresh the grid to show the updated custom sequence
+        sequences.refreshCurrentSequence();
+      }
+    }
+
+    setEditMode(newEditMode);
+  }, [editMode, sequences]);
+
   // Autosave edit stage
   useEffect(() => {
     if (editMode) {
@@ -100,7 +124,7 @@ function App() {
         darkMode={darkMode}
         toggleDarkMode={toggleDarkMode}
         editMode={editMode}
-        setEditMode={setEditMode}
+        setEditMode={handleToggleEditMode}
         currentSequence={sequences.currentSequence}
         setCurrentSequence={sequences.setCurrentSequence}
         customSequences={sequences.customSequences}
@@ -165,6 +189,7 @@ function App() {
                   addSequence={sequences.addSequence}
                   removeSequence={sequences.removeSequence}
                   customSequences={sequences.customSequences}
+                  currentSequence={sequences.currentSequence}
                 />
               )}
             </div>

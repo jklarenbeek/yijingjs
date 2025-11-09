@@ -25,6 +25,7 @@ const AppHeader = ({
             currentSequence={currentSequence}
             onSequenceChange={setCurrentSequence}
             customSequences={customSequences}
+            disabled={editMode}
           />
         </div>
         <div className="flex items-center gap-2">
