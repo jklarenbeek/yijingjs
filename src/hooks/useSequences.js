@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { getAllSequences, addSequence, removeSequence as removeSequenceStorage } from '../utils/storage.js';
 import { getHexagramSequences } from '../utils/tools.js';
 
-export const useSequences = () => {
+const useSequences = () => {
   const [customSequences, setCustomSequences] = useState([]);
   const [currentSequence, setCurrentSequence] = useState('kingwen');
 
@@ -66,3 +66,5 @@ export const useSequences = () => {
     validateSequenceId
   };
 };
+
+export default useSequences;

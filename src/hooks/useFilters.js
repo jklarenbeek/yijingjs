@@ -5,7 +5,7 @@ import * as Yijing from '@yijingjs/core';
 import * as Bagua from '@yijingjs/bagua';
 import * as Wuxing from '@yijingjs/wuxing';
 
-export const useFilters = () => {
+const useFilters = () => {
   const [filterSymmetry, setFilterSymmetry] = useState([]);
   const [filterMantra, setFilterMantra] = useState([]);
   const [filterBalance, setFilterBalance] = useState([]);
@@ -174,3 +174,5 @@ export const useFilters = () => {
     isFiltered,
   };
 };
+
+export default useFilters;

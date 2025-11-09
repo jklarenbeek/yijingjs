@@ -3,9 +3,10 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import * as Yijing from '@yijingjs/core';
 
-import { useFilters } from './hooks/useFilters';
-import { useSequences } from './hooks/useSequences';
-import { useTheme } from './hooks/useTheme';
+import useFilters from './hooks/useFilters.js';
+import useSequences from './hooks/useSequences.js';
+import useTheme from './hooks/useTheme.js';
+
 import { LOCAL_STORAGE_KEYS, TAB_NAMES } from './utils/constants';
 
 import HexagramGrid from './components/HexagramGrid';

@@ -1,7 +1,7 @@
 // src/hooks/useTheme.js
 import { useState, useEffect } from 'react';
 
-export const useTheme = () => {
+const useTheme = () => {
   const [darkMode, setDarkMode] = useState(() => {
     try {
       const saved = localStorage.getItem('yijing_dark_mode');
@@ -29,3 +29,5 @@ export const useTheme = () => {
 
   return { darkMode, toggleDarkMode };
 };
+
+export default useTheme;
