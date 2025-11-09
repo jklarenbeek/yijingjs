@@ -8,7 +8,8 @@ export function getAllSequences() {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
     return data ? JSON.parse(data) : [];
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error loading sequences from storage:', error);
     return [];
   }
@@ -17,10 +18,15 @@ export function getAllSequences() {
 export function addSequence(sequenceObj) {
   try {
     const sequences = getAllSequences();
+    if (sequences.some(s => s.name === sequenceObj.name))
+      return false;
+
     sequences.push(sequenceObj);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(sequences));
+
     return true;
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error saving sequence to storage:', error);
     return false;
   }
@@ -30,7 +36,8 @@ export function getSequenceById(id) {
   try {
     const sequences = getAllSequences();
     return sequences.find(s => s.id === id) || null;
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error getting sequence by ID:', error);
     return null;
   }
@@ -42,7 +49,8 @@ export function removeSequence(id) {
     const filtered = sequences.filter(s => s.id !== id);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
     return true;
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error removing sequence from storage:', error);
     return false;
   }

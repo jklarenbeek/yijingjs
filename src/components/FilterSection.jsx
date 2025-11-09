@@ -13,7 +13,7 @@ const FilterSection = ({
 }) => {
   return (
     <details open={open} className={cn("filter-section", className)}>
-      <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3 cursor-pointer">
+      <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1 cursor-pointer">
         {title}
       </summary>
       <div className="filter-content">

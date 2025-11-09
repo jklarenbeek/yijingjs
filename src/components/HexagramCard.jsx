@@ -19,7 +19,6 @@ const HexagramCard = ({
   filters,
   inEditMode = false,
 }) => {
-  const { filterSymmetry } = filters;
 
   const data = useMemo(() => getHexagramData(hexIndex), [hexIndex]);
 
@@ -27,9 +26,11 @@ const HexagramCard = ({
   let borderColor;
   if (selected) {
     borderColor = theme.additionalColors.selected;
-  } else if (filterSymmetry?.includes(data.symmetryName)) {
+  }
+  else if (filters?.filterSymmetry?.includes(data.symmetryName)) {
     borderColor = data.symmetryColor;
-  } else {
+  }
+  else {
     borderColor = theme.additionalColors.defaultBorder;
   }
 

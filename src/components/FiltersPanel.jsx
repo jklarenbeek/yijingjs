@@ -39,7 +39,7 @@ const FiltersPanel = ({
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
 
         {/* Tao Balance Filter */}
-        <FilterSection title="Tao Balance">
+        <FilterSection title="Tao Balance" className="mb-1">
           <div className="flex flex-wrap gap-2">
             {taoGroups.map(({ key, label, count }) => (
               <FilterButton
@@ -56,7 +56,7 @@ const FiltersPanel = ({
         </FilterSection>
 
         {/* Mantra Levels Filter */}
-        <FilterSection title="Mantra Levels">
+        <FilterSection title="Mantra Levels" className="mb-1">
           <div className="flex flex-wrap gap-2">
             {mantraGroups.map(({ key, label, count }) => (
               <FilterButton
@@ -73,7 +73,7 @@ const FiltersPanel = ({
         </FilterSection>
 
         {/* Symmetry Groups Filter */}
-        <FilterSection title="Symmetry Groups">
+        <FilterSection title="Symmetry Groups" className="mb-1">
           <div className="flex flex-wrap gap-2">
             {symmetryGroups.map(({ key, label, count }) => (
               <FilterButton
@@ -90,7 +90,7 @@ const FiltersPanel = ({
         </FilterSection>
 
         {/* Upper Trigram Filter */}
-        <FilterSection title="Upper Trigram">
+        <FilterSection title="Upper Trigram" className="mb-1">
           <div className="flex flex-wrap gap-2">
             {trigramGroups.map(({ key, label, count }) => {
               const wuxing = Bagua.bagua_toWuxing(Bagua.bagua_fromName(key));
@@ -110,7 +110,7 @@ const FiltersPanel = ({
         </FilterSection>
 
         {/* Lower Trigram Filter */}
-        <FilterSection title="Lower Trigram">
+        <FilterSection title="Lower Trigram" className="mb-1">
           <div className="flex flex-wrap gap-2">
             {trigramGroups.map(({ key, label, count }) => {
               const wuxing = Bagua.bagua_toWuxing(Bagua.bagua_fromName(key));
@@ -130,7 +130,7 @@ const FiltersPanel = ({
         </FilterSection>
 
         {/* Transition Types Filter */}
-        <FilterSection title="Wuxing Transitions">
+        <FilterSection title="Wuxing Transitions" className="mb-1">
           <div className="flex flex-wrap gap-2">
             {transitionGroups.map(({ key, label, count }) => (
               <FilterButton
@@ -147,7 +147,7 @@ const FiltersPanel = ({
         </FilterSection>
 
         {/* Sixiang Filters */}
-        <FilterSection title="Top Layer (Deus)">
+        <FilterSection title="Top Layer (Deus)" className="mb-1">
           <div className="flex flex-wrap gap-2">
             {sixiangGroups.map(({ key, label, count }) => (
               <FilterButton
@@ -163,7 +163,7 @@ const FiltersPanel = ({
           </div>
         </FilterSection>
 
-        <FilterSection title="Middle Layer (Homo)">
+        <FilterSection title="Middle Layer (Homo)" className="mb-1">
           <div className="flex flex-wrap gap-2">
             {sixiangGroups.map(({ key, label, count }) => (
               <FilterButton
@@ -179,7 +179,7 @@ const FiltersPanel = ({
           </div>
         </FilterSection>
 
-        <FilterSection title="Bottom Layer (Torah)">
+        <FilterSection title="Bottom Layer (Torah)" className="mb-1">
           <div className="flex flex-wrap gap-2">
             {sixiangGroups.map(({ key, label, count }) => (
               <FilterButton
@@ -196,7 +196,7 @@ const FiltersPanel = ({
         </FilterSection>
 
         {/* Amino Acids Filter */}
-        <FilterSection title="Amino Acids">
+        <FilterSection title="Amino Acids" className="mb-1">
           <div className="flex flex-wrap gap-2">
             {aminoAcidGroups.map(({ key, label, count }) => (
               <FilterButton

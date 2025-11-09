@@ -32,7 +32,8 @@ const SequenceManager = ({
     if (addSequence(seqObj)) {
       setName('');
       setTitle('');
-    } else {
+    }
+    else {
       alert('Error saving sequence');
     }
   };
@@ -42,7 +43,8 @@ const SequenceManager = ({
       setEditStage(seq.values);
       setCurrentSequence(`custom-${seq.id}`);
       setEditMode(false);
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error loading sequence:', error);
       alert('Error loading sequence');
     }
@@ -51,7 +53,8 @@ const SequenceManager = ({
   const handleDelete = (id) => {
     if (removeSequence(id)) {
       setShowConfirm(null);
-    } else {
+    }
+    else {
       alert('Error deleting sequence');
     }
   };
@@ -60,7 +63,8 @@ const SequenceManager = ({
     try {
       localStorage.removeItem(LOCAL_STORAGE_KEYS.EDIT_STAGE);
       setEditStage(Array(64).fill(null));
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error clearing staging:', error);
       alert('Error clearing staging area');
     }

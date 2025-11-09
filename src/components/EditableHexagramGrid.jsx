@@ -20,17 +20,34 @@ const EditableHexagramGrid = ({
     let sourceIndex = null;
     if (data.startsWith('pool:')) {
       sourceIndex = parseInt(data.slice(5), 10);
-    } else if (data.startsWith('grid:')) {
+    }
+    else if (data.startsWith('grid:')) {
       sourceIndex = parseInt(data.slice(5), 10);
     }
 
-    if (sourceIndex === null || editStage[targetIndex] !== null) return;
+    if (sourceIndex === null) return;
 
     const newStage = [...editStage];
-    if (data.startsWith('grid:')) {
-      newStage[sourceIndex] = null;
+
+    if (data.startsWith('pool:')) {
+      if (editStage.includes(sourceIndex) || editStage[targetIndex] !== null) return;
+      newStage[targetIndex] = sourceIndex;
     }
-    newStage[targetIndex] = sourceIndex;
+    else if (data.startsWith('grid:')) {
+      const sourceHex = editStage[sourceIndex];
+      if (editStage[targetIndex] !== null) {
+        // Swap if target occupied
+        const temp = editStage[targetIndex];
+        newStage[targetIndex] = sourceHex;
+        newStage[sourceIndex] = temp;
+      }
+      else {
+        // Move to empty
+        newStage[sourceIndex] = null;
+        newStage[targetIndex] = sourceHex;
+      }
+    }
+
     setEditStage(newStage);
   };
 

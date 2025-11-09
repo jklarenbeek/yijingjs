@@ -13,7 +13,14 @@ const HexagramGrid = ({
   currentSequence,
   customSequences = [],
 }) => {
-  const baseSequences = { ...getHexagramSequences(), ...customSequences };
+
+  const customMap = customSequences.reduce((acc, seq) => {
+    acc[`custom-${seq.id}`] = seq;
+    return acc;
+  }, {});
+
+  const baseSequences = { ...getHexagramSequences(), ...customMap };
+
   let sequence = baseSequences[currentSequence];
   const values = sequence?.values?.filter(v => v !== null && v !== undefined) ?? [];
 
