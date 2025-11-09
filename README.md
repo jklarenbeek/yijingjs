@@ -26,7 +26,7 @@ Experience the full interactive application with all features available in your 
 ## 🔬 Key Features
 
 ### Interactive Hexagram Grid
-- **Multiple Views**: Switch between trigram and sixiang (4-line symbol) representations
+- **Multiple Views**: Switch between trigram (3-line symbol) and sixiang (2-line symbol) representations
 - **Real-time Filtering**: Filter by symmetry groups, elemental transitions, mantra levels, and more
 - **Visual Relationships**: See neighboring hexagrams and transformation paths
 - **Keyboard Navigation**: Navigate the grid with arrow keys
@@ -137,6 +137,28 @@ The project includes comprehensive documentation within the code:
 - Philosophical framework explanations
 
 ## 🔮 Future Development
+
+### Geno-logic coding
+
+The implementation of numeric connection between the I-Ching, binary numbers, and the geno-logic code suggests the genetic code has an underlying mathematical structure, akin to systems used in computing, with the I-Ching acting as an ancient template for this structure. Researchers propose that the 64 hexagrams of the I-Ching correspond to the 64 mRNA codons and the 4 DNA bases form a system based on binary oppositions, which can be described using dyadic groups and binary-logic rules. This framework, called "geno-logic coding," is seen as a parallel system to the well-known amino acid genetic code, encoding inherited processes through Boolean functions.
+
+### The I-Ching and binary representation
+
+The I-Ching uses a system of yin (broken line, 0) and yang (unbroken line, 1) to form 8 trigrams and 64 hexagrams, which were considered fundamental archetypes of nature.
+This system is inherently based on binary groupings, with the 8 trigrams being groups of 3 binary numbers and the 64 hexagrams being groups of 6 binary numbers.
+This ancient system can be seen as an early example of representing information through combinations of two basic states, a concept that mirrors modern digital and binary systems.
+
+### Dyadic groups and the genetic code
+
+The genetic code uses four nitrogenous bases (A, T, C, G) to create codons, which are groups of three bases.
+Researchers have identified binary-oppositional traits within these bases, such as purines vs. pyrimidines and keto vs. amino groups, to create binary "sub-alphabets".
+These binary representations are based on dyadic (two-fold) shifts and groups, which are mathematical concepts also used in digital communication and computing.
+Studies suggest a strong correlation between the structure of the 64 codons and the 64 hexagrams of the I-Ching, with a mathematical and logical harmony underlying both systems.
+Geno-logic coding and its relation to the genetic code
+Geno-logic coding is a proposed system that runs in parallel with the standard genetic code for amino acids.
+It uses the binary representation of DNA sequences to encode inherited algorithmic processes, rather than the proteins themselves.
+This is based on the concept of Boolean functions and logical holography, which are principles from computer science.
+One key aspect is the use of modulo-2 addition, where the sum of any two of the three parallel binary representations of a DNA sequence equals the third one, a concept that has analogies with the structure of the I-Ching and mathematical codes.
 
 Potential extensions include:
 - Mobile application

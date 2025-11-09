@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
-/* @custom-variant dark (&:where(.dark, .dark *), @media (prefers-color-scheme: dark) { &:not(.light, .light *) }); */
+/* TODO: this is not allowed at build time! */
+@custom-variant dark (&:where(.dark, .dark *), @media (prefers-color-scheme: dark) { &:not(.light, .light *) });
+
+/* ===== ROOT VARIABLES & GLOBAL STYLES ===== */
 
 :root {
   /* Custom properties for theme switching */
@@ -24,23 +27,28 @@
 }
 
 * {
+  /* margin: 0; */
+  /* padding: 0; */
   box-sizing: border-box;
 }
 
 html,
 body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  color: var(--text-color);
+  line-height: 1.6;
   margin: 0;
   padding: 0;
   height: 100%;
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 /* Scrollbar Styling */
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -63,34 +71,6 @@ body {
   @apply outline-2 outline-blue-500 outline-offset-2;
 }
 
-/* Enhanced glow effects for hexagram cards */
-.glow-transition {
-  transition: box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
-}
-
-/* Ensure the glow effect works well with the card layout */
-.hexagram-glow {
-  position: relative;
-  z-index: 1;
-}
-
-.hexagram-glow::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border-radius: inherit;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.hexagram-glow.glow-active::before {
-  opacity: 0.6;
-}
-
 /* Smooth scrollbars */
 .overflow-y-auto {
   scrollbar-width: thin;
@@ -105,13 +85,568 @@ body {
   @apply bg-gray-300 dark:bg-gray-600 rounded;
 }
 
-/* Print styles */
-@media print {
-  body {
-    @apply bg-white text-black;
+.force-block {
+  display: block !important;
+  width: 100%;
+}
+
+/* ===== LAYOUT COMPONENTS ===== */
+
+/* Main app container */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header section */
+.header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 1rem 2rem;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header h1 {
+  color: var(--primary-color);
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.header p {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Main content area */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Footer section */
+.footer {
+  background: var(--primary-color);
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: auto;
+}
+
+/* ===== TOOLTIP COMPONENTS ===== */
+
+.tooltip {
+  position: relative;
+  cursor: pointer;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px;
+  position: absolute;
+  z-index: 1000;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ===== FILTER COMPONENTS ===== */
+
+/* Filter controls container */
+.filter-controls {
+  background: var(--card-background);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Individual filter elements */
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-item label {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.filter-select {
+  padding: 0.5rem 1rem;
+  border: 2px solid #e1e8ed;
+  border-radius: var(--border-radius);
+  background: white;
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* Search input */
+.search-input {
+  padding: 0.5rem 1rem;
+  border: 2px solid #e1e8ed;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: var(--transition);
+  min-width: 250px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* ===== HEXAGRAM GRID & CARDS ===== */
+
+/* Main grid container */
+.hexagram-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+/* Individual hexagram card */
+.hexagram-card {
+  background: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.hexagram-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.hexagram-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.hexagram-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* ===== HEXAGRAM CARD COMPONENTS ===== */
+
+/* Card header with dots and number */
+.hexagram-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.dots-container {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Individual dots in header */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--secondary-color);
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Dot hover animation with wave effect */
+.hexagram-header:hover .dot {
+  animation: dotPulse 2s infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+}
+
+/* Staggered animation for dots */
+.hexagram-header:hover .dot:nth-child(1) { animation-delay: 0s; }
+.hexagram-header:hover .dot:nth-child(2) { animation-delay: 0.2s; }
+.hexagram-header:hover .dot:nth-child(3) { animation-delay: 0.4s; }
+.hexagram-header:hover .dot:nth-child(4) { animation-delay: 0.6s; }
+
+/* Hexagram number display */
+.hexagram-number {
+  font-weight: bold;
+  color: var(--accent-color);
+  font-size: 1.1rem;
+}
+
+/* Main content area of hexagram card */
+.hexagram-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Trigram and sixiang containers */
+.trigram-container,
+.sixiang-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* ===== TRIGRAM STYLES & ANIMATIONS ===== */
+
+/* Base trigram styling */
+.trigram {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+/* Enhanced trigram hover animation with fast initial growth and sustained wave */
+.trigram:hover {
+  animation: trigramWave 3s ease-in-out infinite;
+}
+
+@keyframes trigramWave {
+  0% {
+    transform: scale(1.1);
+  }
+  15% {
+    transform: scale(1.3);
+  }
+  30% {
+    transform: scale(1.25);
+  }
+  45% {
+    transform: scale(1.35);
+  }
+  60% {
+    transform: scale(1.28);
+  }
+  75% {
+    transform: scale(1.32);
+  }
+  90% {
+    transform: scale(1.29);
+  }
+  100% {
+    transform: scale(1.3);
+  }
+}
+
+/* Staggered trigram animations */
+.trigram-container:hover .trigram:nth-child(1) { animation-delay: 0s; }
+.trigram-container:hover .trigram:nth-child(2) { animation-delay: 0.1s; }
+
+/* ===== SIXIANG STYLES & ANIMATIONS ===== */
+
+/* Base sixiang styling */
+.sixiang {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+/* Enhanced sixiang hover animation with rotation and scale effects */
+.sixiang:hover {
+  animation: sixiangWave 4s ease-in-out infinite;
+}
+
+@keyframes sixiangWave {
+  0% {
+    transform: scale(1.1) rotate(0deg);
+  }
+  20% {
+    transform: scale(1.4) rotate(5deg);
+  }
+  40% {
+    transform: scale(1.35) rotate(-3deg);
+  }
+  60% {
+    transform: scale(1.38) rotate(2deg);
+  }
+  80% {
+    transform: scale(1.36) rotate(-1deg);
+  }
+  100% {
+    transform: scale(1.37) rotate(0deg);
+  }
+}
+
+/* Staggered sixiang animations */
+.sixiang-container:hover .sixiang:nth-child(1) { animation-delay: 0s; }
+.sixiang-container:hover .sixiang:nth-child(2) { animation-delay: 0.15s; }
+.sixiang-container:hover .sixiang:nth-child(3) { animation-delay: 0.3s; }
+.sixiang-container:hover .sixiang:nth-child(4) { animation-delay: 0.45s; }
+
+/* ===== HEXAGRAM NAME & TOOLTIP ===== */
+
+/* Hexagram name with integrated tooltip */
+.hexagram-name {
+  font-weight: 600;
+  font-size: 1.2rem;
+  text-align: center;
+  color: var(--primary-color);
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e1e8ed;
+  position: relative;
+  cursor: pointer;
+}
+
+/* Tooltip text styling */
+.tooltip-text {
+  visibility: hidden;
+  width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px;
+  position: absolute;
+  z-index: 1000; /* High z-index to ensure it appears above all other elements */
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 0.9rem;
+  font-weight: normal;
+  line-height: 1.4;
+}
+
+.tooltip-text::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+/* Tooltip visibility on hover */
+.hexagram-name:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ===== MODAL COMPONENTS ===== */
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* High z-index to overlay everything */
+  padding: 2rem;
+}
+
+/* Modal content box */
+.modal-content {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+/* Modal close button */
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  transition: var(--transition);
+}
+
+.modal-close:hover {
+  color: var(--accent-color);
+}
+
+/* Modal header */
+.modal-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.modal-subtitle {
+  color: #666;
+  font-size: 1rem;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablet styles */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
   }
 
-  .no-print {
+  .hexagram-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-input {
+    min-width: auto;
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 480px) {
+  .hexagram-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .header {
+    padding: 1rem;
+  }
+
+  .header h1 {
+    font-size: 1.75rem;
+  }
+
+  .modal-content {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .trigram-container,
+  .sixiang-container {
+    gap: 0.5rem;
+  }
+}
+
+/* ===== ACCESSIBILITY & UTILITIES ===== */
+
+/* Focus styles for keyboard navigation */
+button:focus,
+.filter-select:focus,
+.search-input:focus {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 2px;
+}
+
+/* Reduced motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --primary-color: #000000;
+    --secondary-color: #0000ff;
+    --accent-color: #ff0000;
+    --background-color: #ffffff;
+    --card-background: #ffffff;
+    --text-color: #000000;
+  }
+}
+
+/* Print styles */
+@media print {
+  .header,
+  .filter-controls,
+  .footer {
     display: none;
+  }
+
+  .hexagram-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #000;
   }
 }

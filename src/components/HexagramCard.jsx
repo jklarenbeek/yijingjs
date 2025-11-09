@@ -1,6 +1,6 @@
 // src/components/HexagramCard.jsx
 
-import { useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
@@ -18,6 +18,9 @@ const HexagramCard = ({
   showSixiangs = false,
   showKingWenNumbers = false,
 }) => {
+  // Add hover state for trigrams/sixiangs
+  const [hoveredSection, setHoveredSection] = useState(null);
+
   const data = useMemo(() => getHexagramData(hexIndex), [hexIndex]);
 
   // Get sixiang data
@@ -63,11 +66,11 @@ const HexagramCard = ({
     return (
       <div key={position} className="w-full h-2 flex justify-center gap-1">
         {isYang ? (
-          <div className="w-full h-full bg-white rounded-sm" />
+          <div className="w-full h-full bg-white rounded-sm transition-all duration-200" />
         ) : (
           <>
-            <div className="w-5/12 h-full bg-gray-400 dark:bg-gray-500 rounded-sm" />
-            <div className="w-5/12 h-full bg-gray-400 dark:bg-gray-500 rounded-sm" />
+            <div className="w-5/12 h-full bg-gray-400 dark:bg-gray-500 rounded-sm transition-all duration-200" />
+            <div className="w-5/12 h-full bg-gray-400 dark:bg-gray-500 rounded-sm transition-all duration-200" />
           </>
         )}
       </div>
@@ -76,15 +79,15 @@ const HexagramCard = ({
 
   const renderSixiangLines = useCallback((sixiangValue, sixiangIndex) => {
     return [0, 1].map(linePos => {
-      const isYang = (sixiangValue >> (1 - linePos)) & 1; // Reverse order for display
+      const isYang = (sixiangValue >> (1 - linePos)) & 1;
       return (
         <div key={`${sixiangIndex}-${linePos}`} className="w-full h-2 flex justify-center gap-1">
           {isYang ? (
-            <div className="w-full h-full bg-white rounded-sm" />
+            <div className="w-full h-full bg-white rounded-sm transition-all duration-200" />
           ) : (
             <>
-              <div className="w-5/12 h-full bg-gray-400 dark:bg-gray-500 rounded-sm" />
-              <div className="w-5/12 h-full bg-gray-400 dark:bg-gray-500 rounded-sm" />
+              <div className="w-5/12 h-full bg-gray-400 dark:bg-gray-500 rounded-sm transition-all duration-200" />
+              <div className="w-5/12 h-full bg-gray-400 dark:bg-gray-500 rounded-sm transition-all duration-200" />
             </>
           )}
         </div>
@@ -157,47 +160,85 @@ const HexagramCard = ({
           </div>
         </div>
 
-        {/* Content - either trigrams or sixiangs */}
+        {/* Content - either trigrams or sixiangs with hover effects */}
         {showSixiangs ? (
-          // Sixiangs view - 3 sections of 2 lines each
+          // Sixiangs view with hover effects
           <>
             {sixiangs.map((sixiang, index) => (
-              <div
+              <Tooltip
                 key={index}
-                className="space-y-1 p-1 rounded relative"
-                style={{
-                  backgroundColor: `color-mix(in srgb, ${sixiang.color} 20%, transparent)`,
-                  minHeight: '2.5rem'
-                }}
+                title={sixiang.name}
+                className="capitalize"
+                block={true}
+                followMouse={true}
               >
-                {renderSixiangLines(sixiang.value, index)}
-                {/* Sixiang symbol overlay */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
-                  <span className="text-lg font-bold" style={{ color: sixiang.color }}>
-                    {sixiang.symbol}
-                  </span>
+                <div
+                  className={cn(
+                    "space-y-1 p-1 rounded relative w-full transition-all duration-200",
+                    "transform origin-center",
+                    hoveredSection === `sixiang-${index}` && "scale-105 bg-opacity-40"
+                  )}
+                  style={{
+                    backgroundColor: `color-mix(in srgb, ${sixiang.color} ${hoveredSection === `sixiang-${index}` ? '30%' : '20%'
+                      }, transparent)`,
+                    boxShadow: hoveredSection === `sixiang-${index}`
+                      ? `0 0 12px ${sixiang.color}60`
+                      : 'none'
+                  }}
+                  onMouseEnter={() => setHoveredSection(`sixiang-${index}`)}
+                  onMouseLeave={() => setHoveredSection(null)}
+                >
+                  {renderSixiangLines(sixiang.value, index)}
                 </div>
-              </div>
+              </Tooltip>
             ))}
           </>
         ) : (
-          // Original trigrams view - 2 sections of 3 lines each
+          // Trigrams view with hover effects
           <>
-            {/* Upper trigram */}
-            <div
-              className="space-y-1 p-1 rounded relative"
-              style={{ backgroundColor: `color-mix(in srgb, ${data.upperColor} 20%, transparent)` }}
-            >
-              {[0, 1, 2].map(renderTrigramLine)}
-            </div>
+            {/* Upper trigram with hover effect */}
+            <Tooltip title={Bagua.bagua_toName(data.upperTrigramIndex)} className="capitalize" block={true} followMouse={true}>
+              <div
+                className={cn(
+                  "space-y-1 p-1 rounded relative w-full transition-all duration-200",
+                  "transform origin-center",
+                  hoveredSection === 'upper' && "scale-105 bg-opacity-40"
+                )}
+                style={{
+                  backgroundColor: `color-mix(in srgb, ${data.upperColor} ${hoveredSection === 'upper' ? '30%' : '20%'
+                    }, transparent)`,
+                  boxShadow: hoveredSection === 'upper'
+                    ? `0 0 12px ${data.upperColor}60`
+                    : 'none'
+                }}
+                onMouseEnter={() => setHoveredSection('upper')}
+                onMouseLeave={() => setHoveredSection(null)}
+              >
+                {[0, 1, 2].map(renderTrigramLine)}
+              </div>
+            </Tooltip>
 
-            {/* Lower trigram */}
-            <div
-              className="space-y-1 p-1 rounded relative"
-              style={{ backgroundColor: `color-mix(in srgb, ${data.lowerColor} 20%, transparent)` }}
-            >
-              {[3, 4, 5].map(renderTrigramLine)}
-            </div>
+            {/* Lower trigram with hover effect */}
+            <Tooltip title={Bagua.bagua_toName(data.lowerTrigramIndex)} className="capitalize" block={true} followMouse={true}>
+              <div
+                className={cn(
+                  "space-y-1 p-1 rounded relative w-full transition-all duration-200",
+                  "transform origin-center",
+                  hoveredSection === 'lower' && "scale-105 bg-opacity-40"
+                )}
+                style={{
+                  backgroundColor: `color-mix(in srgb, ${data.lowerColor} ${hoveredSection === 'lower' ? '30%' : '20%'
+                    }, transparent)`,
+                  boxShadow: hoveredSection === 'lower'
+                    ? `0 0 12px ${data.lowerColor}60`
+                    : 'none'
+                }}
+                onMouseEnter={() => setHoveredSection('lower')}
+                onMouseLeave={() => setHoveredSection(null)}
+              >
+                {[3, 4, 5].map(renderTrigramLine)}
+              </div>
+            </Tooltip>
 
             {/* Floating transition symbol */}
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center pointer-events-none">
