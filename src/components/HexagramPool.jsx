@@ -11,11 +11,10 @@ const HexagramPool = ({
   onSelectHex,
   filters,
 }) => {
-  const { filterSymmetry, isFiltered } = filters;
 
   const available = Array.from({ length: 64 }, (_, i) => i).filter(
     (i) =>
-      !placedHexagrams.includes(i) && !isFiltered(i)
+      !placedHexagrams.includes(i) && !filters.isFiltered(i)
   );
 
   const handleDragStart = (e, hexIndex) => {
@@ -45,8 +44,7 @@ const HexagramPool = ({
             selected={false}
             onClick={() => { }}
             isNeighbor={false}
-            symmetryGroup={Yijing.yijing_symmetryName(hexIndex)}
-            filterSymmetry={filterSymmetry}
+            filters={filters}
             inEditMode
           />
         </div>

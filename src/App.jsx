@@ -114,7 +114,7 @@ function App() {
               setEditStage={setEditStage}
               selectedHex={selectedHex}
               onSelectHex={handleSelectHex}
-              isFiltered={filters.isFiltered}
+              filters={filters}
               neighbors={neighbors}
             />
           ) : (
@@ -122,7 +122,7 @@ function App() {
               selectedHex={selectedHex}
               onSelectHex={handleSelectHex}
               neighbors={neighbors}
-              isFiltered={filters.isFiltered}
+              filters={filters}
               currentSequence={sequences.currentSequence}
               customSequences={sequences.customSequences}
             />

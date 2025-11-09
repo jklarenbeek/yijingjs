@@ -1,10 +1,14 @@
 // src/components/HexagramCard.jsx
+
+import { useMemo } from 'react';
+
 import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
 
 import { cn } from '../utils/tools.js';
 import * as theme from '../utils/colors.js';
+import { getHexagramData } from '../utils/hexagramData.js';
 
 import { Tooltip } from './Tooltip';
 
@@ -13,40 +17,19 @@ const HexagramCard = ({
   selected,
   onClick,
   isNeighbor,
-  neighborRelation,
-  symmetryGroup,
-  filterSymmetry = [],
+  filters,
   inEditMode = false,
 }) => {
-  const upper = Yijing.yijing_upper(hexIndex);
-  const lower = Yijing.yijing_lower(hexIndex);
-  const upperWuxing = Bagua.bagua_toWuxing(upper);
-  const lowerWuxing = Bagua.bagua_toWuxing(lower);
-  const upperColor = theme.getWuxingColor(upperWuxing);
-  const lowerColor = theme.getWuxingColor(lowerWuxing);
+  const { filterSymmetry } = filters;
 
-  const transitionType = Wuxing.wuxing_transitionType(upperWuxing, lowerWuxing);
-  const transitionSymbol = Wuxing.wuxing_transitionSymbolChar(transitionType);
-  const transitionName = transitionType.charAt(0).toUpperCase() + transitionType.slice(1);
-
-  const symmetryColor = theme.symmetryColors[symmetryGroup];
-  const balancedColor = theme.balancedColors[Yijing.yijing_taoName(hexIndex)];
-  const mantraColor = theme.mantraColors[Yijing.yijing_mantraName(hexIndex)];
-
-  // ---- tooltip texts ----
-  const symmetryName = Yijing.yijing_symmetryName(hexIndex);
-  const balancedName = Yijing.yijing_taoName(hexIndex);
-  const mantraName = Yijing.yijing_mantraName(hexIndex);
-  const foundation = Yijing.yijing_isFoundation(hexIndex)
-    ? "Foundational"
-    : null;
+  const data = useMemo(() => getHexagramData(hexIndex), [hexIndex]);
 
   // ---- border logic ----
   let borderColor;
   if (selected) {
     borderColor = theme.additionalColors.selected;
-  } else if (filterSymmetry.includes(symmetryGroup)) {
-    borderColor = theme.symmetryColors[symmetryGroup];
+  } else if (filterSymmetry?.includes(data.symmetryName)) {
+    borderColor = data.symmetryColor;
   } else {
     borderColor = theme.additionalColors.defaultBorder;
   }
@@ -98,31 +81,31 @@ const HexagramCard = ({
 
           {/* Dots with tooltips */}
           <div className="flex items-center gap-1">
-            <Tooltip title={`Symmetry: ${symmetryName}`} className="capitalize">
+            <Tooltip title={`Symmetry: ${data.symmetryName}`} className="capitalize">
               <div
                 className="w-2 h-2 rounded-full"
-                style={{ backgroundColor: symmetryColor }}
+                style={{ backgroundColor: data.symmetryColor }}
                 aria-hidden="true"
               />
             </Tooltip>
 
-            <Tooltip title={`Mantra: ${mantraName}`} className="capitalize">
+            <Tooltip title={`Mantra: ${data.mantraName}`} className="capitalize">
               <div
                 className="w-2 h-2 rounded-full"
-                style={{ backgroundColor: mantraColor }}
+                style={{ backgroundColor: data.mantraColor }}
                 aria-hidden="true"
               />
             </Tooltip>
 
-            <Tooltip title={`Tao: ${balancedName}`} className="capitalize">
+            <Tooltip title={`Tao: ${data.balancedName}`} className="capitalize">
               <div
                 className="w-2 h-2 rounded-full"
-                style={{ backgroundColor: balancedColor }}
+                style={{ backgroundColor: data.balancedColor }}
                 aria-hidden="true"
               />
             </Tooltip>
 
-            {(foundation && (<Tooltip title={`${foundation}: ${Bagua.bagua_toName(upper)}`} className="capitalize">
+            {(data.foundationName && (<Tooltip title={`Foundational: ${data.foundationName}`} className="capitalize">
               <div
                 className="w-2 h-2 rounded-full"
                 style={{ backgroundColor: theme.additionalColors.foundation }}
@@ -136,7 +119,7 @@ const HexagramCard = ({
         {/* Upper trigram */}
         <div
           className="space-y-1 p-1 rounded relative"
-          style={{ backgroundColor: `color-mix(in srgb, ${upperColor} 20%, transparent)` }}
+          style={{ backgroundColor: `color-mix(in srgb, ${data.upperColor} 20%, transparent)` }}
         >
           {[0, 1, 2].map(renderLine)}
         </div>
@@ -144,14 +127,14 @@ const HexagramCard = ({
         {/* Lower trigram */}
         <div
           className="space-y-1 p-1 rounded relative"
-          style={{ backgroundColor: `color-mix(in srgb, ${lowerColor} 20%, transparent)` }}
+          style={{ backgroundColor: `color-mix(in srgb, ${data.lowerColor} 20%, transparent)` }}
         >
           {[3, 4, 5].map(renderLine)}
         </div>
 
         {/* Floating transition symbol */}
         <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center pointer-events-none">
-          <Tooltip title={transitionName} className="capitalize">
+          <Tooltip title={data.transitionName} className="capitalize">
             <div
               className={cn(
                 "pointer-events-auto w-8 h-8 rounded-full border-2 flex items-center justify-center",
@@ -160,11 +143,11 @@ const HexagramCard = ({
                 "group"
               )}
               style={{
-                borderColor: upperColor,
-                color: upperColor,
+                borderColor: data.upperColor,
+                color: data.upperColor,
               }}
             >
-              {transitionSymbol}
+              {data.transitionSymbol}
             </div>
           </Tooltip>
         </div>

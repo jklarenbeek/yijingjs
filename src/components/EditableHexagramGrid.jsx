@@ -9,11 +9,10 @@ const EditableHexagramGrid = ({
   setEditStage,
   selectedHex,
   onSelectHex,
-  filterSymmetry,
-  filterMantra = [],
-  filterBalance = [],
+  filters,
   neighbors = [],
 }) => {
+
   const handleDrop = (e, targetIndex) => {
     e.preventDefault();
     const data = e.dataTransfer.getData('text/plain');
@@ -53,10 +52,6 @@ const EditableHexagramGrid = ({
     }
   };
 
-  const handleReset = () => {
-    setEditStage(Array(64).fill(null));
-  };
-
   const handleClear = () => {
     setEditStage(Array(64).fill(null));
   };
@@ -68,12 +63,6 @@ const EditableHexagramGrid = ({
           Custom Sequence Editor
         </h3>
         <div className="flex gap-2">
-          <button
-            onClick={handleReset}
-            className="px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded transition-colors"
-          >
-            Reset
-          </button>
           <button
             onClick={handleClear}
             className="px-3 py-1 text-sm bg-red-500 hover:bg-red-600 text-white rounded transition-colors"
@@ -114,11 +103,7 @@ const EditableHexagramGrid = ({
                 opacity = 'opacity-40';
               }
             }
-            const symmetryGroup = Yijing.yijing_symmetryName(hexIndex);
-            const isFilteredBySymmetry = filterSymmetry.length > 0 && !filterSymmetry.includes(symmetryGroup);
-            const isFilteredByMantra = filterMantra.length > 0 && !filterMantra.includes(Yijing.yijing_mantraName(hexIndex));
-            const isFilteredByBalance = filterBalance.length > 0 && !filterBalance.includes(Yijing.yijing_taoName(hexIndex));
-            if (isFilteredBySymmetry || isFilteredByMantra || isFilteredByBalance) {
+            if (filters.isFiltered(hexIndex)) {
               opacity = 'opacity-20';
             }
             return (
@@ -148,8 +133,7 @@ const EditableHexagramGrid = ({
                       selected={selectedHex === hexIndex}
                       onClick={() => { }}
                       isNeighbor={false}
-                      symmetryGroup={Yijing.yijing_symmetryName(hexIndex)}
-                      filterSymmetry={filterSymmetry}
+                      filter={filters}
                       inEditMode
                     />
                   </div>

@@ -9,7 +9,7 @@ const HexagramGrid = ({
   selectedHex,
   onSelectHex,
   neighbors,
-  isFiltered,
+  filters,
   currentSequence,
   customSequences = [],
 }) => {
@@ -22,13 +22,12 @@ const HexagramGrid = ({
       <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
         {values.map((i) => {
           const isNeighbor = neighbors.includes(i);
-          const symmetryGroup = Yijing.yijing_symmetryName(i);
 
           let opacity = 'opacity-100';
           if (selectedHex !== null && !isNeighbor && i !== selectedHex) {
             opacity = 'opacity-40';
           }
-          if (isFiltered(i)) {
+          if (filters.isFiltered(i)) {
             opacity = 'opacity-20';
           }
           return (
@@ -41,8 +40,7 @@ const HexagramGrid = ({
                 selected={selectedHex === i}
                 onClick={onSelectHex}
                 isNeighbor={isNeighbor}
-                neighborRelation={selectedHex}
-                symmetryGroup={symmetryGroup}
+                filters={filters}
               />
             </div>
           );

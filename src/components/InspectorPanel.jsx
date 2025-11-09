@@ -5,51 +5,18 @@ import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
 import HexagramCard from './HexagramCard';
-import { toBinary, cn } from '../utils/tools.js';
-import * as theme from '../utils/colors.js';
+import { cn } from '../utils/tools.js';
+
+import { getHexagramData } from '../utils/hexagramData.js';
 
 const InspectorPanel = ({ hexIndex, onSelectHex }) => {
   const [history, setHistory] = useState([]);
 
+  // Define currentHex early, with fallback to hexIndex for initial sync
+  const currentHex = history[history.length - 1] ?? hexIndex;
+
   // Memoize expensive calculations
-  const currentData = useMemo(() => {
-    if (hexIndex === null) return null;
-
-    const upper = Yijing.yijing_upper(hexIndex);
-    const lower = Yijing.yijing_lower(hexIndex);
-    const upperSymbol = Bagua.bagua_toSymbolChar(upper);
-    const lowerSymbol = Bagua.bagua_toSymbolChar(lower);
-    const upperWuxing = Bagua.bagua_toWuxing(upper);
-    const lowerWuxing = Bagua.bagua_toWuxing(lower);
-    const transitionType = Wuxing.wuxing_transitionType(upperWuxing, lowerWuxing);
-
-    return {
-      upper, lower, upperSymbol, lowerSymbol, upperWuxing, lowerWuxing, transitionType,
-      symmetry: Yijing.yijing_symmetryName(hexIndex),
-      foundation: Yijing.yijing_isFoundation(hexIndex) ? "Foundational" : null,
-      balanced: Yijing.yijing_taoName(hexIndex),
-      mantra: Yijing.yijing_mantraName(hexIndex),
-      lineCount: Yijing.yijing_lineCount(hexIndex),
-      binary: toBinary(hexIndex),
-      orbit: Yijing.yijing_orbitClass(hexIndex),
-      centerChain: Yijing.yijing_getCenterChain(hexIndex),
-      localNeighbors: Yijing.yijing_neighbors(hexIndex),
-      red: Yijing.yijing_red(hexIndex),
-      white: Yijing.yijing_white(hexIndex),
-      blue: Yijing.yijing_blue(hexIndex),
-      kingWenNumber: Yijing.YIJING_KINGWEN_SEQUENCE[hexIndex] + 1,
-      grayCode: Yijing.yijing_toGray(hexIndex),
-      grayPosition: Yijing.yijing_fromGray(hexIndex),
-      entropy: Yijing.yijing_entropy(hexIndex).toFixed(3),
-      balance: Yijing.yijing_balance(hexIndex).toFixed(3),
-      depth: Yijing.yijing_depth(hexIndex),
-      root: Yijing.yijing_root(hexIndex),
-      distanceToRoot: Yijing.yijing_distance(hexIndex, Yijing.yijing_root(hexIndex)),
-      codon: Yijing.yijing_toCodon(hexIndex),
-      aaName: Yijing.yijing_toAminoAcidName(hexIndex),
-      isStop: Yijing.yijing_isStopCodon(hexIndex)
-    };
-  }, [hexIndex]);
+  const currentData = useMemo(() => getHexagramData(currentHex), [currentHex]);
 
   // Sync history when global selection changes
   useEffect(() => {
@@ -81,15 +48,13 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
     );
   }
 
-  const currentHex = history[history.length - 1];
-
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col h-full">
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {/* Header */}
         <div className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6 sticky top-0 bg-white dark:bg-gray-800 z-10">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Hexagram {currentHex}</h2>
-          <p className="text-sm font-mono text-gray-500 dark:text-gray-400 mt-1">{currentData.binary}</p>
+          <p className="text-sm font-mono text-gray-500 dark:text-gray-400 mt-1">{currentData.binaryString}</p>
         </div>
 
         {/* Breadcrumb Navigation */}
@@ -131,23 +96,23 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
         {/* Basic Info */}
         <details className="border-b border-gray-200 dark:border-gray-700 pb-4 -mx-6 px-6" open>
           <summary className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Geometry</summary>
-          {currentData.foundation && (
+          {currentData.foundationName && (
             <div className="flex items-center gap-2 p-2 mb-1 bg-gray-50 dark:bg-gray-700/50 rounded">
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#FFFF00' }} />
-              <span className="capitalize font-medium">{currentData.foundation}</span>
+              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: currentData.foundationColor }} />
+              <span className="capitalize font-medium">Foundational</span>
             </div>
           )}
           <div className="flex items-center gap-2 p-2 mb-1 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: theme.balancedColors[currentData.balanced] }} />
-            <span className="capitalize font-medium">{currentData.balanced}</span>
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: currentData.balancedColor }} />
+            <span className="capitalize font-medium">{currentData.balancedName}</span>
           </div>
           <div className="flex items-center gap-2 p-2 mb-1 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: theme.mantraColors[currentData.mantra] }} />
-            <span className="capitalize font-medium">{currentData.mantra}</span>
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: currentData.mantraColor }} />
+            <span className="capitalize font-medium">{currentData.mantraName}</span>
           </div>
           <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700/50 rounded">
-            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: theme.symmetryColors[currentData.symmetry] }} />
-            <span className="capitalize font-medium">{currentData.symmetry}</span>
+            <div className="w-4 h-4 rounded-full" style={{ backgroundColor: currentData.symmetryColor }} />
+            <span className="capitalize font-medium">{currentData.symmetryName}</span>
           </div>
         </details>
 
@@ -239,9 +204,7 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
                     selected={h === currentHex}
                     onClick={() => handleLocalSelect(h)}
                     isNeighbor={idx > 0}
-                    neighborRelation={idx > 0 ? currentData.centerChain[idx - 1] : null}
-                    symmetryGroup={Yijing.yijing_symmetryName(h)}
-                    filterSymmetry={[]}
+                    filters={{}}
                   />
                   <span className="text-xs text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">
                     {idx === currentData.centerChain.length - 1 ? 'Cosmic' : (idx === currentData.centerChain.length - 2 ? 'Karmic' : 'Atomic')}&nbsp;
@@ -267,9 +230,7 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
                   selected={false}
                   onClick={() => handleLocalSelect(value)}
                   isNeighbor={false}
-                  neighborRelation={null}
-                  symmetryGroup={Yijing.yijing_symmetryName(value)}
-                  filterSymmetry={[]}
+                  filters={{}}
                 />
 
                 <span className="text-xs capitalize text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">
@@ -297,9 +258,7 @@ const InspectorPanel = ({ hexIndex, onSelectHex }) => {
                     selected={false}
                     onClick={() => handleLocalSelect(n)}
                     isNeighbor={true}
-                    neighborRelation={currentHex}
-                    symmetryGroup={Yijing.yijing_symmetryName(n)}
-                    filterSymmetry={[]}
+                    filters={{}}
                   />
                   <span className="text-xs text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100">
                     {Yijing.yijing_relationEmojiChar(currentHex, n)}
