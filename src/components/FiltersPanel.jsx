@@ -1,9 +1,6 @@
 // src/components/FiltersPanel.jsx
 
-import React from 'react';
-import * as Yijing from '@yijingjs/core';
 import * as Bagua from '@yijingjs/bagua';
-import * as Wuxing from '@yijingjs/wuxing';
 
 import {
   generateAminoAcidInfo,

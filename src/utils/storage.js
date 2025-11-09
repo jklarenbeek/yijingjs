@@ -1,4 +1,4 @@
-// src/utils/sequenceStorage.js
+// src/utils/storage.js
 
 import { LOCAL_STORAGE_KEYS } from './constants.js';
 

@@ -1,13 +1,12 @@
 // src/components/InspectorPanel.jsx
 
 import React, { useState, useEffect, useMemo } from 'react';
+
 import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
-import * as Bagua from '@yijingjs/bagua';
-import HexagramCard from './HexagramCard';
-import { cn } from '../utils/tools.js';
 
-import { getHexagramData } from '../utils/hexagramData.js';
+import HexagramCard from './HexagramCard';
+import { cn, getHexagramData } from '../utils/tools.js';
 
 const InspectorPanel = ({ hexIndex, onSelectHex }) => {
   const [history, setHistory] = useState([]);

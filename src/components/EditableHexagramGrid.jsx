@@ -1,6 +1,5 @@
 // src/components/EditableHexagramGrid.jsx
-import React from 'react';
-import * as Yijing from '@yijingjs/core';
+
 import HexagramCard from './HexagramCard';
 import { cn } from '../utils/tools.js';
 

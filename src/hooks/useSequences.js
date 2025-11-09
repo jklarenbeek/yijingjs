@@ -1,7 +1,7 @@
 // src/hooks/useSequences.js
 
 import { useState, useEffect, useCallback } from 'react';
-import { getAllSequences, addSequence, removeSequence as removeSequenceStorage } from '../utils/sequenceStorage.js';
+import { getAllSequences, addSequence, removeSequence as removeSequenceStorage } from '../utils/storage.js';
 import { getHexagramSequences } from '../utils/tools.js';
 
 export const useSequences = () => {
