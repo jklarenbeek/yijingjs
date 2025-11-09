@@ -10,7 +10,7 @@ import {
   transitionColors,
   sixiangColors,
   additionalColors
-} from './src/utils/colors.js'; // Adjust path if utils is in src
+} from './src/utils/colors.js';
 
 export default {
   content: [

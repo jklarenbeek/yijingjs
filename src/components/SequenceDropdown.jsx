@@ -10,19 +10,33 @@ const SequenceDropdown = ({ currentSequence, onSequenceChange, customSequences =
       <select
         value={currentSequence}
         onChange={(e) => onSequenceChange(e.target.value)}
-        className="w-full p-2 pr-8 border-0 bg-transparent text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg cursor-pointer"
+        className="w-full p-2 pr-8 border-0 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg cursor-pointer appearance-none"
       >
-        <optgroup label="Standard Sequences">
+        <optgroup
+          label="Standard Sequences"
+          className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+        >
           {Object.entries(sequences).map(([key, seq]) => (
-            <option key={key} value={key}>
+            <option
+              key={key}
+              value={key}
+              className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+            >
               {seq.title}
             </option>
           ))}
         </optgroup>
         {customSequences.length > 0 && (
-          <optgroup label="My Sequences">
+          <optgroup
+            label="My Sequences"
+            className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+          >
             {customSequences.map((seq) => (
-              <option key={`custom-${seq.id}`} value={`custom-${seq.id}`}>
+              <option
+                key={`custom-${seq.id}`}
+                value={`custom-${seq.id}`}
+                className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              >
                 {seq.title} ({seq.name})
               </option>
             ))}
