@@ -11,7 +11,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  base: '/yijing-explorer/',
+  base: '/yijingjs/',
   resolve: {
     alias: {
       '@yijingjs/core': resolve(__dirname, './packages/core/src/yijing.js'),
@@ -28,7 +28,7 @@ export default defineConfig({
   },
   build: {
     sourcemap: true,
-    outDir: 'demo'
+    outDir: 'demo'  // Keep as 'demo' for consistency
   },
   // Better for debugging
   define: {
