@@ -10,6 +10,18 @@ const AppTabs = ({ activeTab, setActiveTab, editMode }) => {
   return (
     <div className="flex border-b border-gray-200 dark:border-gray-700">
       <button
+        onClick={() => setActiveTab(TAB_NAMES.FILTERS)}
+        className={cn(
+          "flex-1 px-4 py-3 text-sm font-medium transition-colors",
+          activeTab === TAB_NAMES.FILTERS
+            ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
+            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+        )}
+        aria-label="Exploration panel"
+      >
+        Explore
+      </button>
+      <button
         onClick={() => setActiveTab(TAB_NAMES.READER)}
         className={cn(
           "flex-1 px-4 py-3 text-sm font-medium transition-colors",
@@ -19,7 +31,7 @@ const AppTabs = ({ activeTab, setActiveTab, editMode }) => {
         )}
         aria-label="Reader panel"
       >
-        Reader
+        Read
       </button>
       <button
         onClick={() => setActiveTab(TAB_NAMES.INSPECTOR)}
@@ -31,19 +43,7 @@ const AppTabs = ({ activeTab, setActiveTab, editMode }) => {
         )}
         aria-label="Inspector panel"
       >
-        Inspector
-      </button>
-      <button
-        onClick={() => setActiveTab(TAB_NAMES.FILTERS)}
-        className={cn(
-          "flex-1 px-4 py-3 text-sm font-medium transition-colors",
-          activeTab === TAB_NAMES.FILTERS
-            ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
-            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
-        )}
-        aria-label="Filters panel"
-      >
-        Filters
+        Inspect
       </button>
       {editMode && (
         <button

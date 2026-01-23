@@ -13,7 +13,7 @@ import HexagramGrid from './components/HexagramGrid';
 import EditableHexagramGrid from './components/EditableHexagramGrid';
 import InspectorPanel from './components/InspectorPanel';
 import FiltersPanel from './components/FiltersPanel.jsx';
-import HexagramTextPanel from './components/HexagramTextPanel';
+import KingWenPanel from './components/KingWenPanel.jsx';
 import SequenceManager from './components/SequenceManager';
 import AppHeader from './components/AppHeader';
 import AppTabs from './components/AppTabs';
@@ -23,7 +23,7 @@ function App() {
   const [showSixiangs, setShowSixiangs] = useState(false);
   const [showKingWenNumbers, setShowKingWenNumbers] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [activeTab, setActiveTab] = useState(TAB_NAMES.INSPECTOR);
+  const [activeTab, setActiveTab] = useState(TAB_NAMES.FILTERS);
   const [editStage, setEditStage] = useState(() => {
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEYS.EDIT_STAGE);
@@ -226,7 +226,7 @@ function App() {
             {/* Tab Content */}
             <div className="flex-1 overflow-hidden">
               {activeTab === TAB_NAMES.READER && (
-                <HexagramTextPanel
+                <KingWenPanel
                   hexIndex={selectedHex}
                 />
               )}

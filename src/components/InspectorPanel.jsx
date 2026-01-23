@@ -206,7 +206,7 @@ const InspectorPanel = ({
                 >
                   <HexagramCard
                     hexIndex={h}
-                    selectedHex={currentHex}
+                    selectedHex={false}
                     onClick={() => handleLocalSelect(h)}
                     isNeighbor={idx > 0}
                     filters={filters}
