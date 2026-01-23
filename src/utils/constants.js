@@ -14,6 +14,7 @@ export const FILTER_TYPES = {
 };
 
 export const TAB_NAMES = {
+  READER: 'reader',
   INSPECTOR: 'inspector',
   FILTERS: 'filters',
   MANAGER: 'manager'

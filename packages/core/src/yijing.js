@@ -1,4 +1,5 @@
 // ./packages/core/src/yijing.js
+import textData from './yijing-en.json';
 
 //#region Sixiang Layers
 
@@ -609,6 +610,14 @@ export const YIJING_KINGWEN_SEQUENCE = [
   0b101010 /* 63 Ji Ji (After Completion) */,
   0b010101 /* 64 Wei Ji (Before Completion) */
 ];
+
+export function yijing_toWen(decimal) {
+  return YIJING_KINGWEN_SEQUENCE.findIndex(num => num === decimal) + 1;
+}
+
+export function yijing_toWenText(decimal) {
+  return textData[yijing_toWen(decimal)];
+}
 
 export const YIJING_KINGWEN_INVERTED =
   (() => yijing_invertSequence(YIJING_KINGWEN_SEQUENCE));

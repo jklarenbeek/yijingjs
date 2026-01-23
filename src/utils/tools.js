@@ -166,7 +166,7 @@ export function getHexagramData(hexIndex) {
   const red = Yijing.yijing_red(hexIndex);
   const white = Yijing.yijing_white(hexIndex);
   const blue = Yijing.yijing_blue(hexIndex);
-  const kingWenNumber = Yijing.YIJING_KINGWEN_SEQUENCE.findIndex(num => num === hexIndex) + 1;
+  const kingWenNumber = Yijing.yijing_toWen(hexIndex);
   const grayCode = Yijing.yijing_toGray(hexIndex);
   const grayPosition = Yijing.yijing_fromGray(hexIndex);
   const entropy = Yijing.yijing_entropy(hexIndex).toFixed(3);

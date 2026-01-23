@@ -13,6 +13,7 @@ import HexagramGrid from './components/HexagramGrid';
 import EditableHexagramGrid from './components/EditableHexagramGrid';
 import InspectorPanel from './components/InspectorPanel';
 import FiltersPanel from './components/FiltersPanel.jsx';
+import HexagramTextPanel from './components/HexagramTextPanel';
 import SequenceManager from './components/SequenceManager';
 import AppHeader from './components/AppHeader';
 import AppTabs from './components/AppTabs';
@@ -224,6 +225,11 @@ function App() {
 
             {/* Tab Content */}
             <div className="flex-1 overflow-hidden">
+              {activeTab === TAB_NAMES.READER && (
+                <HexagramTextPanel
+                  hexIndex={selectedHex}
+                />
+              )}
               {activeTab === TAB_NAMES.INSPECTOR && (
                 <InspectorPanel
                   hexIndex={selectedHex}
