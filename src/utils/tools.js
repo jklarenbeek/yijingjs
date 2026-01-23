@@ -128,20 +128,23 @@ export function getHexagramData(hexIndex) {
 
   const upper = Yijing.yijing_upper(hexIndex);
   const lower = Yijing.yijing_lower(hexIndex);
+  const upperName = Bagua.bagua_toName(upper);
+  const lowerName = Bagua.bagua_toName(lower);
   const upperSymbol = Bagua.bagua_toSymbolChar(upper);
   const lowerSymbol = Bagua.bagua_toSymbolChar(lower);
+
   const upperWuxing = Bagua.bagua_toWuxing(upper);
   const lowerWuxing = Bagua.bagua_toWuxing(lower);
   const transitionType = Wuxing.wuxing_transitionType(upperWuxing, lowerWuxing);
   const transitionSymbol = Wuxing.wuxing_transitionSymbolChar(transitionType);
   const transitionName = transitionType.charAt(0).toUpperCase() + transitionType.slice(1);
 
+  const balancedName = Yijing.yijing_taoName(hexIndex);
+  const mantraName = Yijing.yijing_mantraName(hexIndex);
   const symmetryName = Yijing.yijing_symmetryName(hexIndex);
   const foundationName = Yijing.yijing_isFoundation(hexIndex)
     ? Bagua.bagua_toName(upper) : null;
 
-  const balancedName = Yijing.yijing_taoName(hexIndex);
-  const mantraName = Yijing.yijing_mantraName(hexIndex);
 
   // Derived colors (for HexagramCard)
   const upperColor = getWuxingColor(upperWuxing);
@@ -176,7 +179,7 @@ export function getHexagramData(hexIndex) {
   const isStop = Yijing.yijing_isStopCodon(hexIndex);
 
   return {
-    upper, lower, upperSymbol, lowerSymbol,
+    upper, lower, upperName, lowerName, upperSymbol, lowerSymbol,
     upperWuxing, lowerWuxing,
     upperColor, lowerColor,
     transitionType, transitionSymbol, transitionName, transitionColor,
@@ -203,19 +206,19 @@ export function getSixiangData(hexIndex) {
       value: red,
       name: Wuxing.sixiang_toName(red),
       symbol: Wuxing.sixiang_toSymbolChar(red),
-      color: colorSystem.sixiang[red]
+      color: colorSystem.sixiang[Wuxing.sixiang_toName(red)]
     },
     {
       value: white,
       name: Wuxing.sixiang_toName(white),
       symbol: Wuxing.sixiang_toSymbolChar(white),
-      color: colorSystem.sixiang[white]
+      color: colorSystem.sixiang[Wuxing.sixiang_toName(white)]
     },
     {
       value: blue,
       name: Wuxing.sixiang_toName(blue),
       symbol: Wuxing.sixiang_toSymbolChar(blue),
-      color: colorSystem.sixiang[blue]
+      color: colorSystem.sixiang[Wuxing.sixiang_toName(blue)]
     }
   ];
 }

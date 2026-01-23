@@ -170,7 +170,7 @@ const HexagramCard = ({
             >
               <div
                 className={cn(
-                  "space-y-1 p-1 rounded relative w-full transition-all duration-200",
+                  "space-y-1 px-1 py-0.75 rounded relative w-full transition-all duration-200",
                   "transform origin-center",
                   hoveredSection === `sixiang-${index}` && "scale-105 bg-opacity-40"
                 )}
@@ -193,7 +193,7 @@ const HexagramCard = ({
         // Trigrams view with hover effects
         <>
           {/* Upper trigram with hover effect */}
-          <Tooltip title={Bagua.bagua_toName(data.upperTrigramIndex)} className="capitalize" block={true} followMouse={true}>
+          <Tooltip title={data.upperName} className="capitalize" block={true} followMouse={true}>
             <div
               className={cn(
                 "space-y-1 p-1 rounded relative w-full transition-all duration-200",
@@ -215,7 +215,7 @@ const HexagramCard = ({
           </Tooltip>
 
           {/* Lower trigram with hover effect */}
-          <Tooltip title={Bagua.bagua_toName(data.lowerTrigramIndex)} className="capitalize" block={true} followMouse={true}>
+          <Tooltip title={data.lowerName} className="capitalize" block={true} followMouse={true}>
             <div
               className={cn(
                 "space-y-1 p-1 rounded relative w-full transition-all duration-200",
