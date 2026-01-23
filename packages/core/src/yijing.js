@@ -705,3 +705,169 @@ export const YIJING_GRAYCODE_INVERTED = Object.freeze(
 );
 
 //#endregion
+
+//#region Nuclear Matrix Sequence
+
+// Helper: Find all direct children via inverse nuclear mapping
+export function yijing_inverseCenter(hexagram = 0) {
+  hexagram = hexagram | 0;
+
+  // Atomic hexagrams have no children
+  if (yijing_isAtomic(hexagram)) {
+    return [];
+  }
+
+  // determine quadrant
+  const root = yijing_root(hexagram);
+
+  const children = [];
+  // find all children in the same quadrant
+  for (let i = 0; i < 64; i++) {
+    if (yijing_root(i) === root) {
+      children.push(i);
+    }
+  }
+
+  // Safety filter by layer (not strictly necessary, but explicit)
+  let result;
+  if (yijing_isCosmic(hexagram)) {
+    // Expect exactly 3 karmic children
+    result = children.filter(yijing_isKarmic);
+  }
+  else /* is karmic */ {
+    // Expect exactly 4 atomic children
+    result = children.filter(yijing_isAtomic);
+  }
+
+  // Numeric ascending order for deterministic matrix layout
+  result.sort((a, b) => a - b);
+
+  return result;
+}
+
+/**
+ * Generates the Nuclear Matrix Sequence (8x8)
+ * Layout: 4 Quadrants, each rooted in the center of the matrix.
+ * Center 2x2 = Cosmic. Surrounding Ring = Karmic. Outer Layer = Atomic.
+ */
+/**
+ * Generates the Nuclear Matrix Sequence (8x8)
+ * Layout: 4 Quadrants, each rooted in a cosmic hexagram.
+ * Center 2x2 = Cosmic roots. Surrounding ring = Karmic. Outer layers = Atomic.
+ *
+ * Quadrant placement:
+ *   0 (TL) | 42 (TR)
+ *   -------|-------
+ *  21 (BL) | 63 (BR)
+ */
+export const YIJING_NUCLEAR_MATRIX = (function () {
+  // Group all 64 hexagrams by their cosmic root
+  const sequence = Array.from({ length: 64 }, (_, i) => i);
+  const groupedByRoot = Object.groupBy(sequence, (num) => yijing_root(num));
+
+  /**
+   * Builds a canonical 4x4 quadrant with root at position (0,0)
+   * Layout pattern:
+   *   [Root] [K3]   [A3] [A3]
+   *   [K1]   [K2]   [A3] [A3]
+   *   [A1]   [A1]   [A2] [A2]
+   *   [A1]   [A1]   [A2] [A2]
+   */
+  function buildCanonicalQuadrant(root) {
+    const children = groupedByRoot[root] || [];
+
+    // Separate by layer
+    const cosmic = children.filter(h => yijing_isCosmic(h))[0]; // Just the root
+    const karmic = children.filter(h => yijing_isKarmic(h)).sort((a, b) => a - b);
+    const atomic = children.filter(h => yijing_isAtomic(h)).sort((a, b) => a - b);
+
+    // Group atomic by their karmic parent
+    const groupedByKarmic = Object.groupBy(atomic, (num) => yijing_center(num));
+
+    // Initialize a 4x4 matrix
+    const quad = Array(4).fill(null).map(() => Array(4).fill(null));
+
+    // Place root and karmic
+    quad[0][0] = cosmic;           // Root at origin
+    quad[1][0] = karmic[0] || null; // K1
+    quad[1][1] = karmic[1] || null; // K2
+    quad[0][1] = karmic[2] || null; // K3
+
+    // Place atomic descendants in 2x2 blocks
+    const k1a = groupedByKarmic[karmic[0]] || [];
+    quad[2][0] = k1a[0] || null;
+    quad[3][0] = k1a[1] || null;
+    quad[2][1] = k1a[2] || null;
+    quad[3][1] = k1a[3] || null;
+
+    const k2a = groupedByKarmic[karmic[1]] || [];
+    quad[2][2] = k2a[0] || null;
+    quad[3][2] = k2a[1] || null;
+    quad[2][3] = k2a[2] || null;
+    quad[3][3] = k2a[3] || null;
+
+    const k3a = groupedByKarmic[karmic[2]] || [];
+    quad[0][2] = k3a[0] || null;
+    quad[1][2] = k3a[1] || null;
+    quad[0][3] = k3a[2] || null;
+    quad[1][3] = k3a[3] || null;
+
+    return quad;
+  }
+
+  // Rotate 4x4 quadrant clockwise by 90° × times
+  function rotateQuadrant(quad, times) {
+    let result = quad.map(row => [...row]);
+    for (let t = 0; t < times; t++) {
+      const temp = Array(4).fill(null).map(() => Array(4).fill(null));
+      for (let r = 0; r < 4; r++) {
+        for (let c = 0; c < 4; c++) {
+          temp[c][3 - r] = result[r][c];
+        }
+      }
+      result = temp;
+    }
+    return result;
+  }
+
+  // Place quadrant into 8x8 matrix at offset
+  function placeQuadrant(matrix, quad, rowOffset, colOffset) {
+    for (let r = 0; r < 4; r++) {
+      for (let c = 0; c < 4; c++) {
+        matrix[rowOffset + r][colOffset + c] = quad[r][c];
+      }
+    }
+  }
+
+  // Initialize 8x8 matrix
+  const matrix = Array(8).fill(null).map(() => Array(8).fill(null));
+
+  // Build and place each quadrant with appropriate rotation
+  // Rotations position roots at the center 2x2 block
+
+  // Top-Left: Root 0 at (3,3) → rotate 180° (2 times)
+  const quad0 = buildCanonicalQuadrant(0);
+  placeQuadrant(matrix, rotateQuadrant(quad0, 2), 0, 0);
+
+  // Top-Right: Root 42 at (3,4) → rotate 270° CCW = 90° CW (1 time)
+  const quad42 = buildCanonicalQuadrant(42);
+  placeQuadrant(matrix, rotateQuadrant(quad42, 3), 0, 4);
+
+  // Bottom-Left: Root 21 at (4,3) → rotate 90° CCW = 270° CW (3 times)
+  const quad21 = buildCanonicalQuadrant(21);
+  placeQuadrant(matrix, rotateQuadrant(quad21, 1), 4, 0);
+
+  // Bottom-Right: Root 63 at (4,4) → no rotation (0 times)
+  const quad63 = buildCanonicalQuadrant(63);
+  placeQuadrant(matrix, rotateQuadrant(quad63, 0), 4, 4);
+
+  // Flatten to 1D array for consistency with other sequences
+  return matrix.flat();
+})();
+
+// Inverted lookup for Nuclear Matrix
+export const YIJING_NUCLEAR_INVERTED = Object.freeze(
+  yijing_invertSequence(YIJING_NUCLEAR_MATRIX)
+);
+
+//#endregion

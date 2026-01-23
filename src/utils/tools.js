@@ -30,6 +30,10 @@ export function getHexagramSequences() {
       "title": "King Wen Sequence",
       "values": Yijing.YIJING_KINGWEN_SEQUENCE
     },
+    "nuclear": {
+      "title": "Nuclear Matrix Sequence",
+      "values": Yijing.YIJING_NUCLEAR_MATRIX
+    },
     "bagua": {
       "title": "King Wen Bagua Sequence",
       "values": Yijing.generateHexagrams(Bagua.BAGUA_KING_WEN_SEQUENCE)
