@@ -3,6 +3,7 @@
 /** @type {import('tailwindcss').Config} */
 
 import colorSystem from './src/utils/colors.js';
+import animate from 'tailwindcss-animate';
 
 export default {
   content: [
@@ -60,5 +61,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [animate()],
 }

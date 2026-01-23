@@ -187,10 +187,55 @@ export function getHexagramData(hexIndex) {
   };
 }
 
-export function getSixiangData(sixiangValue) {
-  const name = Wuxing.sixiang_toName(sixiangValue);
-  const symbol = Wuxing.sixiang_toSymbolChar(sixiangValue);
-  const color = colorSystem.sixiang[name];
+export function getSixiangData(hexIndex) {
 
-  return { name, symbol, color };
+  const red = Yijing.yijing_red(hexIndex);      // Top two lines (bits 0-1)
+  const white = Yijing.yijing_white(hexIndex);  // Middle two lines (bits 2-3)
+  const blue = Yijing.yijing_blue(hexIndex);    // Bottom two lines (bits 4-5)
+
+  return [
+    {
+      value: red,
+      name: Wuxing.sixiang_toName(red),
+      symbol: Wuxing.sixiang_toSymbolChar(red),
+      color: colorSystem.sixiang[red]
+    },
+    {
+      value: white,
+      name: Wuxing.sixiang_toName(white),
+      symbol: Wuxing.sixiang_toSymbolChar(white),
+      color: colorSystem.sixiang[white]
+    },
+    {
+      value: blue,
+      name: Wuxing.sixiang_toName(blue),
+      symbol: Wuxing.sixiang_toSymbolChar(blue),
+      color: colorSystem.sixiang[blue]
+    }
+  ];
+}
+
+export function getWuxingData(hexIndex) {
+
+  const upper = Yijing.yijing_upper(hexIndex);
+  const lower = Yijing.yijing_lower(hexIndex);
+  const upperSymbol = Bagua.bagua_toSymbolChar(upper);
+  const lowerSymbol = Bagua.bagua_toSymbolChar(lower);
+  const upperWuxing = Bagua.bagua_toWuxing(upper);
+  const lowerWuxing = Bagua.bagua_toWuxing(lower);
+  const transitionType = Wuxing.wuxing_transitionType(upperWuxing, lowerWuxing);
+  const transitionSymbol = Wuxing.wuxing_transitionSymbolChar(transitionType);
+  const transitionName = transitionType.charAt(0).toUpperCase() + transitionType.slice(1);
+  const upperColor = getWuxingColor(upperWuxing);
+  const lowerColor = getWuxingColor(lowerWuxing);
+
+  return {
+    upper, lower,
+    upperSymbol, lowerSymbol,
+    upperWuxing, lowerWuxing,
+    upperColor, lowerColor,
+    transitionType,
+    transitionSymbol,
+    transitionName,
+  };
 }

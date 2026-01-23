@@ -69,7 +69,7 @@ const HexagramGrid = ({
             opacity = 'opacity-40';
           }
           if (filters.isFiltered(hexIndex)) {
-            opacity = 'opacity-20';
+            opacity = 'opacity-60';
           }
           return (
             <div

@@ -4,7 +4,7 @@ import { useState, useMemo, useCallback } from 'react';
 import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
-import { cn, getHexagramData } from '../utils/tools.js';
+import { cn, getHexagramData, getSixiangData } from '../utils/tools.js';
 import colorSystem, { getColor } from '../utils/colors.js';
 import { Tooltip } from './Tooltip';
 
@@ -24,32 +24,7 @@ const HexagramCard = ({
   const data = useMemo(() => getHexagramData(hexIndex), [hexIndex]);
 
   // Get sixiang data
-  const sixiangs = useMemo(() => {
-    const red = Yijing.yijing_red(hexIndex);      // Top two lines (bits 0-1)
-    const white = Yijing.yijing_white(hexIndex);  // Middle two lines (bits 2-3)
-    const blue = Yijing.yijing_blue(hexIndex);    // Bottom two lines (bits 4-5)
-
-    return [
-      {
-        value: red,
-        name: Wuxing.sixiang_toName(red),
-        symbol: Wuxing.sixiang_toSymbolChar(red),
-        color: getColor('sixiang', Wuxing.sixiang_toName(red))
-      },
-      {
-        value: white,
-        name: Wuxing.sixiang_toName(white),
-        symbol: Wuxing.sixiang_toSymbolChar(white),
-        color: getColor('sixiang', Wuxing.sixiang_toName(white))
-      },
-      {
-        value: blue,
-        name: Wuxing.sixiang_toName(blue),
-        symbol: Wuxing.sixiang_toSymbolChar(blue),
-        color: getColor('sixiang', Wuxing.sixiang_toName(blue))
-      }
-    ];
-  }, [hexIndex]);
+  const sixiangs = useMemo(() => getSixiangData(hexIndex), [hexIndex]);
 
   const { borderColor } = useMemo(() => {
     if (selected) {

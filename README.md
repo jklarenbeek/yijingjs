@@ -5,7 +5,7 @@
 [![Live Demo](https://img.shields.io/badge/demo-live-green.svg)](https://jklarenbeek.github.io/yijingjs/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## 🌟 What is Yijing Explorer?
+## 🌟 How the force will be with you
 
 Yijing Explorer is an interactive web application that reimagines the ancient Chinese divination system of the I Ching (Yijing) through modern computational and mathematical frameworks. It transforms the 64 hexagrams from static symbols into dynamic, interconnected nodes in a multidimensional exploration space.
 
