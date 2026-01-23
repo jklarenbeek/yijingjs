@@ -76,7 +76,7 @@ const AppHeader = ({
             )}
             aria-label={showKingWenNumbers ? 'Show decimal numbers' : 'Show King Wen numbers'}
           >
-            {showKingWenNumbers ? 'KW' : 'Dec'}
+            {showKingWenNumbers ? '♔' : '#'}
           </button>
           <button
             onClick={toggleDarkMode}

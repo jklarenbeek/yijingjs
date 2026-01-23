@@ -150,6 +150,7 @@ export function getHexagramData(hexIndex) {
   const balancedColor = colorSystem.balanced[balancedName];
   const mantraColor = colorSystem.mantra[mantraName];
   const foundationColor = colorSystem.ui.foundation;
+  const transitionColor = colorSystem.transition[transitionType];
 
   // Derived Texts
 
@@ -178,7 +179,7 @@ export function getHexagramData(hexIndex) {
     upper, lower, upperSymbol, lowerSymbol,
     upperWuxing, lowerWuxing,
     upperColor, lowerColor,
-    transitionType, transitionSymbol, transitionName,
+    transitionType, transitionSymbol, transitionName, transitionColor,
     foundationName, foundationColor,
     symmetryName, symmetryColor,
     balancedName, balancedColor,

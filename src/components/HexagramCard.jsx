@@ -32,7 +32,7 @@ const HexagramCard = ({
   const { borderColor, opacity } = useMemo(() => {
 
     function getOpacity() {
-      if (selectedHex !== null && !isNeighbor && hexIndex !== selectedHex) {
+      if (Number.isInteger(selectedHex) && !isNeighbor && !selected) {
         return 'opacity-40';
       }
       if (filters != null && filters.isFiltered(hexIndex)) {
@@ -44,11 +44,19 @@ const HexagramCard = ({
     if (selected) {
       return { borderColor: getColor('ui', 'selected'), opacity: getOpacity() };
     }
-    if (filters?.filterSymmetry?.includes(data.symmetryName)) {
-      return { borderColor: getColor('symmetry', data.symmetryName), opacity: getOpacity() };
+    if (filters) {
+      if (filters.filterBalance?.includes(data.balancedName))
+        return { borderColor: data.symmetryColor, opacity: getOpacity() };
+      else if (filters.filterMantra?.includes(data.mantraName))
+        return { borderColor: data.mantraColor, opacity: getOpacity() };
+      else if (filters.filterSymmetry?.includes(data.symmetryName))
+        return { borderColor: data.symmetryColor, opacity: getOpacity() };
+      else if (filters.filterTransition?.includes(data.transitionName))
+        return { borderColor: data.transitionColor, opacity: getOpacity() };
     }
+
     return { borderColor: getColor('ui', 'defaultBorder'), opacity: getOpacity() };
-  }, [hexIndex, selectedHex, isNeighbor, selected, filters, data.symmetryName]);
+  }, [hexIndex, selectedHex, isNeighbor, selected, filters, data]);
 
   const renderTrigramLine = useCallback((position) => {
     const isYang = (hexIndex >> position) & 1;
