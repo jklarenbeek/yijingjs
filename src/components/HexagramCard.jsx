@@ -33,10 +33,10 @@ const HexagramCard = ({
 
     function getOpacity() {
       if (Number.isInteger(selectedHex) && !isNeighbor && !selected) {
-        return 'opacity-40';
+        return 'opacity-20';
       }
       if (filters != null && filters.isFiltered(hexIndex)) {
-        return 'opacity-60';
+        return 'opacity-30';
       }
       return 'opacity-100';
     }

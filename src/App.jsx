@@ -175,9 +175,6 @@ function App() {
         toggleDarkMode={toggleDarkMode}
         editMode={editMode}
         setEditMode={handleToggleEditMode}
-        currentSequence={sequences.currentSequence}
-        setCurrentSequence={sequences.setCurrentSequence}
-        customSequences={sequences.customSequences}
         hasUnsavedChanges={hasUnsavedChanges}
         showSixiangs={showSixiangs}
         setShowSixiangs={setShowSixiangs}
@@ -244,6 +241,9 @@ function App() {
                   filters={filters}
                   placedHexagrams={editMode ? editStage.filter(h => h !== null) : []}
                   onSelectHex={handleSelectHex}
+                  currentSequence={sequences.currentSequence}
+                  setCurrentSequence={sequences.setCurrentSequence}
+                  customSequences={sequences.customSequences}
                   setEditStage={handleEditStageChange}
                   editMode={editMode}
                   showSixiangs={showSixiangs}

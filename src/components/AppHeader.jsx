@@ -1,7 +1,6 @@
 // src/components/AppHeader.jsx
 
 import { Sun, Moon, Edit3, X, Save } from 'lucide-react';
-import SequenceDropdown from './SequenceDropdown.jsx';
 import { cn } from '../utils/tools.js';
 
 /**
@@ -12,9 +11,6 @@ const AppHeader = ({
   toggleDarkMode,
   editMode,
   setEditMode,
-  currentSequence,
-  setCurrentSequence,
-  customSequences,
   hasUnsavedChanges = false,
   showSixiangs = false,
   setShowSixiangs,
@@ -26,12 +22,6 @@ const AppHeader = ({
       <div className="flex items-center justify-between max-w-screen-2xl mx-auto">
         <div className="flex items-center gap-4">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Yijing Explorer</h1>
-          <SequenceDropdown
-            currentSequence={currentSequence}
-            onSequenceChange={setCurrentSequence}
-            customSequences={customSequences}
-            disabled={editMode}
-          />
         </div>
         <div className="flex items-center gap-2">
           {editMode && hasUnsavedChanges && (

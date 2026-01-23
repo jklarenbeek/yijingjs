@@ -13,6 +13,7 @@ import {
 } from '../utils/tools.js';
 
 import colorSystem from '../utils/colors.js';
+import SequenceDropdown from './SequenceDropdown.jsx';
 import FilterSection from './FilterSection';
 import FilterButton from './FilterButton';
 import HexagramPool from './HexagramPool';
@@ -30,6 +31,9 @@ const FiltersPanel = ({
   filters,
   placedHexagrams = [],
   onSelectHex,
+  currentSequence,
+  setCurrentSequence,
+  customSequences,
   setEditStage,
   editMode = false,
   showSixiangs = false,
@@ -39,6 +43,13 @@ const FiltersPanel = ({
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col h-full">
       {/* Scrollable Container */}
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
+
+        <SequenceDropdown
+          currentSequence={currentSequence}
+          onSequenceChange={setCurrentSequence}
+          customSequences={customSequences}
+          disabled={editMode}
+        />
 
         {/* Tao Balance Filter */}
         <FilterSection title="Tao Balance" className="mb-1">
