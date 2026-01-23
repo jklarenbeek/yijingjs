@@ -63,7 +63,7 @@ const AppHeader = ({
             )}
             aria-label={showSixiangs ? 'Show trigrams' : 'Show sixiangs'}
           >
-            {showSixiangs ? '䷀' : '☰'}
+            {showSixiangs ? '⚌' : '☰'}
           </button>
 
           <button

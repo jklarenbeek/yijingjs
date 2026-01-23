@@ -53,7 +53,7 @@ const HexagramCard = ({
   }, [hexIndex]);
 
   const renderSixiangLines = useCallback((sixiangValue, sixiangIndex) => {
-    return [0, 1].map(linePos => {
+    return [1, 0].map(linePos => {
       const isYang = (sixiangValue >> (1 - linePos)) & 1;
       return (
         <div key={`${sixiangIndex}-${linePos}`} className="w-full h-2 flex justify-center gap-1">
