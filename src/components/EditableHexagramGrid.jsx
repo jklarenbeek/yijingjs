@@ -321,7 +321,7 @@ const EditableHexagramGrid = ({
           >
             <HexagramCard
               hexIndex={hexIndex}
-              selected={selectedHex === hexIndex}
+              selectedHex={selectedHex}
               onClick={() => { }}
               isNeighbor={false}
               filters={filters}
@@ -499,7 +499,7 @@ const EditableHexagramGrid = ({
           <div className="absolute" style={{ left: '50%', top: '50%' }}>
             <HexagramCard
               hexIndex={dragPreview}
-              selected={false}
+              selectedHex={false}
               onClick={() => { }}
               isNeighbor={false}
               filters={filters}

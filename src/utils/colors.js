@@ -45,7 +45,7 @@ export const colorSystem = {
   },
   ui: {
     selected: '#fbbf24', // Selected border
-    defaultBorder: '#3b82f6', // Default border
+    defaultBorder: '#333333', // Default border
     foundation: '#ffff00', // Foundation Color
     amino: '#3b82f6', // Amino buttons
   }

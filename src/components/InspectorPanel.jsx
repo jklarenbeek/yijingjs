@@ -11,6 +11,7 @@ import { cn, getHexagramData } from '../utils/tools.js';
 const InspectorPanel = ({
   hexIndex,
   onSelectHex,
+  filters,
   showSixiangs = false,
   showKingWenNumbers = false
 }) => {
@@ -205,10 +206,10 @@ const InspectorPanel = ({
                 >
                   <HexagramCard
                     hexIndex={h}
-                    selected={h === currentHex}
+                    selectedHex={currentHex}
                     onClick={() => handleLocalSelect(h)}
                     isNeighbor={idx > 0}
-                    filters={{}}
+                    filters={filters}
                     showSixiangs={showSixiangs}
                     showKingWenNumbers={showKingWenNumbers}
                   />
@@ -233,10 +234,10 @@ const InspectorPanel = ({
               >
                 <HexagramCard
                   hexIndex={value}
-                  selected={false}
+                  selectedHex={false}
                   onClick={() => handleLocalSelect(value)}
                   isNeighbor={false}
-                  filters={{}}
+                  filters={filters}
                   showSixiangs={showSixiangs}
                   showKingWenNumbers={showKingWenNumbers}
                 />
@@ -263,10 +264,10 @@ const InspectorPanel = ({
                 >
                   <HexagramCard
                     hexIndex={n}
-                    selected={false}
+                    selectedHex={false}
                     onClick={() => handleLocalSelect(n)}
                     isNeighbor={true}
-                    filters={{}}
+                    filters={filters}
                     showSixiangs={showSixiangs}
                     showKingWenNumbers={showKingWenNumbers}
                   />

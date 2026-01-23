@@ -228,6 +228,7 @@ function App() {
                 <InspectorPanel
                   hexIndex={selectedHex}
                   onSelectHex={handleSelectHex}
+                  filters={filters}
                   showSixiangs={showSixiangs}
                   showKingWenNumbers={showKingWenNumbers}
                 />

@@ -64,28 +64,17 @@ const HexagramGrid = ({
 
           const isNeighbor = neighbors.includes(hexIndex);
 
-          let opacity = 'opacity-100';
-          if (selectedHex !== null && !isNeighbor && hexIndex !== selectedHex) {
-            opacity = 'opacity-40';
-          }
-          if (filters.isFiltered(hexIndex)) {
-            opacity = 'opacity-60';
-          }
           return (
-            <div
+            <HexagramCard
               key={gridIndex}
-              className={`transition-opacity duration-200 ${opacity}`}
-            >
-              <HexagramCard
-                hexIndex={hexIndex}
-                selected={selectedHex === hexIndex}
-                onClick={onSelectHex}
-                isNeighbor={isNeighbor}
-                filters={filters}
-                showSixiangs={showSixiangs}
-                showKingWenNumbers={showKingWenNumbers}
-              />
-            </div>
+              hexIndex={hexIndex}
+              selectedHex={selectedHex}
+              onClick={onSelectHex}
+              isNeighbor={isNeighbor}
+              filters={filters}
+              showSixiangs={showSixiangs}
+              showKingWenNumbers={showKingWenNumbers}
+            />
           );
         })}
       </div>
