@@ -34,7 +34,6 @@ const FiltersPanel = ({
   currentSequence,
   setCurrentSequence,
   customSequences,
-  setEditStage,
   editMode = false,
   showSixiangs = false,
   showKingWenNumbers = false
@@ -80,6 +79,23 @@ const FiltersPanel = ({
                 count={count}
                 color={colorSystem.mantra[key]}
                 ariaLabel={`${filters.filterMantra?.includes(key) ? 'Hide' : 'Show'} ${label}`}
+              />
+            ))}
+          </div>
+        </FilterSection>
+
+        {/* Transition Types Filter */}
+        <FilterSection title="Transition Types" className="mb-1">
+          <div className="flex flex-wrap gap-2">
+            {transitionGroups.map(({ key, label, count }) => (
+              <FilterButton
+                key={key}
+                isActive={filters.filterTransition?.includes(key) ?? false}
+                onClick={() => filters.handleTransitionToggle(key)}
+                label={label}
+                count={count}
+                color={colorSystem.transition[key]}
+                ariaLabel={`${filters.filterTransition?.includes(key) ? 'Hide' : 'Show'} ${label}`}
               />
             ))}
           </div>
@@ -142,25 +158,8 @@ const FiltersPanel = ({
           </div>
         </FilterSection>
 
-        {/* Transition Types Filter */}
-        <FilterSection title="Wuxing Transitions" className="mb-1">
-          <div className="flex flex-wrap gap-2">
-            {transitionGroups.map(({ key, label, count }) => (
-              <FilterButton
-                key={key}
-                isActive={filters.filterTransition?.includes(key) ?? false}
-                onClick={() => filters.handleTransitionToggle(key)}
-                label={label}
-                count={count}
-                color={colorSystem.transition[key]}
-                ariaLabel={`${filters.filterTransition?.includes(key) ? 'Hide' : 'Show'} ${label}`}
-              />
-            ))}
-          </div>
-        </FilterSection>
-
         {/* Sixiang Filters */}
-        <FilterSection title="Top Layer (Deus)" className="mb-1">
+        <FilterSection title="Top Layer (Red)" className="mb-1">
           <div className="flex flex-wrap gap-2">
             {sixiangGroups.map(({ key, label, count }) => (
               <FilterButton
@@ -176,7 +175,7 @@ const FiltersPanel = ({
           </div>
         </FilterSection>
 
-        <FilterSection title="Middle Layer (Homo)" className="mb-1">
+        <FilterSection title="Middle Layer (White)" className="mb-1">
           <div className="flex flex-wrap gap-2">
             {sixiangGroups.map(({ key, label, count }) => (
               <FilterButton
@@ -192,7 +191,7 @@ const FiltersPanel = ({
           </div>
         </FilterSection>
 
-        <FilterSection title="Bottom Layer (Torah)" className="mb-1">
+        <FilterSection title="Bottom Layer (Blue)" className="mb-1">
           <div className="flex flex-wrap gap-2">
             {sixiangGroups.map(({ key, label, count }) => (
               <FilterButton

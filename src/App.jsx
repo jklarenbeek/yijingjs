@@ -244,7 +244,6 @@ function App() {
                   currentSequence={sequences.currentSequence}
                   setCurrentSequence={sequences.setCurrentSequence}
                   customSequences={sequences.customSequences}
-                  setEditStage={handleEditStageChange}
                   editMode={editMode}
                   showSixiangs={showSixiangs}
                   showKingWenNumbers={showKingWenNumbers}

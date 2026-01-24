@@ -61,7 +61,7 @@ const HexagramCard = ({
   const renderTrigramLine = useCallback((position) => {
     const isYang = (hexIndex >> position) & 1;
     return (
-      <div key={position} className="w-full h-2 flex justify-center gap-1">
+      <div key={position} className="w-full h-2 flex justify-center gap-3">
         {isYang ? (
           <div className="w-full h-full bg-white rounded-sm transition-all duration-200" />
         ) : (
@@ -78,7 +78,7 @@ const HexagramCard = ({
     return [1, 0].map(linePos => {
       const isYang = (sixiangValue >> (1 - linePos)) & 1;
       return (
-        <div key={`${sixiangIndex}-${linePos}`} className="w-full h-2 flex justify-center gap-1">
+        <div key={`${sixiangIndex}-${linePos}`} className="w-full h-2 flex justify-center gap-3">
           {isYang ? (
             <div className="w-full h-full bg-white rounded-sm transition-all duration-200" />
           ) : (

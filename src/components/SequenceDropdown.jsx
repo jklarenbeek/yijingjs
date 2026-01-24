@@ -23,7 +23,7 @@ const SequenceDropdown = ({ currentSequence, onSequenceChange, customSequences =
         `}
       >
         <optgroup
-          label="Standard Sequences"
+          label="Yijing Sequences"
           className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
         >
           {Object.entries(sequences).map(([key, seq]) => (

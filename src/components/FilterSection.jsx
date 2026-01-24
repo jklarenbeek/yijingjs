@@ -8,7 +8,7 @@ import { cn } from '../utils/tools.js';
 const FilterSection = ({
   title,
   children,
-  open = true,
+  open = false,
   className
 }) => {
   return (

@@ -83,10 +83,10 @@ Direct correlation to the genetic code:
 ### Computational Taoism
 The project implements several innovative frameworks:
 
-#### Three-Layer Architecture (Deus/Homo/Torah)
-- **Deus** (Red): Top two lines - spiritual dimension
-- **Homo** (White): Middle two lines - human dimension
-- **Torah** (Blue): Bottom two lines - foundational dimension
+#### Three-Layer Architecture
+- **Red**: Top two lines - spiritual dimension
+- **White**: Middle two lines - human dimension
+- **Blue**: Bottom two lines - foundational dimension
 
 #### Nuclear Convergence
 - Every hexagram converges to one of 4 cosmic roots through center operations

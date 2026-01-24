@@ -82,24 +82,24 @@ export function generateMantraInfo() {
 export function generateSymmetryInfo() {
   const groups = Tools.yijing_symmetryGroups;
   return [
-    { key: Yijing.YIJING_BREATH, label: 'Breath', count: groups.breath.length },
-    { key: Yijing.YIJING_MOTHER, label: 'Mother', count: groups.mothers.length },
-    { key: Yijing.YIJING_DIRECTION, label: 'Direction', count: groups.directions.length },
     { key: Yijing.YIJING_BEGINNING, label: 'Beginning', count: groups.beginning.length },
     { key: Yijing.YIJING_PRINCIPLE, label: 'Principle', count: groups.principles.length },
     { key: Yijing.YIJING_TITAN, label: 'Titan', count: groups.titans.length },
-    { key: Yijing.YIJING_GIGANTE, label: 'Gigante', count: groups.gigantes.length }
+    { key: Yijing.YIJING_GIGANTE, label: 'Gigante', count: groups.gigantes.length },
+    { key: Yijing.YIJING_BREATH, label: 'Breath', count: groups.breath.length },
+    { key: Yijing.YIJING_MOTHER, label: 'Mother', count: groups.mothers.length },
+    { key: Yijing.YIJING_DIRECTION, label: 'Direction', count: groups.directions.length },
   ];
 }
 
 export function generateTransitionInfo() {
   const groups = Tools.yijing_transitionGroups;
   return [
-    { key: Wuxing.WUXING_NEUTRAL, label: 'Neutral', count: groups.neutral.length },
-    { key: Wuxing.WUXING_CREATES, label: 'Creates', count: groups.creates.length },
-    { key: Wuxing.WUXING_DESTROYS, label: 'Destroys', count: groups.destroys.length },
-    { key: Wuxing.WUXING_WEAKENS, label: 'Weakens', count: groups.weakens.length },
-    { key: Wuxing.WUXING_INSULTS, label: 'Insults', count: groups.insults.length },
+    { key: Wuxing.WUXING_NEUTRAL, label: 'Neutral', count: groups.neutral },
+    { key: Wuxing.WUXING_CREATES, label: 'Creates', count: groups.creates },
+    { key: Wuxing.WUXING_DESTROYS, label: 'Destroys', count: groups.destroys },
+    { key: Wuxing.WUXING_WEAKENS, label: 'Weakens', count: groups.weakens },
+    { key: Wuxing.WUXING_INSULTS, label: 'Insults', count: groups.insults },
   ];
 }
 
