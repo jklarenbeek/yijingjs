@@ -21,7 +21,7 @@ import AppTabs from './components/AppTabs';
 function App() {
   const [selectedHex, setSelectedHex] = useState(null);
   const [showSixiangs, setShowSixiangs] = useState(false);
-  const [showKingWenNumbers, setShowKingWenNumbers] = useState(false);
+  const [showKingWenNumbers, setShowKingWenNumbers] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState(TAB_NAMES.FILTERS);
   const [editStage, setEditStage] = useState(() => {

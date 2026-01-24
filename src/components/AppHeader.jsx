@@ -14,7 +14,7 @@ const AppHeader = ({
   hasUnsavedChanges = false,
   showSixiangs = false,
   setShowSixiangs,
-  showKingWenNumbers = false,
+  showKingWenNumbers = true,
   setShowKingWenNumbers
 }) => {
   return (
