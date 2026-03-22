@@ -3,6 +3,45 @@
 /* TODO: this is not allowed at build time! */
 @custom-variant dark (&:where(.dark, .dark *), @media (prefers-color-scheme: dark) { &:not(.light, .light *) });
 
+@theme {
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --animate-pulse-glow-slow: pulse-glow 3s ease-in-out infinite;
+  --animate-pulse-scale: pulse-scale 3s ease-in-out infinite;
+  --animate-reveal-overlay: reveal-overlay 300ms ease-out forwards;
+  --animate-coin-spin: coin-spin var(--spin-dur, 0.9s) cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  --animate-pfly: pfly var(--dur) ease-out forwards;
+
+  --shadow-glow-sm: 0 0 10px currentColor;
+  --shadow-glow-md: 0 0 20px currentColor;
+  --shadow-glow-lg: 0 0 30px currentColor;
+  --shadow-glow-xl: 0 0 40px currentColor;
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 10px currentColor; }
+    50% { box-shadow: 0 0 20px currentColor; }
+  }
+  @keyframes pulse-scale {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  @keyframes reveal-overlay {
+    0% { transform: scale(1.08); opacity: 0.4; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes coin-spin {
+    0% { transform: rotateX(0) rotateY(0) rotateZ(0); }
+    20% { transform: rotateX(520deg) rotateY(240deg) rotateZ(28deg); }
+    45% { transform: rotateX(900deg) rotateY(480deg) rotateZ(-20deg); }
+    68% { transform: rotateX(1200deg) rotateY(660deg) rotateZ(12deg); }
+    86% { transform: rotateX(1360deg) rotateY(720deg) rotateZ(-3deg); }
+    100% { transform: rotateX(1440deg) rotateY(720deg) rotateZ(0); }
+  }
+  @keyframes pfly {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+  }
+}
+
 /* ===== ROOT VARIABLES & GLOBAL STYLES ===== */
 
 :root {

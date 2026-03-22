@@ -18,6 +18,7 @@ import MainTabBar from './components/MainTabBar';
 import MatrixPanel from './components/MatrixPanel';
 import SequencesPanel from './components/SequencesPanel';
 import SefirotPanel from './components/SefirotPanel';
+import HomePanel from './components/HomePanel';
 
 function App() {
   const [selectedHex, setSelectedHex] = useState(null);
@@ -25,7 +26,7 @@ function App() {
   const [showKingWenNumbers, setShowKingWenNumbers] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState(TAB_NAMES.FILTERS);
-  const [activeAppView, setActiveAppView] = useState(APP_VIEWS.GRID);
+  const [activeAppView, setActiveAppView] = useState(APP_VIEWS.HOME);
 
   // Dnd-Kit state
   const [activeDragId, setActiveDragId] = useState(null);
@@ -204,9 +205,6 @@ function App() {
         <AppHeader
           darkMode={darkMode}
           toggleDarkMode={toggleDarkMode}
-          editMode={editMode}
-          setEditMode={handleToggleEditMode}
-          hasUnsavedChanges={hasUnsavedChanges}
           showSixiangs={showSixiangs}
           setShowSixiangs={setShowSixiangs}
           showKingWenNumbers={showKingWenNumbers}
@@ -215,6 +213,12 @@ function App() {
 
         <main className="relative flex-1">
           <AnimatePresence mode="wait">
+            {activeAppView === APP_VIEWS.HOME && (
+              <motion.div key="view-home" className="w-full h-full">
+                <HomePanel />
+              </motion.div>
+            )}
+
             {activeAppView === APP_VIEWS.GRID && (
               <MatrixPanel
                 editMode={editMode}

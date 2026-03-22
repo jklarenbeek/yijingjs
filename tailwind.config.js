@@ -46,6 +46,8 @@ export default {
         'pulse-glow-slow': 'pulse-glow 3s ease-in-out infinite',
         'pulse-scale': 'pulse-scale 3s ease-in-out infinite',
         'reveal-overlay': 'reveal-overlay 300ms ease-out forwards',
+        'coin-spin': 'coin-spin var(--spin-dur, 0.9s) cubic-bezier(0.25, 0.46, 0.45, 0.94) both',
+        'pfly': 'pfly var(--dur) ease-out forwards',
       },
       keyframes: {
         'pulse-glow': {
@@ -69,6 +71,18 @@ export default {
             transform: 'scale(1)',
             opacity: '1',
           },
+        },
+        'coin-spin': {
+          '0%': { transform: 'rotateX(0) rotateY(0) rotateZ(0)' },
+          '20%': { transform: 'rotateX(520deg) rotateY(240deg) rotateZ(28deg)' },
+          '45%': { transform: 'rotateX(900deg) rotateY(480deg) rotateZ(-20deg)' },
+          '68%': { transform: 'rotateX(1200deg) rotateY(660deg) rotateZ(12deg)' },
+          '86%': { transform: 'rotateX(1360deg) rotateY(720deg) rotateZ(-3deg)' },
+          '100%': { transform: 'rotateX(1440deg) rotateY(720deg) rotateZ(0)' },
+        },
+        'pfly': {
+          '0%': { transform: 'translate(0, 0) scale(1)', opacity: '1' },
+          '100%': { transform: 'translate(var(--tx), var(--ty)) scale(0)', opacity: '0' },
         },
       },
       // Add backdrop-filter utilities if not already present

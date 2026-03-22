@@ -14,6 +14,7 @@ export const FILTER_TYPES = {
 };
 
 export const APP_VIEWS = {
+  HOME: 'home',
   GRID: 'grid',
   SEQUENCES: 'sequences',
   SEFIROT: 'sefirot'

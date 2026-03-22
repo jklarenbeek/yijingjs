@@ -1,6 +1,6 @@
 // src/components/AppHeader.jsx
 
-import { Sun, Moon, Edit3, X, Save } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import { cn } from '../utils/tools.js';
 
 /**
@@ -9,9 +9,6 @@ import { cn } from '../utils/tools.js';
 const AppHeader = ({
   darkMode,
   toggleDarkMode,
-  editMode,
-  setEditMode,
-  hasUnsavedChanges = false,
   showSixiangs = false,
   setShowSixiangs,
   showKingWenNumbers = true,
@@ -24,25 +21,6 @@ const AppHeader = ({
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Yijing Explorer</h1>
         </div>
         <div className="flex items-center gap-2">
-          {editMode && hasUnsavedChanges && (
-            <div className="flex items-center gap-2 px-3 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 rounded-md text-sm">
-              <Save className="w-4 h-4" />
-              Unsaved
-            </div>
-          )}
-          <button
-            onClick={() => setEditMode(!editMode)}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all",
-              editMode
-                ? "bg-red-500 hover:bg-red-600 text-white"
-                : "bg-blue-500 hover:bg-blue-600 text-white"
-            )}
-            aria-label={editMode ? 'Exit edit mode' : 'Enter edit mode'}
-          >
-            {editMode ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
-            {editMode ? 'Exit Edit' : 'Edit Mode'}
-          </button>
           <button
             onClick={() => setShowSixiangs(!showSixiangs)}
             className={cn(

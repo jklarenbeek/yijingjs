@@ -1,7 +1,7 @@
 // src/components/MainTabBar.jsx
 
 /* eslint-disable no-unused-vars */
-import { LayoutGrid, ListTree, Network } from 'lucide-react';
+import { LayoutGrid, ListTree, Network, Home } from 'lucide-react';
 import { cn } from '../utils/tools.js';
 import { APP_VIEWS } from '../utils/constants.js';
 
@@ -10,6 +10,7 @@ import { APP_VIEWS } from '../utils/constants.js';
  */
 const MainTabBar = ({ activeView, setActiveView }) => {
   const tabs = [
+    { id: APP_VIEWS.HOME, label: 'Home', icon: Home },
     { id: APP_VIEWS.GRID, label: 'The Matrix', icon: LayoutGrid },
     { id: APP_VIEWS.SEQUENCES, label: 'Sequences', icon: ListTree },
     { id: APP_VIEWS.SEFIROT, label: 'Tree of Life', icon: Network },
