@@ -40,18 +40,21 @@ const SefirotPanel = ({ showKingWenNumbers }) => {
   }, []);
 
   return (
-    <div className="max-w-screen-2xl mx-auto p-4 md:p-8 w-full h-full flex flex-col md:flex-row gap-8">
-      {/* SVG Tree Container */}
-      <div className="flex-1 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col justify-center items-center relative min-h-[500px]">
-        
-        <div className="absolute top-6 left-6">
-          <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-amber-500 to-amber-700 dark:from-amber-300 dark:to-amber-500">
-            Tree of Life
+    <div className="max-w-screen-2xl mx-auto p-4 md:p-8 w-full h-full overflow-y-auto">
+      <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+            The Tree of Life
           </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs mt-1">
-            Hover over the Sefirot (Nodes) and Paths to reveal their I Ching mappings.
+          <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl">
+            The 10 Emanations (Sefirot) and 22 Paths of Wisdom mapped to the 32 pairs of the I Ching. Hover over the nodes and paths to reveal their hexagram mappings.
           </p>
         </div>
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-8">
+        {/* SVG Tree Container */}
+        <div className="flex-1 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col justify-center items-center relative min-h-[500px]">
 
         <svg 
           viewBox="0 0 100 150" 
@@ -185,6 +188,7 @@ const SefirotPanel = ({ showKingWenNumbers }) => {
           </AnimatePresence>
         </div>
       </div>
+    </div>
     </div>
   );
 };
