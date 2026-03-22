@@ -1,6 +1,6 @@
 // src/components/HexagramCard.jsx
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, forwardRef } from 'react';
 import * as Yijing from '@yijingjs/core';
 import * as Wuxing from '@yijingjs/wuxing';
 import * as Bagua from '@yijingjs/bagua';
@@ -8,7 +8,7 @@ import { cn, getHexagramData, getSixiangData } from '../utils/tools.js';
 import colorSystem, { getColor } from '../utils/colors.js';
 import { Tooltip } from './Tooltip';
 
-const HexagramCard = ({
+const HexagramCard = forwardRef(({
   hexIndex,
   selectedHex,
   onClick,
@@ -17,7 +17,7 @@ const HexagramCard = ({
   inEditMode = false,
   showSixiangs = false,
   showKingWenNumbers = false,
-}) => {
+}, ref) => {
   // Add hover state for trigrams/sixiangs
   const [hoveredSection, setHoveredSection] = useState(null);
 
@@ -94,13 +94,13 @@ const HexagramCard = ({
 
   return (
     <button
+      ref={ref}
       onClick={() => onClick(hexIndex)}
       className={cn(
         `transition-opacity duration-200 ${opacity}`,
         "relative rounded-lg border-2 transition-all w-full",
         "bg-linear-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900",
         "hover:scale-105 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
-        selected && "shadow-lg shadow-yellow-400/50 scale-105 z-10",
         isNeighbor && "glow-transition hexagram-glow z-20",
         isNeighbor && "shadow-glow-lg",
         inEditMode && "cursor-move"
@@ -259,6 +259,8 @@ const HexagramCard = ({
       )}
     </button>
   );
-};
+});
+
+HexagramCard.displayName = 'HexagramCard';
 
 export default HexagramCard;

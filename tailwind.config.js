@@ -43,7 +43,9 @@ export default {
       },
       animation: {
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
-        'pulse-glow-slow': 'pulse-glow 3s ease-in-out infinite', // Added slower variant
+        'pulse-glow-slow': 'pulse-glow 3s ease-in-out infinite',
+        'pulse-scale': 'pulse-scale 3s ease-in-out infinite',
+        'reveal-overlay': 'reveal-overlay 300ms ease-out forwards',
       },
       keyframes: {
         'pulse-glow': {
@@ -52,6 +54,20 @@ export default {
           },
           '50%': {
             boxShadow: '0 0 20px currentColor',
+          },
+        },
+        'pulse-scale': {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.05)' },
+        },
+        'reveal-overlay': {
+          '0%': {
+            transform: 'scale(1.08)',
+            opacity: '0.4',
+          },
+          '100%': {
+            transform: 'scale(1)',
+            opacity: '1',
           },
         },
       },

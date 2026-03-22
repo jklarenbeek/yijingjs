@@ -1,8 +1,8 @@
 // src/components/HexagramGrid.jsx
-
-import * as Yijing from '@yijingjs/core';
+import { useRef } from 'react';
 
 import HexagramCard from './HexagramCard';
+import SelectedHexagram from './SelectedHexagram.jsx';
 import { getHexagramSequences } from '../utils/tools.js';
 
 const HexagramGrid = ({
@@ -15,6 +15,8 @@ const HexagramGrid = ({
   showSixiangs = false,
   showKingWenNumbers = false,
 }) => {
+
+  const selectedCardRef = useRef(null);
 
   const customMap = customSequences.reduce((acc, seq) => {
     acc[`custom-${seq.id}`] = seq;
@@ -47,7 +49,7 @@ const HexagramGrid = ({
         </div>
       )}
 
-      <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
+      <div className="relative grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
         {values.map((hexIndex, gridIndex) => {
           if (hexIndex === null) {
             return (
@@ -66,6 +68,7 @@ const HexagramGrid = ({
 
           return (
             <HexagramCard
+              ref={hexIndex === selectedHex ? selectedCardRef : null}
               key={gridIndex}
               hexIndex={hexIndex}
               selectedHex={selectedHex}
@@ -77,6 +80,11 @@ const HexagramGrid = ({
             />
           );
         })}
+        {Number.isInteger(selectedHex) && (
+          <SelectedHexagram
+            key={selectedHex}
+            targetRef={selectedCardRef} />
+        )}
       </div>
     </div>
   );
