@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
-import { getKingWenPairs, getBinaryPairs, categorizePairs } from '../utils/kabbalah.js';
+import { getSequencePairs, categorizeSequencePairs } from '../utils/tools.js';
 import HexagramCard from './HexagramCard';
 
 const PairRow = ({ pair, index, delay, showKingWenNumbers }) => (
@@ -30,12 +30,11 @@ const PairRow = ({ pair, index, delay, showKingWenNumbers }) => (
 );
 
 const SequencesPanel = ({ showKingWenNumbers }) => {
-  const activeSequence = showKingWenNumbers ? 'kingwen' : 'binary';
 
   const pairsData = useMemo(() => {
-    const rawPairs = activeSequence === 'kingwen' ? getKingWenPairs() : getBinaryPairs();
-    return categorizePairs(rawPairs);
-  }, [activeSequence]);
+    const rawPairs = getSequencePairs(showKingWenNumbers);
+    return categorizeSequencePairs(rawPairs);
+  }, [showKingWenNumbers]);
 
   return (
     <div className="max-w-screen-2xl mx-auto p-4 md:p-8 w-full h-full overflow-y-auto">
@@ -52,7 +51,7 @@ const SequencesPanel = ({ showKingWenNumbers }) => {
 
       <AnimatePresence mode="wait">
         <motion.div
-          key={activeSequence}
+          key={showKingWenNumbers ? 'kingwen' : 'binary'}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}

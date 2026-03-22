@@ -28,7 +28,16 @@ export default defineConfig({
   },
   build: {
     sourcemap: true,
-    outDir: 'dist'
+    outDir: 'dist',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'framer-motion'],
+          dnd: ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
+          ui: ['lucide-react', 'clsx', 'tailwind-merge']
+        }
+      }
+    }
   },
   // Better for debugging
   define: {

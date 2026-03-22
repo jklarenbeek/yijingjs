@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
-import { categorizePairs, getKingWenPairs } from '../utils/kabbalah';
+import { getSequencePairs, categorizeSequencePairs } from '../utils/tools';
 import HexagramCard from './HexagramCard';
 
 const NODES = [
@@ -36,7 +36,7 @@ const SefirotPanel = ({ showKingWenNumbers }) => {
 
   // Load exactly 10 nodes and 22 paths relationships
   const pairsData = useMemo(() => {
-    return categorizePairs(getKingWenPairs());
+    return categorizeSequencePairs(getSequencePairs(true));
   }, []);
 
   return (

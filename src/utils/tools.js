@@ -247,3 +247,49 @@ export function getWuxingData(hexIndex) {
     transitionName,
   };
 }
+
+export function getSequencePairs(isKingWen) {
+  const pairs = [];
+  if (isKingWen) {
+    const seq = Yijing.YIJING_KINGWEN_SEQUENCE;
+    for (let i = 0; i < 64; i += 2) {
+      pairs.push({
+        hexA: seq[i],
+        hexB: seq[i + 1],
+        id: `kw-${i/2}`,
+        label: `Pair ${i/2 + 1}`
+      });
+    }
+  } else {
+    const processed = new Set();
+    for (let i = 0; i < 64; i++) {
+      if (processed.has(i)) continue;
+      const inverse = Yijing.yijing_invert(i);
+      pairs.push({
+        hexA: i,
+        hexB: inverse,
+        id: `bin-${pairs.length}`,
+        label: `Binary ${i} & ${inverse}`
+      });
+      processed.add(i);
+      processed.add(inverse);
+    }
+  }
+  return pairs;
+}
+
+export function categorizeSequencePairs(pairs) {
+  const balanced = [];
+  const unbalanced = [];
+
+  for (const p of pairs) {
+    if (Yijing.yijing_isBalanced(p.hexA) && Yijing.yijing_isBalanced(p.hexB)) {
+      balanced.push({ ...p, score: 'Balanced (3/3)' });
+    } else {
+      const yangCount = Yijing.yijing_lineCount(p.hexA) + Yijing.yijing_lineCount(p.hexB);
+      unbalanced.push({ ...p, score: `Unbalanced (${yangCount}/12 Yang)` });
+    }
+  }
+
+  return { balanced, unbalanced };
+}
