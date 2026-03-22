@@ -49,7 +49,7 @@ const HexagramGrid = ({
         </div>
       )}
 
-      <div className="relative grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
+      <div className="relative grid grid-cols-8 gap-1 sm:gap-2 w-full max-w-[calc(100vh-200px)] aspect-square mx-auto">
         {values.map((hexIndex, gridIndex) => {
           if (hexIndex === null) {
             return (

@@ -2,21 +2,28 @@
 
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import * as Yijing from '@yijingjs/core';
+import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
 
 import useFilters from './hooks/useFilters.js';
 import useSequences from './hooks/useSequences.js';
 import useTheme from './hooks/useTheme.js';
+// eslint-disable-next-line no-unused-vars
+import { AnimatePresence, motion } from 'framer-motion';
 
-import { LOCAL_STORAGE_KEYS, TAB_NAMES } from './utils/constants';
+import { LOCAL_STORAGE_KEYS, TAB_NAMES, APP_VIEWS } from './utils/constants';
 
 import HexagramGrid from './components/HexagramGrid';
 import EditableHexagramGrid from './components/EditableHexagramGrid';
+import HexagramCard from './components/HexagramCard';
 import InspectorPanel from './components/InspectorPanel';
 import FiltersPanel from './components/FiltersPanel.jsx';
 import KingWenPanel from './components/KingWenPanel.jsx';
 import SequenceManager from './components/SequenceManager';
 import AppHeader from './components/AppHeader';
 import AppTabs from './components/AppTabs';
+import MainTabBar from './components/MainTabBar';
+import SequencesPanel from './components/SequencesPanel';
+import SefirotPanel from './components/SefirotPanel';
 
 function App() {
   const [selectedHex, setSelectedHex] = useState(null);
@@ -24,6 +31,12 @@ function App() {
   const [showKingWenNumbers, setShowKingWenNumbers] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState(TAB_NAMES.FILTERS);
+  const [activeAppView, setActiveAppView] = useState(APP_VIEWS.GRID);
+  
+  // Dnd-Kit state
+  const [activeDragId, setActiveDragId] = useState(null);
+  const [activeDragData, setActiveDragData] = useState(null);
+
   const [editStage, setEditStage] = useState(() => {
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEYS.EDIT_STAGE);
@@ -168,9 +181,33 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedHex, editMode]);
 
+  // DND Handlers
+  const handleDragStart = useCallback((event) => {
+    setActiveDragId(event.active.id);
+    setActiveDragData(event.active.data.current);
+  }, []);
+
+  const handleDragEnd = useCallback((event) => {
+    setActiveDragId(null);
+    setActiveDragData(null);
+    // Dispatch to EditableHexagramGrid to handle the logic
+    document.dispatchEvent(new CustomEvent('yijingDndDragEnd', { detail: event }));
+  }, []);
+
+  const handleDragCancel = useCallback(() => {
+    setActiveDragId(null);
+    setActiveDragData(null);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white transition-colors">
-      <AppHeader
+    <DndContext
+      collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onDragCancel={handleDragCancel}
+    >
+      <div className="min-h-screen flex flex-col bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white transition-colors">
+        <AppHeader
         darkMode={darkMode}
         toggleDarkMode={toggleDarkMode}
         editMode={editMode}
@@ -181,8 +218,18 @@ function App() {
         showKingWenNumbers={showKingWenNumbers}
         setShowKingWenNumbers={setShowKingWenNumbers}
       />
-
-      <div className="flex flex-col lg:flex-row gap-4 p-4 max-w-screen-2xl mx-auto">
+      
+      <main className="relative flex-1">
+        <AnimatePresence mode="wait">
+          {activeAppView === APP_VIEWS.GRID && (
+            <motion.div 
+              key="view-grid"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="flex flex-col lg:flex-row gap-4 p-4 max-w-screen-2xl mx-auto"
+            >
         {/* Main Panel */}
         <div className="flex-1 min-w-0">
           {editMode ? (
@@ -267,10 +314,25 @@ function App() {
             </div>
           </div>
         </div>
-      </div>
+            </motion.div>
+          )}
+
+          {activeAppView === APP_VIEWS.SEQUENCES && (
+            <motion.div key="view-sequences" className="w-full h-full">
+              <SequencesPanel showKingWenNumbers={showKingWenNumbers} />
+            </motion.div>
+          )}
+
+          {activeAppView === APP_VIEWS.SEFIROT && (
+            <motion.div key="view-sefirot" className="w-full h-full">
+              <SefirotPanel showKingWenNumbers={showKingWenNumbers} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700 px-6 py-4 mt-8 text-center text-sm text-gray-500 dark:text-gray-400 transition-colors">
+      <footer className="bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700 px-6 py-4 mt-auto text-center text-sm text-gray-500 dark:text-gray-400 transition-colors">
         <p>
           {editMode
             ? 'Drag hexagrams from pool to grid • Drag placed hexagrams to move or swap • Double-click to remove • Save in Manager'
@@ -282,7 +344,30 @@ function App() {
           </p>
         )}
       </footer>
-    </div>
+
+      <div className="sticky bottom-0 z-50 w-full relative">
+        <MainTabBar activeView={activeAppView} setActiveView={setActiveAppView} />
+      </div>
+
+      <DragOverlay dropAnimation={{ duration: 250, easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)' }}>
+        {activeDragId && activeDragData ? (
+          <div style={{ transform: 'scale(1.05)', cursor: 'grabbing' }}>
+            <HexagramCard
+              hexIndex={activeDragData.hexIndex}
+              selectedHex={null}
+              onClick={() => {}}
+              isNeighbor={false}
+              filters={filters}
+              inEditMode
+              showSixiangs={showSixiangs}
+              showKingWenNumbers={showKingWenNumbers}
+            />
+          </div>
+        ) : null}
+      </DragOverlay>
+
+      </div>
+    </DndContext>
   );
 }
 

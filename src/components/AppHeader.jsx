@@ -59,12 +59,13 @@ const AppHeader = ({
           <button
             onClick={() => setShowKingWenNumbers(!showKingWenNumbers)}
             className={cn(
-              "p-2 rounded-lg transition-colors",
+              "p-2 rounded-lg transition-colors group relative",
               showKingWenNumbers
                 ? "bg-green-500 hover:bg-green-600 text-white"
                 : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100"
             )}
-            aria-label={showKingWenNumbers ? 'Show decimal numbers' : 'Show King Wen numbers'}
+            title={showKingWenNumbers ? 'Switch all views to Binary Sequence' : 'Switch all views to King Wen Sequence'}
+            aria-label={showKingWenNumbers ? 'Switch to Binary Sequence' : 'Switch to King Wen Sequence'}
           >
             {showKingWenNumbers ? '♔' : '#'}
           </button>

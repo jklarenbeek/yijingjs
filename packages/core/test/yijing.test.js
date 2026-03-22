@@ -37,8 +37,7 @@ describe('Yijing - 64 Hexagrams', () => {
 
   describe('yijing_opposite', () => {
     it('should swap trigrams', () => {
-      const hex = 0b111000; // upper=000, lower=111
-      const opp = Yijing.yijing_opposite(hex);
+      // const opp = Yijing.yijing_opposite(hex);
       //TODO: expect(Yijing.yijing_upper(opp)).toBe(0b111);
       //TODO: expect(Yijing.yijing_lower(opp)).toBe(0b000);
     });

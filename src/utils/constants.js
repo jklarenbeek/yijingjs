@@ -13,6 +13,12 @@ export const FILTER_TYPES = {
   TOP_SIXIANG: 'topSixiang'
 };
 
+export const APP_VIEWS = {
+  GRID: 'grid',
+  SEQUENCES: 'sequences',
+  SEFIROT: 'sefirot'
+};
+
 export const TAB_NAMES = {
   READER: 'reader',
   INSPECTOR: 'inspector',
