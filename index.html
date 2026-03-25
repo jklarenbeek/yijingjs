@@ -9,14 +9,21 @@
   }
 
   body {
-    background: #0d0d1a;
-    color: #ddd0b0;
+    background: #f3f4f6;
+    color: #111827;
     font: 13px system-ui;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: 100vh
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    body {
+      background: #111827;
+      color: #f9fafb;
+    }
   }
 
   @keyframes w {
