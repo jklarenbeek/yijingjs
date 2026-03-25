@@ -5,11 +5,25 @@ import tailwindcss from '@tailwindcss/vite'
 
 const __dirname = import.meta.dirname;
 
+const minifyHtml = () => {
+  return {
+    name: 'html-transform',
+    transformIndexHtml(html) {
+      return html
+        .replace(/\s+/g, ' ')
+        .replace(/> </g, '><')
+        .replace(/\s*([{}])\s*/g, '$1')
+        .replace(/\s*([:;])\s*/g, '$1');
+    }
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    minifyHtml(),
   ],
   base: '/yijingjs/',
   resolve: {
