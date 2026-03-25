@@ -8,6 +8,7 @@
   --animate-pulse-glow-slow: pulse-glow 3s ease-in-out infinite;
   --animate-pulse-scale: pulse-scale 3s ease-in-out infinite;
   --animate-reveal-overlay: reveal-overlay 300ms ease-out forwards;
+  --animate-slide-up-fade: slide-up-fade 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-coin-spin: coin-spin var(--spin-dur, 0.9s) cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   --animate-pfly: pfly var(--dur) ease-out forwards;
 
@@ -27,6 +28,10 @@
   @keyframes reveal-overlay {
     0% { transform: scale(1.08); opacity: 0.4; }
     100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes slide-up-fade {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
   }
   @keyframes coin-spin {
     0% { transform: rotateX(0) rotateY(0) rotateZ(0); }

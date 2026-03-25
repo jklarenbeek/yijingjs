@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { cn } from '../utils/tools';
 import HexagramCard from './HexagramCard';
+import HexagramTextPanel from './KingWenPanel';
 
 const EXPLAINERS = {
   three: 'Throw three coins six times — one throw per hexagram line (line 1 = bottom). Heads counts as 3, tails as 2. The sum (6–9) determines the line: 6 = old yin (moving →yang), 7 = young yang, 8 = young yin, 9 = old yang (moving →yin). Moving lines produce a second, transformed hexagram.',
@@ -144,6 +145,7 @@ const HomePanel = () => {
   const accelPrev = useRef(0);
   const stillTimer = useRef(null);
   const buttonRef = useRef(null);
+  const oracleRef = useRef(null);
 
   const [isHolding, setIsHolding] = useState(false);
   const [holdProgress, setHoldProgress] = useState(0);
@@ -158,7 +160,11 @@ const HomePanel = () => {
   }, []);
 
   useEffect(() => {
-    if (throwResults.length > 0 || finalResult) {
+    if (finalResult) {
+      setTimeout(() => {
+        oracleRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    } else if (throwResults.length > 0) {
       setTimeout(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
       }, 50);
@@ -520,7 +526,7 @@ const HomePanel = () => {
         {finalResult && (
           <div className="w-full flex justify-center animate-reveal-overlay relative z-10 mt-6 pt-8 border-t border-gray-200 dark:border-gray-700">
             <div className="flex flex-col items-center">
-              <div className="text-sm font-bold tracking-widest text-blue-500 uppercase text-center mb-8">The Oracle Speaks</div>
+              <div ref={oracleRef} className="text-sm font-bold tracking-widest text-blue-500 uppercase text-center mb-8 scroll-mt-28">The Oracle Speaks</div>
               <div className="flex flex-row gap-8 md:gap-16 flex-wrap items-center justify-center pointer-events-auto">
 
                 <div className="flex flex-col items-center gap-4 w-[160px] sm:w-[210px]">
@@ -547,6 +553,14 @@ const HomePanel = () => {
                 ) : (
                   <p>No moving lines — the situation is stable. Contemplate the imagery with stillness.</p>
                 )}
+              </div>
+
+              <div className="mt-8 w-full max-w-3xl text-left bg-white dark:bg-gray-800/80 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden animate-reveal-overlay overflow-x-hidden">
+                <HexagramTextPanel 
+                  hexIndex={finalResult[0]} 
+                  animated={true} 
+                  movingLinesMask={finalResult[2]} 
+                />
               </div>
             </div>
           </div>
