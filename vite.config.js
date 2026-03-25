@@ -30,6 +30,10 @@ export default defineConfig({
     sourcemap: true,
     outDir: 'dist',
     rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        app: resolve(__dirname, 'app.html')
+      },
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom', 'framer-motion'],
