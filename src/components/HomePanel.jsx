@@ -145,6 +145,26 @@ const HomePanel = () => {
   const stillTimer = useRef(null);
   const buttonRef = useRef(null);
 
+  const [isHolding, setIsHolding] = useState(false);
+  const [holdProgress, setHoldProgress] = useState(0);
+  const holdStartTime = useRef(0);
+  const holdReqRef = useRef(null);
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (holdReqRef.current) cancelAnimationFrame(holdReqRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (throwResults.length > 0 || finalResult) {
+      setTimeout(() => {
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }, 50);
+    }
+  }, [throwResults, finalResult, dots]);
+
   const totalThrows = currentMethod === 'three' ? 6 : 1;
 
   const selectMethod = (m) => {
@@ -153,6 +173,37 @@ const HomePanel = () => {
     setThrowResults([]);
     setFinalResult(null);
     setDots({ done: 0, total: m === 'three' ? 6 : 1 });
+  };
+
+  const startHold = (e) => {
+    if (isActive || (e && e.pointerType === 'mouse' && e.button !== 0)) return;
+    setIsHolding(true);
+    holdStartTime.current = performance.now();
+    
+    if (shakeHint.includes('tap above')) requestMotion();
+
+    const animate = (time) => {
+      const elapsed = time - holdStartTime.current;
+      setHoldProgress(elapsed);
+      holdReqRef.current = requestAnimationFrame(animate);
+    };
+    holdReqRef.current = requestAnimationFrame(animate);
+  };
+
+  const endHold = () => {
+    if (!isHolding) return;
+    setIsHolding(false);
+    if (holdReqRef.current) cancelAnimationFrame(holdReqRef.current);
+    setHoldProgress(0);
+    
+    handleThrowClick();
+  };
+
+  const cancelHold = () => {
+    if (!isHolding) return;
+    setIsHolding(false);
+    if (holdReqRef.current) cancelAnimationFrame(holdReqRef.current);
+    setHoldProgress(0);
   };
 
   const spawnParticles = useCallback(() => {
@@ -368,19 +419,40 @@ const HomePanel = () => {
           <button
             ref={buttonRef}
             disabled={isActive}
-            onClick={() => {
-              if (shakeHint.includes('tap above')) requestMotion();
-              handleThrowClick();
-            }}
+            onPointerDown={startHold}
+            onPointerUp={endHold}
+            onPointerLeave={cancelHold}
+            onPointerCancel={cancelHold}
+            onContextMenu={(e) => { if (isHolding) e.preventDefault(); }}
             className={cn(
-              "relative px-12 py-4 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl",
-              "text-white font-bold tracking-wide transition-all overflow-hidden shadow-md",
-              "hover:-translate-y-0.5 hover:shadow-lg hover:from-blue-500 hover:to-purple-500",
-              "active:translate-y-0 active:scale-[0.98]",
-              "disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none group"
+              "relative px-12 py-4 rounded-xl text-white font-bold tracking-wide transition-all overflow-hidden group select-none touch-none",
+              isHolding ? "bg-gradient-to-br from-purple-600 to-pink-600 scale-[1.02] shadow-[0_0_25px_rgba(236,72,153,0.6)]" : "bg-gradient-to-br from-blue-600 to-purple-600 hover:-translate-y-0.5 hover:shadow-lg shadow-md hover:from-blue-500 hover:to-purple-500 active:translate-y-0 active:scale-[0.98]",
+              "disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
             )}
           >
-            Cast the Oracle
+            <div 
+              className="absolute inset-0 bg-white/20 transition-transform duration-75 origin-left"
+              style={{ transform: `scaleX(${Math.min(holdProgress / 2000, 1)})` }}
+            />
+            <div 
+              className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.4)_0,transparent_50%)] transition-opacity duration-75"
+              style={{ 
+                opacity: Math.min(holdProgress / 2000, 1),
+                transform: `scale(${1 + Math.min(holdProgress / 2000, 1) * 2})` 
+              }}
+            />
+            <span className="relative z-10 drop-shadow-md flex items-center justify-center gap-2 min-w-[140px]">
+              {isHolding ? (
+                <>
+                  <span className="animate-[spin_2s_linear_infinite] text-lg block leading-none">☯</span>
+                  <span className="tracking-widest">
+                    QI {(Math.min(holdProgress / 2000, 1) * 100).toFixed(0)}%
+                  </span>
+                </>
+              ) : (
+                'Cast the Oracle'
+              )}
+            </span>
           </button>
           <p className="text-sm text-gray-500 text-center min-h-[1.2em]">{shakeHint}</p>
         </div>
@@ -480,6 +552,7 @@ const HomePanel = () => {
           </div>
         )}
       </div>
+      <div ref={bottomRef} className="h-8 shrink-0" />
     </div>
   );
 };
