@@ -1,10 +1,10 @@
-// src/components/SequenceManager.jsx
+// src/components/MatrixManager.jsx
 
 import { useState } from 'react';
 import { LOCAL_STORAGE_KEYS } from '../utils/constants';
 import { getHexagramSequences } from '../utils/tools.js';
 
-const SequenceManager = ({
+const MatrixManager = ({
   editStage,
   setEditStage,
   setCurrentSequence,
@@ -261,4 +261,4 @@ const SequenceManager = ({
   );
 };
 
-export default SequenceManager;
+export default MatrixManager;

@@ -8,7 +8,7 @@ import EditableHexagramGrid from './EditableHexagramGrid';
 import InspectorPanel from './InspectorPanel';
 import FiltersPanel from './FiltersPanel.jsx';
 import KingWenPanel from './KingWenPanel.jsx';
-import SequenceManager from './SequenceManager';
+import MatrixManager from './MatrixManager';
 import AppTabs from './AppTabs';
 import { TAB_NAMES } from '../utils/constants';
 
@@ -146,7 +146,7 @@ const MatrixPanel = ({
                 />
               )}
               {activeTab === TAB_NAMES.MANAGER && editMode && (
-                <SequenceManager
+                <MatrixManager
                   editStage={editStage}
                   setEditStage={handleEditStageChange}
                   setCurrentSequence={sequences.setCurrentSequence}
