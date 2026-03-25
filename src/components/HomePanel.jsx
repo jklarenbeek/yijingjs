@@ -185,7 +185,7 @@ const HomePanel = ({ selectedHex, handleSelectHex }) => {
     if (isActive || (e && e.pointerType === 'mouse' && e.button !== 0)) return;
     setIsHolding(true);
     holdStartTime.current = performance.now();
-    
+
     if (shakeHint.includes('tap above')) requestMotion();
 
     const animate = (time) => {
@@ -201,7 +201,7 @@ const HomePanel = ({ selectedHex, handleSelectHex }) => {
     setIsHolding(false);
     if (holdReqRef.current) cancelAnimationFrame(holdReqRef.current);
     setHoldProgress(0);
-    
+
     handleThrowClick();
   };
 
@@ -382,10 +382,10 @@ const HomePanel = ({ selectedHex, handleSelectHex }) => {
   }, [setupMotion]);
 
   return (
-    <div className="flex flex-col p-4 md:p-8 w-full h-full max-w-screen-2xl mx-auto overflow-y-auto relative">
+    <div className="flex flex-col p-1 md:p-2 w-full h-full max-w-screen-2xl mx-auto overflow-y-auto relative">
       <div className={cn("fixed inset-0 border-4 border-blue-400 pointer-events-none z-[100] transition-opacity duration-150 shadow-[inset_0_0_60px_rgba(59,130,246,0.15)]", isShakeActive ? "opacity-100" : "opacity-0")} />
 
-      <div className="mb-8">
+      <div className="p-2 mb-8">
         <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
           Everything is changing<br />Discover what is next!
         </h2>
@@ -436,15 +436,15 @@ const HomePanel = ({ selectedHex, handleSelectHex }) => {
               "disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
             )}
           >
-            <div 
+            <div
               className="absolute inset-0 bg-white/20 transition-transform duration-75 origin-left"
               style={{ transform: `scaleX(${Math.min(holdProgress / 2000, 1)})` }}
             />
-            <div 
+            <div
               className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.4)_0,transparent_50%)] transition-opacity duration-75"
-              style={{ 
+              style={{
                 opacity: Math.min(holdProgress / 2000, 1),
-                transform: `scale(${1 + Math.min(holdProgress / 2000, 1) * 2})` 
+                transform: `scale(${1 + Math.min(holdProgress / 2000, 1) * 2})`
               }}
             />
             <span className="relative z-10 drop-shadow-md flex items-center justify-center gap-2 min-w-[140px]">
@@ -527,18 +527,18 @@ const HomePanel = ({ selectedHex, handleSelectHex }) => {
           <div className="w-full flex justify-center animate-reveal-overlay relative z-10 mt-6 pt-8 border-t border-gray-200 dark:border-gray-700">
             <div className="flex flex-col items-center">
               <div ref={oracleRef} className="text-sm font-bold tracking-widest text-blue-500 uppercase text-center mb-8 scroll-mt-28">The Oracle Speaks</div>
-              <div className="flex flex-row gap-8 md:gap-16 flex-wrap items-center justify-center pointer-events-auto">
+              <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center justify-center pointer-events-auto">
 
                 <div className="flex flex-col items-center gap-4 w-[160px] sm:w-[210px]">
-                  <div className="text-sm font-medium text-gray-500 uppercase tracking-wider">Primary Hexagram</div>
+                  <div className="text-sm font-medium text-gray-500 uppercase tracking-wider text-center">Primary Hexagram</div>
                   <HexagramCard hexIndex={finalResult[0]} selectedHex={selectedHex} onClick={handleSelectHex} />
                 </div>
 
                 {finalResult[2] !== 0 && (
                   <>
-                    <div className="text-4xl text-gray-300 dark:text-gray-600 animate-pulse my-4 md:my-0 flex items-center justify-center">➔</div>
+                    <div className="text-4xl text-gray-300 dark:text-gray-600 animate-pulse my-4 md:my-0 flex items-center justify-center rotate-90 md:rotate-0">➔</div>
                     <div className="flex flex-col items-center gap-4 w-[160px] sm:w-[210px]">
-                      <div className="text-sm font-medium text-gray-500 uppercase tracking-wider">Transformed Hexagram</div>
+                      <div className="text-sm font-medium text-gray-500 uppercase tracking-wider text-center">Transformed Hexagram</div>
                       <HexagramCard hexIndex={finalResult[1]} selectedHex={selectedHex} onClick={handleSelectHex} />
                     </div>
                   </>
@@ -555,11 +555,11 @@ const HomePanel = ({ selectedHex, handleSelectHex }) => {
                 )}
               </div>
 
-              <div className="mt-8 w-full max-w-3xl text-left bg-white dark:bg-gray-800/80 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden animate-reveal-overlay overflow-x-hidden">
-                <HexagramTextPanel 
-                  hexIndex={finalResult[0]} 
-                  animated={true} 
-                  movingLinesMask={finalResult[2]} 
+              <div className="mt-8 w-full max-w-3xl text-left bg-white dark:bg-gray-800/80 rounded-2xl shadow-sm overflow-hidden animate-reveal-overlay overflow-x-hidden">
+                <HexagramTextPanel
+                  hexIndex={finalResult[0]}
+                  animated={true}
+                  movingLinesMask={finalResult[2]}
                 />
               </div>
             </div>

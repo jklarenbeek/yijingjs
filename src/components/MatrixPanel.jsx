@@ -1,7 +1,7 @@
 // src/components/MatrixPanel.jsx
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
-import { Edit3, X, Save } from 'lucide-react';
+import { Save } from 'lucide-react';
 import { cn } from '../utils/tools';
 import HexagramGrid from './HexagramGrid';
 import EditableHexagramGrid from './EditableHexagramGrid';
@@ -37,9 +37,9 @@ const MatrixPanel = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col p-4 md:p-8 w-full h-full max-w-screen-2xl mx-auto overflow-y-auto"
+      className="flex flex-col p-1 md:p-2 w-full h-full max-w-screen-2xl mx-auto overflow-y-auto"
     >
-      <div className="mb-6 flex flex-col md:flex-row md:justify-between md:items-start gap-4">
+      <div className="p-2 mb-6 flex flex-col md:flex-row md:justify-between md:items-start gap-4">
         <div>
           <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
             The Matrix
@@ -63,19 +63,6 @@ const MatrixPanel = ({
               Unsaved
             </div>
           )}
-          <button
-            onClick={() => setEditMode(!editMode)}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all shadow-sm shrink-0",
-              editMode
-                ? "bg-red-500 hover:bg-red-600 text-white shadow-red-500/20"
-                : "bg-blue-500 hover:bg-blue-600 text-white shadow-blue-500/20"
-            )}
-            aria-label={editMode ? 'Exit edit mode' : 'Enter edit mode'}
-          >
-            {editMode ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
-            {editMode ? 'Exit Edit' : 'Edit Mode'}
-          </button>
         </div>
       </div>
       <div className="flex flex-col lg:flex-row gap-4 h-full">
@@ -119,9 +106,11 @@ const MatrixPanel = ({
             {/* Tab Content */}
             <div className="flex-1 overflow-hidden">
               {activeTab === TAB_NAMES.READER && (
-                <KingWenPanel
-                  hexIndex={selectedHex}
-                />
+                <div className="p-4">
+                  <KingWenPanel
+                    hexIndex={selectedHex}
+                  />
+                </div>
               )}
               {activeTab === TAB_NAMES.INSPECTOR && (
                 <InspectorPanel
@@ -145,8 +134,9 @@ const MatrixPanel = ({
                   showKingWenNumbers={showKingWenNumbers}
                 />
               )}
-              {activeTab === TAB_NAMES.MANAGER && editMode && (
+              {activeTab === TAB_NAMES.MANAGER && (
                 <MatrixManager
+                  editMode={editMode}
                   editStage={editStage}
                   setEditStage={handleEditStageChange}
                   setCurrentSequence={sequences.setCurrentSequence}

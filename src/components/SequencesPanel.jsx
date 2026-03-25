@@ -37,8 +37,8 @@ const SequencesPanel = ({ showKingWenNumbers, selectedHex, handleSelectHex }) =>
   }, [showKingWenNumbers]);
 
   return (
-    <div className="max-w-screen-2xl mx-auto p-4 md:p-8 w-full h-full overflow-y-auto">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+    <div className="max-w-screen-2xl mx-auto p-1 md:p-2 w-full h-full overflow-y-auto">
+      <div className="flex flex-col p-2 md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
             {showKingWenNumbers ? 'King Wen Sequences' : 'Binary Sequences'}
@@ -58,7 +58,7 @@ const SequencesPanel = ({ showKingWenNumbers, selectedHex, handleSelectHex }) =>
           className="grid grid-cols-1 xl:grid-cols-2 gap-8"
         >
           {/* 10 Balanced Pairs */}
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="mb-6 flex items-center justify-between">
               <div>
                 <h3 className="text-xl font-bold text-amber-600 dark:text-amber-400">10 Balanced Pairs</h3>
@@ -76,7 +76,7 @@ const SequencesPanel = ({ showKingWenNumbers, selectedHex, handleSelectHex }) =>
           </div>
 
           {/* 22 Unbalanced Pairs */}
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="mb-6 flex items-center justify-between">
               <div>
                 <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400">22 Unbalanced Pairs</h3>

@@ -45,20 +45,18 @@ const AppTabs = ({ activeTab, setActiveTab, editMode }) => {
       >
         Inspect
       </button>
-      {editMode && (
-        <button
-          onClick={() => setActiveTab(TAB_NAMES.MANAGER)}
-          className={cn(
-            "flex-1 px-4 py-3 text-sm font-medium transition-colors",
-            activeTab === TAB_NAMES.MANAGER
-              ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
-              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
-          )}
-          aria-label="Sequence manager"
-        >
-          Manager
-        </button>
-      )}
+      <button
+        onClick={() => setActiveTab(TAB_NAMES.MANAGER)}
+        className={cn(
+          "flex-1 px-4 py-3 text-sm font-medium transition-colors",
+          activeTab === TAB_NAMES.MANAGER
+            ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
+            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+        )}
+        aria-label="Matrix Editor"
+      >
+        Editor
+      </button>
     </div>
   );
 };

@@ -3,8 +3,11 @@
 import { useState } from 'react';
 import { LOCAL_STORAGE_KEYS } from '../utils/constants';
 import { getHexagramSequences } from '../utils/tools.js';
+import { Edit3, X } from 'lucide-react';
+import { cn } from '../utils/tools.js';
 
 const MatrixManager = ({
+  editMode,
   editStage,
   setEditStage,
   setCurrentSequence,
@@ -130,11 +133,28 @@ const MatrixManager = ({
 
   return (
     <div className="p-4 space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-        Sequence Manager
-      </h3>
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          Sequence Manager
+        </h3>
+        <button
+          onClick={() => setEditMode(!editMode)}
+          className={cn(
+            "flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium transition-all shadow-sm shrink-0 text-sm",
+            editMode
+              ? "bg-red-500 hover:bg-red-600 text-white shadow-red-500/20"
+              : "bg-blue-500 hover:bg-blue-600 text-white shadow-blue-500/20"
+          )}
+          aria-label={editMode ? 'Exit edit mode' : 'Enter edit mode'}
+        >
+          {editMode ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
+          {editMode ? 'Exit Edit' : 'Edit Mode'}
+        </button>
+      </div>
 
-      {hasUnsavedChanges && (
+      {editMode && (
+        <div className="space-y-4">
+          {hasUnsavedChanges && (
         <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg">
           <div className="flex items-center gap-2 text-amber-800 dark:text-amber-200 text-sm">
             <span>💡</span>
@@ -255,6 +275,8 @@ const MatrixManager = ({
               </button>
             </div>
           </div>
+        </div>
+      )}
         </div>
       )}
     </div>

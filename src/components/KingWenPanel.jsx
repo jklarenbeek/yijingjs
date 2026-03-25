@@ -3,14 +3,14 @@ import { useKingWenText } from '../hooks/useKingWenText';
 
 const AnimatedExpander = ({ delay, children }) => {
   const [expanded, setExpanded] = useState(false);
-  
+
   useEffect(() => {
     const timer = setTimeout(() => setExpanded(true), delay);
     return () => clearTimeout(timer);
   }, [delay]);
 
   return (
-    <div 
+    <div
       className="grid transition-all duration-700 ease-out"
       style={{ gridTemplateRows: expanded ? '1fr' : '0fr' }}
     >
@@ -25,7 +25,7 @@ const AnimatedExpander = ({ delay, children }) => {
 
 const HexagramTextPanel = ({ hexIndex, animated = false, movingLinesMask = undefined }) => {
   const { data, loading, error } = useKingWenText(hexIndex);
-  
+
   let animIdx = 0;
   const renderAnim = (content) => {
     if (!animated) return content;
@@ -68,7 +68,7 @@ const HexagramTextPanel = ({ hexIndex, animated = false, movingLinesMask = undef
 
   return (
     <div className="overflow-y-auto h-full">
-      <div className="p-6 space-y-6">
+      <div className="p-2 space-y-6">
         {/* Header */}
         {renderAnim(
           <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
@@ -165,10 +165,10 @@ const HexagramTextPanel = ({ hexIndex, animated = false, movingLinesMask = undef
 
         {/* Lines */}
         {data.lines && (() => {
-          const visibleLines = Object.entries(data.lines).filter(([lineNum]) => 
+          const visibleLines = Object.entries(data.lines).filter(([lineNum]) =>
             movingLinesMask === undefined || (movingLinesMask & (1 << (parseInt(lineNum) - 1))) !== 0
           );
-          
+
           if (visibleLines.length === 0) return null;
 
           return (
