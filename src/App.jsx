@@ -215,7 +215,10 @@ function App() {
           <AnimatePresence mode="wait">
             {activeAppView === APP_VIEWS.HOME && (
               <motion.div key="view-home" className="w-full h-full">
-                <HomePanel />
+                <HomePanel 
+                  selectedHex={selectedHex}
+                  handleSelectHex={handleSelectHex}
+                />
               </motion.div>
             )}
 
@@ -242,13 +245,21 @@ function App() {
 
             {activeAppView === APP_VIEWS.SEQUENCES && (
               <motion.div key="view-sequences" className="w-full h-full">
-                <SequencesPanel showKingWenNumbers={showKingWenNumbers} />
+                <SequencesPanel 
+                  showKingWenNumbers={showKingWenNumbers} 
+                  selectedHex={selectedHex}
+                  handleSelectHex={handleSelectHex}
+                />
               </motion.div>
             )}
 
             {activeAppView === APP_VIEWS.SEFIROT && (
               <motion.div key="view-sefirot" className="w-full h-full">
-                <SefirotPanel showKingWenNumbers={showKingWenNumbers} />
+                <SefirotPanel 
+                  showKingWenNumbers={showKingWenNumbers} 
+                  selectedHex={selectedHex}
+                  handleSelectHex={handleSelectHex}
+                />
               </motion.div>
             )}
           </AnimatePresence>

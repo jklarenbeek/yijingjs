@@ -130,7 +130,7 @@ const LineSymbol = ({ isYang, isMoving }) => {
 };
 
 
-const HomePanel = () => {
+const HomePanel = ({ selectedHex, handleSelectHex }) => {
   const [currentMethod, setCurrentMethod] = useState('three');
   const [isActive, setIsActive] = useState(false);
   const [throwResults, setThrowResults] = useState([]);
@@ -531,7 +531,7 @@ const HomePanel = () => {
 
                 <div className="flex flex-col items-center gap-4 w-[160px] sm:w-[210px]">
                   <div className="text-sm font-medium text-gray-500 uppercase tracking-wider">Primary Hexagram</div>
-                  <HexagramCard hexIndex={finalResult[0]} selectedHex={null} onClick={() => { }} />
+                  <HexagramCard hexIndex={finalResult[0]} selectedHex={selectedHex} onClick={handleSelectHex} />
                 </div>
 
                 {finalResult[2] !== 0 && (
@@ -539,7 +539,7 @@ const HomePanel = () => {
                     <div className="text-4xl text-gray-300 dark:text-gray-600 animate-pulse my-4 md:my-0 flex items-center justify-center">➔</div>
                     <div className="flex flex-col items-center gap-4 w-[160px] sm:w-[210px]">
                       <div className="text-sm font-medium text-gray-500 uppercase tracking-wider">Transformed Hexagram</div>
-                      <HexagramCard hexIndex={finalResult[1]} selectedHex={null} onClick={() => { }} />
+                      <HexagramCard hexIndex={finalResult[1]} selectedHex={selectedHex} onClick={handleSelectHex} />
                     </div>
                   </>
                 )}

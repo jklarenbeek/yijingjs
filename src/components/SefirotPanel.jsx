@@ -31,7 +31,7 @@ const PATHS = [
   [8, 9]
 ];
 
-const SefirotPanel = ({ showKingWenNumbers }) => {
+const SefirotPanel = ({ showKingWenNumbers, selectedHex, handleSelectHex }) => {
   const [hoveredData, setHoveredData] = useState(null);
 
   // Load exactly 10 nodes and 22 paths relationships
@@ -152,10 +152,10 @@ const SefirotPanel = ({ showKingWenNumbers }) => {
 
                 <div className="flex justify-center gap-6 w-full px-4">
                   <div className="flex-1 flex justify-center">
-                     <HexagramCard hexIndex={hoveredData.pair.hexA} showKingWenNumbers={showKingWenNumbers} />
+                     <HexagramCard hexIndex={hoveredData.pair.hexA} showKingWenNumbers={showKingWenNumbers} selectedHex={selectedHex} onClick={handleSelectHex} />
                   </div>
                   <div className="flex-1 flex justify-center">
-                     <HexagramCard hexIndex={hoveredData.pair.hexB} showKingWenNumbers={showKingWenNumbers} />
+                     <HexagramCard hexIndex={hoveredData.pair.hexB} showKingWenNumbers={showKingWenNumbers} selectedHex={selectedHex} onClick={handleSelectHex} />
                   </div>
                 </div>
                 
