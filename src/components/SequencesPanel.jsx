@@ -11,18 +11,20 @@ const PairRow = ({ pair, index, delay, showKingWenNumbers, selectedHex, handleSe
     initial={{ opacity: 0, x: -20 }}
     animate={{ opacity: 1, x: 0 }}
     transition={{ delay: delay * 0.05 }}
-    className="flex items-center gap-4 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border border-gray-100 dark:border-gray-700"
+    className="flex items-center gap-2 sm:gap-4 p-1 bg-gray-50 dark:bg-gray-800/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border border-gray-100 dark:border-gray-700 overflow-hidden"
   >
-    <div className="text-gray-400 dark:text-gray-500 font-mono text-sm w-8 text-center">
+    <div className="text-gray-400 dark:text-gray-500 font-mono text-xs sm:text-sm w-6 sm:w-8 text-center shrink-0">
       #{index + 1}
     </div>
-    <div className="flex gap-2 w-24 h-24">
-      <HexagramCard hexIndex={pair.hexA} showKingWenNumbers={showKingWenNumbers} selectedHex={selectedHex} onClick={handleSelectHex} />
-      <HexagramCard hexIndex={pair.hexB} showKingWenNumbers={showKingWenNumbers} selectedHex={selectedHex} onClick={handleSelectHex} />
+    <div className="relative w-[96px] h-[86px] sm:w-[160px] sm:h-auto md:w-[180px] shrink-0">
+      <div className="absolute sm:relative top-0 left-0 w-[128px] sm:w-full scale-75 sm:scale-100 origin-top-left flex gap-1.5 sm:gap-2">
+        <HexagramCard hexIndex={pair.hexA} showKingWenNumbers={showKingWenNumbers} selectedHex={selectedHex} onClick={handleSelectHex} />
+        <HexagramCard hexIndex={pair.hexB} showKingWenNumbers={showKingWenNumbers} selectedHex={selectedHex} onClick={handleSelectHex} />
+      </div>
     </div>
-    <div className="flex flex-col ml-4">
-      <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">{pair.label}</h4>
-      <p className="text-xs text-gray-500">
+    <div className="flex flex-col ml-1 min-w-0">
+      <h4 className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 truncate">{pair.label}</h4>
+      <p className="text-[10px] sm:text-xs text-gray-500">
         Score: {pair.score}
       </p>
     </div>
