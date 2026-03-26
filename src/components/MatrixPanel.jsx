@@ -45,7 +45,7 @@ const MatrixPanel = ({
             The Matrix
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl">
-            Interactive 64 Hexagram sequence layout. Explore, filter, and edit the foundational grid of the I Ching system.
+            Interactive 64 Hexagram sequence layout. Explore, filter, and edit the foundational grid of the yijing system.
             {editMode
               ? ' Drag hexagrams from pool to grid • Drag placed hexagrams to move or swap • Double-click to remove • Save in Manager'
               : ' Use arrow keys to navigate • Click hexagrams to explore relationships.'}

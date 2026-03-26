@@ -47,7 +47,7 @@ const SefirotPanel = ({ showKingWenNumbers, selectedHex, handleSelectHex }) => {
             The Tree of Life
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl">
-            The 10 Emanations (Sefirot) and 22 Paths of Wisdom mapped to the 32 pairs of the I Ching. Hover over the nodes and paths to reveal their hexagram mappings.
+            The 10 Emanations (Sefirot) and 22 Paths of Wisdom mapped to the 32 pairs of the yijing. Hover over the nodes and paths to reveal their hexagram mappings.
           </p>
         </div>
       </div>
@@ -181,7 +181,7 @@ const SefirotPanel = ({ showKingWenNumbers, selectedHex, handleSelectHex }) => {
                     Inspect the Tree
                   </h3>
                   <p className="text-sm text-gray-500 mt-2">
-                    Hover or tap any node (Sefirah) or path on the Tree of Life to reveal its associated I Ching hexagram pair.
+                    Hover or tap any node (Sefirah) or path on the Tree of Life to reveal its associated yijing hexagram pair.
                   </p>
                 </motion.div>
               )}

@@ -58,6 +58,29 @@ const HexagramCard = forwardRef(({
     return { borderColor: getColor('ui', 'defaultBorder'), opacity: getOpacity() };
   }, [hexIndex, selectedHex, isNeighbor, selected, filters, data]);
 
+  const { stripBackground, propertiesTooltip } = useMemo(() => {
+    const colors = [data.symmetryColor, data.mantraColor, data.balancedColor];
+    const parts = [
+      `Symmetry: ${data.symmetryName}`,
+      `Mantra: ${data.mantraName}`,
+      `Tao: ${data.balancedName}`
+    ];
+    
+    if (data.foundationName) {
+      colors.push(colorSystem.ui.foundation);
+      parts.push(`Foundational: ${data.foundationName}`);
+    }
+    
+    const background = colors.length === 3 
+      ? `linear-gradient(to right, ${colors[0]} 0% 33.33%, ${colors[1]} 33.33% 66.66%, ${colors[2]} 66.66% 100%)`
+      : `linear-gradient(to right, ${colors[0]} 0% 25%, ${colors[1]} 25% 50%, ${colors[2]} 50% 75%, ${colors[3]} 75% 100%)`;
+      
+    return {
+      stripBackground: background,
+      propertiesTooltip: parts.join(' • ')
+    };
+  }, [data]);
+
   const renderTrigramLine = useCallback((position) => {
     const isYang = (hexIndex >> position) & 1;
     return (
@@ -113,46 +136,22 @@ const HexagramCard = forwardRef(({
       }}
       aria-label={`Hexagram ${hexIndex}`}
     >
+      {/* Properties Strip */}
+      <div className="w-full">
+        <Tooltip title={propertiesTooltip} className="capitalize" block={true}>
+          <div 
+            className="w-full h-1.5 opacity-80 rounded-t-[6px]"
+            style={{ background: stripBackground }}
+            aria-hidden="true"
+          />
+        </Tooltip>
+      </div>
+
       {/* Header row */}
-      <div className="flex items-center justify-between ml-1 mr-1">
+      <div className="flex items-center justify-center mt-0.5 mb-1">
         {/* Number display */}
         <div className="text-xs font-mono text-gray-500 dark:text-gray-400">
           {showKingWenNumbers ? data.kingWenNumber : hexIndex}
-        </div>
-
-        {/* Dots with tooltips */}
-        <div className="flex items-center gap-1">
-          <Tooltip title={`Symmetry: ${data.symmetryName}`} className="capitalize">
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ backgroundColor: data.symmetryColor }}
-              aria-hidden="true"
-            />
-          </Tooltip>
-
-          <Tooltip title={`Mantra: ${data.mantraName}`} className="capitalize">
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ backgroundColor: data.mantraColor }}
-              aria-hidden="true"
-            />
-          </Tooltip>
-
-          <Tooltip title={`Tao: ${data.balancedName}`} className="capitalize">
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ backgroundColor: data.balancedColor }}
-              aria-hidden="true"
-            />
-          </Tooltip>
-
-          {(data.foundationName && (<Tooltip title={`Foundational: ${data.foundationName}`} className="capitalize">
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ backgroundColor: colorSystem.ui.foundation }}
-              aria-hidden="true"
-            />
-          </Tooltip>))}
         </div>
       </div>
 
