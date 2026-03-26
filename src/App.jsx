@@ -218,6 +218,7 @@ function App() {
                 <HomePanel 
                   selectedHex={selectedHex}
                   handleSelectHex={handleSelectHex}
+                  showSixiangs={showSixiangs}
                 />
               </motion.div>
             )}
@@ -249,6 +250,7 @@ function App() {
                   showKingWenNumbers={showKingWenNumbers} 
                   selectedHex={selectedHex}
                   handleSelectHex={handleSelectHex}
+                  showSixiangs={showSixiangs}
                 />
               </motion.div>
             )}
@@ -259,6 +261,7 @@ function App() {
                   showKingWenNumbers={showKingWenNumbers} 
                   selectedHex={selectedHex}
                   handleSelectHex={handleSelectHex}
+                  showSixiangs={showSixiangs}
                 />
               </motion.div>
             )}

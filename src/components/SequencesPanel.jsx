@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getSequencePairs, categorizeSequencePairs } from '../utils/tools.js';
 import HexagramCard from './HexagramCard';
 
-const PairRow = ({ pair, index, delay, showKingWenNumbers, selectedHex, handleSelectHex }) => (
+const PairRow = ({ pair, index, delay, showKingWenNumbers, selectedHex, handleSelectHex, showSixiangs }) => (
   <motion.div
     initial={{ opacity: 0, x: -20 }}
     animate={{ opacity: 1, x: 0 }}
@@ -18,8 +18,8 @@ const PairRow = ({ pair, index, delay, showKingWenNumbers, selectedHex, handleSe
     </div>
     <div className="relative w-[96px] h-[86px] sm:w-[160px] sm:h-auto md:w-[180px] shrink-0">
       <div className="absolute sm:relative top-0 left-0 w-[128px] sm:w-full scale-75 sm:scale-100 origin-top-left flex gap-1.5 sm:gap-2">
-        <HexagramCard hexIndex={pair.hexA} showKingWenNumbers={showKingWenNumbers} selectedHex={selectedHex} onClick={handleSelectHex} />
-        <HexagramCard hexIndex={pair.hexB} showKingWenNumbers={showKingWenNumbers} selectedHex={selectedHex} onClick={handleSelectHex} />
+        <HexagramCard hexIndex={pair.hexA} showKingWenNumbers={showKingWenNumbers} selectedHex={selectedHex} onClick={handleSelectHex} showSixiangs={showSixiangs} />
+        <HexagramCard hexIndex={pair.hexB} showKingWenNumbers={showKingWenNumbers} selectedHex={selectedHex} onClick={handleSelectHex} showSixiangs={showSixiangs} />
       </div>
     </div>
     <div className="flex flex-col ml-1 min-w-0">
@@ -31,7 +31,7 @@ const PairRow = ({ pair, index, delay, showKingWenNumbers, selectedHex, handleSe
   </motion.div>
 );
 
-const SequencesPanel = ({ showKingWenNumbers, selectedHex, handleSelectHex }) => {
+const SequencesPanel = ({ showKingWenNumbers, selectedHex, handleSelectHex, showSixiangs }) => {
 
   const pairsData = useMemo(() => {
     const rawPairs = getSequencePairs(showKingWenNumbers);
@@ -72,7 +72,7 @@ const SequencesPanel = ({ showKingWenNumbers, selectedHex, handleSelectHex }) =>
             </div>
             <div className="flex flex-col gap-3">
               {pairsData.balanced.map((pair, idx) => (
-                <PairRow key={pair.id} pair={pair} index={idx} delay={idx} showKingWenNumbers={showKingWenNumbers} selectedHex={selectedHex} handleSelectHex={handleSelectHex} />
+                <PairRow key={pair.id} pair={pair} index={idx} delay={idx} showKingWenNumbers={showKingWenNumbers} selectedHex={selectedHex} handleSelectHex={handleSelectHex} showSixiangs={showSixiangs} />
               ))}
             </div>
           </div>
@@ -90,7 +90,7 @@ const SequencesPanel = ({ showKingWenNumbers, selectedHex, handleSelectHex }) =>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
               {pairsData.unbalanced.map((pair, idx) => (
-                <PairRow key={pair.id} pair={pair} index={idx} delay={idx} showKingWenNumbers={showKingWenNumbers} selectedHex={selectedHex} handleSelectHex={handleSelectHex} />
+                <PairRow key={pair.id} pair={pair} index={idx} delay={idx} showKingWenNumbers={showKingWenNumbers} selectedHex={selectedHex} handleSelectHex={handleSelectHex} showSixiangs={showSixiangs} />
               ))}
             </div>
           </div>
