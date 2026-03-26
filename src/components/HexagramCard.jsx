@@ -65,16 +65,16 @@ const HexagramCard = forwardRef(({
       `Mantra: ${data.mantraName}`,
       `Tao: ${data.balancedName}`
     ];
-    
+
     if (data.foundationName) {
       colors.push(colorSystem.ui.foundation);
       parts.push(`Foundational: ${data.foundationName}`);
     }
-    
-    const background = colors.length === 3 
+
+    const background = colors.length === 3
       ? `linear-gradient(to right, ${colors[0]} 0% 33.33%, ${colors[1]} 33.33% 66.66%, ${colors[2]} 66.66% 100%)`
       : `linear-gradient(to right, ${colors[0]} 0% 25%, ${colors[1]} 25% 50%, ${colors[2]} 50% 75%, ${colors[3]} 75% 100%)`;
-      
+
     return {
       stripBackground: background,
       propertiesTooltip: parts.join(' • ')
@@ -139,7 +139,7 @@ const HexagramCard = forwardRef(({
       {/* Properties Strip */}
       <div className="w-full">
         <Tooltip title={propertiesTooltip} className="capitalize" block={true}>
-          <div 
+          <div
             className="w-full h-1.5 opacity-80 rounded-t-[6px]"
             style={{ background: stripBackground }}
             aria-hidden="true"
@@ -148,11 +148,15 @@ const HexagramCard = forwardRef(({
       </div>
 
       {/* Header row */}
-      <div className="flex items-center justify-center mt-0.5 mb-1">
-        {/* Number display */}
+      <div className="flex items-center justify-between mt-0.5 mb-1 px-2">
         <div className="text-xs font-mono text-gray-500 dark:text-gray-400">
           {showKingWenNumbers ? data.kingWenNumber : hexIndex}
         </div>
+        <Tooltip title={data.transitionName} className="capitalize">
+          <div className="text-xs font-bold" style={{ color: data.transitionColor }}>
+            {data.transitionSymbol}
+          </div>
+        </Tooltip>
       </div>
 
       {/* Content - either trigrams or sixiangs with hover effects */}
@@ -235,25 +239,7 @@ const HexagramCard = forwardRef(({
             </div>
           </Tooltip>
 
-          {/* Floating transition symbol */}
-          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center pointer-events-none">
-            <Tooltip title={data.transitionName} className="capitalize">
-              <div
-                className={cn(
-                  "pointer-events-auto w-8 h-8 rounded-full border-2 flex items-center justify-center",
-                  "text-lg font-bold bg-white dark:bg-gray-900 shadow-md",
-                  "opacity-40 hover:opacity-100 transition-opacity duration-200",
-                  "group"
-                )}
-                style={{
-                  borderColor: data.upperColor,
-                  color: data.upperColor,
-                }}
-              >
-                {data.transitionSymbol}
-              </div>
-            </Tooltip>
-          </div>
+
         </>
       )}
     </button>
