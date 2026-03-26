@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { cn } from '../utils/tools';
 import HexagramCard from './HexagramCard';
 import HexagramTextPanel from './KingWenPanel';
+import HomePanelIntro from './HomePanelIntro'
 
 const EXPLAINERS = {
   three: 'Throw three coins six times — one throw per hexagram line (line 1 = bottom). Heads counts as 3, tails as 2. The sum (6–9) determines the line: 6 = old yin (moving →yang), 7 = young yang, 8 = young yin, 9 = old yang (moving →yin). Moving lines produce a second, transformed hexagram.',
@@ -385,14 +386,7 @@ const HomePanel = ({ selectedHex, handleSelectHex, showSixiangs }) => {
     <div className="flex flex-col p-1 md:p-2 w-full h-full max-w-screen-2xl mx-auto overflow-y-auto relative">
       <div className={cn("fixed inset-0 border-4 border-blue-400 pointer-events-none z-[100] transition-opacity duration-150 shadow-[inset_0_0_60px_rgba(59,130,246,0.15)]", isShakeActive ? "opacity-100" : "opacity-0")} />
 
-      <div className="p-2 mb-8">
-        <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
-          Everything is changing<br />Discover what is next!
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl">
-          Cast the coins — let the cosmos speak. {EXPLAINERS[currentMethod]}
-        </p>
-      </div>
+      <HomePanelIntro currentMethod={currentMethod} />
 
       <div className="flex flex-col items-center gap-8 w-full bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-10 shadow-sm border border-gray-200 dark:border-gray-700 min-h-[500px]">
 
@@ -416,6 +410,10 @@ const HomePanel = ({ selectedHex, handleSelectHex, showSixiangs }) => {
             </button>
           ))}
         </div>
+
+        <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl">
+          {EXPLAINERS[currentMethod]}
+        </p>
 
         <div className={cn("text-sm text-blue-500 font-medium text-center h-[1.2em] transition-opacity duration-500", sensorStatus ? "opacity-100" : "opacity-0")}>
           {sensorStatus}
