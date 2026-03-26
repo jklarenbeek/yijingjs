@@ -12,7 +12,7 @@ const MainTabBar = ({ activeView, setActiveView }) => {
   const tabs = [
     { id: APP_VIEWS.HOME, label: 'Home', icon: Home },
     { id: APP_VIEWS.GRID, label: 'The Matrix', icon: LayoutGrid },
-    { id: APP_VIEWS.SEQUENCES, label: 'Sequences', icon: ListTree },
+    { id: APP_VIEWS.SEQUENCES, label: 'Pairs', icon: ListTree },
     { id: APP_VIEWS.SEFIROT, label: 'Tree of Life', icon: Network },
   ];
 
