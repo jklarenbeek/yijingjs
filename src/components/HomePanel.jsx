@@ -107,22 +107,27 @@ const Coin = ({ isHeads, isSpecial, showLineNum, lineNum }) => {
 
 const LineSymbol = ({ isYang, isMoving }) => {
   return (
-    <div className="flex w-[52px] h-[10px]">
+    <div className="flex w-[52px] h-[10px] items-center">
       {isYang ? (
         <div className={cn(
           "w-full h-full rounded-[2px]",
-          isMoving ? "bg-gradient-to-r from-red-600 to-red-500 shadow-[0_0_10px_rgba(239,68,68,0.6)] animate-[pulse-glow_1.8s_infinite]"
-            : "bg-gradient-to-r from-amber-700 to-amber-400 shadow-[0_0_7px_rgba(245,158,11,0.5)]"
+          isMoving
+            ? "bg-gradient-to-r from-[var(--red-chi)] to-[var(--red-chi-light)] shadow-[0_0_10px_rgba(231,76,60,0.6)] animate-blink"
+            : "bg-gradient-to-r from-[var(--gold-dark)] to-[var(--gold-light)] shadow-[0_0_7px_rgba(201,146,10,0.5)]"
         )} />
       ) : (
         <>
           <div className={cn(
             "w-[44%] h-full rounded-[2px]",
-            isMoving ? "bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.4)] animate-[pulse-glow_1.8s_infinite]" : "bg-gray-500"
+            isMoving
+              ? "bg-[var(--jade-light)] shadow-[0_0_6px_rgba(59,204,143,0.4)] animate-blink"
+              : "bg-[var(--text-dim)]"
           )} />
           <div className={cn(
             "w-[44%] h-full rounded-[2px] ml-auto",
-            isMoving ? "bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.4)] animate-[pulse-glow_1.8s_infinite]" : "bg-gray-500"
+            isMoving
+              ? "bg-[var(--jade-light)] shadow-[0_0_6px_rgba(59,204,143,0.4)] animate-blink"
+              : "bg-[var(--text-dim)]"
           )} />
         </>
       )}
@@ -529,7 +534,13 @@ const HomePanel = ({ selectedHex, handleSelectHex, showSixiangs }) => {
 
                 <div className="flex flex-col items-center gap-4 w-[160px] sm:w-[210px]">
                   <div className="text-sm font-medium text-gray-500 uppercase tracking-wider text-center">Primary Hexagram</div>
-                  <HexagramCard hexIndex={finalResult[0]} selectedHex={selectedHex} onClick={handleSelectHex} showSixiangs={showSixiangs} />
+                  <HexagramCard
+                    hexIndex={finalResult[0]}
+                    selectedHex={selectedHex}
+                    onClick={handleSelectHex}
+                    showSixiangs={showSixiangs}
+                    movingLinesMask={finalResult[2]}
+                  />
                 </div>
 
                 {finalResult[2] !== 0 && (

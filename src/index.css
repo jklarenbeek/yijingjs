@@ -21,6 +21,10 @@
     0%, 100% { box-shadow: 0 0 10px currentColor; }
     50% { box-shadow: 0 0 20px currentColor; }
   }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
   @keyframes pulse-scale {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }
@@ -45,6 +49,29 @@
     0% { transform: translate(0, 0) scale(1); opacity: 1; }
     100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
   }
+
+  --animate-blink: blink 1.8s infinite;
+}
+
+/* Beautiful Yijing Palette */
+:root {
+  --ink: #0a0c0f;
+  --ink-2: #111418;
+  --jade-dark: #0d3d2e;
+  --jade: #1a6b4e;
+  --jade-light: #2a9d6f;
+  --jade-glow: #3bcc8f;
+  --gold-dark: #8b6914;
+  --gold: #c9920a;
+  --gold-light: #f0b429;
+  --gold-glow: #ffd166;
+  --silver: #8e9baa;
+  --silver-light: #c8d6e5;
+  --red-chi: #c0392b;
+  --red-chi-light: #e74c3c;
+  --text-dim: #5a6672;
+  --text-mid: #8fa0b0;
+  --text-bright: #d4e0ec;
 }
 
 /* ===== ROOT VARIABLES & GLOBAL STYLES ===== */

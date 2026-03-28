@@ -1,9 +1,6 @@
 // src/components/HexagramCard.jsx
 
 import { useState, useMemo, useCallback, forwardRef } from 'react';
-import * as Yijing from '@yijingjs/core';
-import * as Wuxing from '@yijingjs/wuxing';
-import * as Bagua from '@yijingjs/bagua';
 import { cn, getHexagramData, getSixiangData } from '../utils/tools.js';
 import colorSystem, { getColor } from '../utils/colors.js';
 import { Tooltip } from './Tooltip';
@@ -17,6 +14,7 @@ const HexagramCard = forwardRef(({
   inEditMode = false,
   showSixiangs = false,
   showKingWenNumbers = false,
+  movingLinesMask = 0,
 }, ref) => {
   // Add hover state for trigrams/sixiangs
   const [hoveredSection, setHoveredSection] = useState(null);
@@ -83,37 +81,60 @@ const HexagramCard = forwardRef(({
 
   const renderTrigramLine = useCallback((position) => {
     const isYang = (hexIndex >> position) & 1;
+    const isMoving = (movingLinesMask >> position) & 1;
+
     return (
-      <div key={position} className="w-full h-2 flex justify-center gap-3">
+      <div key={position} className="w-full h-2 flex justify-center gap-0">
         {isYang ? (
-          <div className="w-full h-full bg-white rounded-sm transition-all duration-200" />
+          <div className={cn(
+            "w-full h-full rounded-sm transition-all duration-200",
+            isMoving ? "bg-[var(--red-chi-light)] shadow-[0_0_8px_rgba(231,76,60,0.6)] animate-blink" : "bg-white"
+          )} />
         ) : (
           <>
-            <div className="w-5/12 h-full bg-gray-400 dark:bg-gray-500 rounded-sm transition-all duration-200" />
-            <div className="w-5/12 h-full bg-gray-400 dark:bg-gray-500 rounded-sm transition-all duration-200" />
+            <div className={cn(
+              "w-[42%] h-full rounded-sm transition-all duration-200",
+              isMoving ? "bg-[var(--jade-glow)] animate-blink" : "bg-gray-400 dark:bg-gray-500"
+            )} />
+            <div className={cn(
+              "w-[42%] h-full rounded-sm transition-all duration-200 ml-auto",
+              isMoving ? "bg-[var(--jade-glow)] animate-blink" : "bg-gray-400 dark:bg-gray-500"
+            )} />
           </>
         )}
       </div>
     );
-  }, [hexIndex]);
+  }, [hexIndex, movingLinesMask]);
 
   const renderSixiangLines = useCallback((sixiangValue, sixiangIndex) => {
     return [1, 0].map(linePos => {
       const isYang = (sixiangValue >> (1 - linePos)) & 1;
+      const globalLinePosition = sixiangIndex * 2 + (1 - linePos);
+      const isMoving = (movingLinesMask >> globalLinePosition) & 1;
+
       return (
-        <div key={`${sixiangIndex}-${linePos}`} className="w-full h-2 flex justify-center gap-3">
+        <div key={`${sixiangIndex}-${offset}`} className="w-full h-2 flex justify-center gap-0">
           {isYang ? (
-            <div className="w-full h-full bg-white rounded-sm transition-all duration-200" />
+            <div className={cn(
+              "w-full h-full rounded-sm transition-all duration-200",
+              isMoving ? "bg-[var(--red-chi-light)] shadow-[0_0_8px_rgba(231,76,60,0.6)] animate-blink" : "bg-white"
+            )} />
           ) : (
             <>
-              <div className="w-5/12 h-full bg-gray-400 dark:bg-gray-500 rounded-sm transition-all duration-200" />
-              <div className="w-5/12 h-full bg-gray-400 dark:bg-gray-500 rounded-sm transition-all duration-200" />
+              <div className={cn(
+                "w-[42%] h-full rounded-sm transition-all duration-200",
+                isMoving ? "bg-[var(--jade-glow)] animate-blink" : "bg-gray-400 dark:bg-gray-500"
+              )} />
+              <div className={cn(
+                "w-[42%] h-full rounded-sm transition-all duration-200 ml-auto",
+                isMoving ? "bg-[var(--jade-glow)] animate-blink" : "bg-gray-400 dark:bg-gray-500"
+              )} />
             </>
           )}
         </div>
       );
     });
-  }, []);
+  }, [movingLinesMask]);
 
   return (
     <button
@@ -129,7 +150,7 @@ const HexagramCard = forwardRef(({
         inEditMode && "cursor-move"
       )}
       style={{
-        borderColor,
+        borderColor: selected ? borderColor : 'var(--gold-dark)',
         ...(isNeighbor && {
           boxShadow: `0 0 25px ${borderColor}40`,
         }),
@@ -148,7 +169,7 @@ const HexagramCard = forwardRef(({
       </div>
 
       {/* Header row */}
-      <div className="flex items-center justify-between mt-0.5 mb-1 px-2">
+      <div className="flex items-center justify-between mt-0.5 px-2">
         <div className="text-xs font-mono text-gray-500 dark:text-gray-400">
           {showKingWenNumbers ? data.kingWenNumber : hexIndex}
         </div>
@@ -178,7 +199,7 @@ const HexagramCard = forwardRef(({
                   hoveredSection === `sixiang-${index}` && "scale-105 bg-opacity-40"
                 )}
                 style={{
-                  backgroundColor: `color-mix(in srgb, ${sixiang.color} ${hoveredSection === `sixiang-${index}` ? '30%' : '20%'
+                  backgroundColor: `color-mix(in srgb, ${sixiang.color} ${hoveredSection === `sixiang-${index}` ? '30%' : '15%'
                     }, transparent)`,
                   boxShadow: hoveredSection === `sixiang-${index}`
                     ? `0 0 12px ${sixiang.color}60`
@@ -204,7 +225,7 @@ const HexagramCard = forwardRef(({
                 hoveredSection === 'upper' && "scale-105 bg-opacity-40"
               )}
               style={{
-                backgroundColor: `color-mix(in srgb, ${data.upperColor} ${hoveredSection === 'upper' ? '30%' : '20%'
+                backgroundColor: `color-mix(in srgb, ${data.upperColor} ${hoveredSection === 'upper' ? '30%' : '15%'
                   }, transparent)`,
                 boxShadow: hoveredSection === 'upper'
                   ? `0 0 12px ${data.upperColor}60`
@@ -226,7 +247,7 @@ const HexagramCard = forwardRef(({
                 hoveredSection === 'lower' && "scale-105 bg-opacity-40"
               )}
               style={{
-                backgroundColor: `color-mix(in srgb, ${data.lowerColor} ${hoveredSection === 'lower' ? '30%' : '20%'
+                backgroundColor: `color-mix(in srgb, ${data.lowerColor} ${hoveredSection === 'lower' ? '30%' : '15%'
                   }, transparent)`,
                 boxShadow: hoveredSection === 'lower'
                   ? `0 0 12px ${data.lowerColor}60`
