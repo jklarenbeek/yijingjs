@@ -41,7 +41,7 @@ const MatrixPanel = ({
     >
       <div className="p-2 mb-6 flex flex-col md:flex-row md:justify-between md:items-start gap-4">
         <div>
-          <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-white leading-tight">
             The Matrix
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl">

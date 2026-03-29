@@ -1,14 +1,14 @@
 // src/components/MainTabBar.jsx
 
 /* eslint-disable no-unused-vars */
-import { LayoutGrid, ListTree, Network, Home } from 'lucide-react';
+import { LayoutGrid, ListTree, Network, Home, Settings } from 'lucide-react';
 import { cn } from '../utils/tools.js';
 import { APP_VIEWS } from '../utils/constants.js';
 
 /**
  * Main application navigation bar (bottom on mobile, top on desktop)
  */
-const MainTabBar = ({ activeView, setActiveView }) => {
+const MainTabBar = ({ activeView, setActiveView, onOpenSettings }) => {
   const tabs = [
     { id: APP_VIEWS.HOME, label: 'Home', icon: Home },
     { id: APP_VIEWS.GRID, label: 'The Matrix', icon: LayoutGrid },
@@ -39,6 +39,16 @@ const MainTabBar = ({ activeView, setActiveView }) => {
             )}
           </button>
         ))}
+        
+        {/* Settings Button */}
+        <button
+          onClick={onOpenSettings}
+          className="flex-1 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 px-2 py-3 md:py-4 text-xs md:text-sm font-medium transition-colors relative text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+          aria-label="Open settings"
+        >
+          <Settings className="w-5 h-5 md:w-4 md:h-4" />
+          <span>Settings</span>
+        </button>
       </div>
     </div>
   );

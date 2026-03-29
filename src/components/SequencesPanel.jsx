@@ -42,7 +42,7 @@ const SequencesPanel = ({ showKingWenNumbers, selectedHex, handleSelectHex, show
     <div className="max-w-screen-2xl mx-auto p-1 md:p-2 w-full h-full overflow-y-auto">
       <div className="flex flex-col p-2 md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-white leading-tight">
             {showKingWenNumbers ? 'King Wen Pairs' : 'Binary Pairs'}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl">

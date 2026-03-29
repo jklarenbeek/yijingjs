@@ -13,12 +13,12 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { LOCAL_STORAGE_KEYS, TAB_NAMES, APP_VIEWS } from './utils/constants';
 
 import HexagramCard from './components/HexagramCard';
-import AppHeader from './components/AppHeader';
 import MainTabBar from './components/MainTabBar';
 import MatrixPanel from './components/MatrixPanel';
 import SequencesPanel from './components/SequencesPanel';
 import SefirotPanel from './components/SefirotPanel';
 import HomePanel from './components/HomePanel';
+import SettingsMenu from './components/SettingsMenu';
 import { YijingProvider } from './components/YijingContext';
 import BackgroundEngine from './components/BackgroundEngine';
 
@@ -29,6 +29,7 @@ function App() {
   const [editMode, setEditMode] = useState(false);
   const [activeTab, setActiveTab] = useState(TAB_NAMES.FILTERS);
   const [activeAppView, setActiveAppView] = useState(APP_VIEWS.HOME);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   // Dnd-Kit state
   const [activeDragId, setActiveDragId] = useState(null);
@@ -206,15 +207,6 @@ function App() {
       <YijingProvider>
         <BackgroundEngine />
         <div className="min-h-screen flex flex-col bg-transparent text-gray-900 dark:text-white transition-colors">
-        <AppHeader
-          darkMode={darkMode}
-          toggleDarkMode={toggleDarkMode}
-          showSixiangs={showSixiangs}
-          setShowSixiangs={setShowSixiangs}
-          showKingWenNumbers={showKingWenNumbers}
-          setShowKingWenNumbers={setShowKingWenNumbers}
-        />
-
         <main className="relative flex-1">
           <AnimatePresence mode="wait">
             {activeAppView === APP_VIEWS.HOME && (
@@ -273,8 +265,23 @@ function App() {
         </main>
 
         <div className="sticky bottom-0 z-50 w-full relative">
-          <MainTabBar activeView={activeAppView} setActiveView={setActiveAppView} />
+          <MainTabBar 
+            activeView={activeAppView} 
+            setActiveView={setActiveAppView} 
+            onOpenSettings={() => setIsSettingsOpen(true)}
+          />
         </div>
+
+        <SettingsMenu
+          isOpen={isSettingsOpen}
+          onClose={() => setIsSettingsOpen(false)}
+          darkMode={darkMode}
+          toggleDarkMode={toggleDarkMode}
+          showSixiangs={showSixiangs}
+          setShowSixiangs={setShowSixiangs}
+          showKingWenNumbers={showKingWenNumbers}
+          setShowKingWenNumbers={setShowKingWenNumbers}
+        />
 
         <DragOverlay dropAnimation={{ duration: 250, easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)' }}>
           {activeDragId && activeDragData ? (
