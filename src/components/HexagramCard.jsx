@@ -113,7 +113,7 @@ const HexagramCard = forwardRef(({
       const isMoving = (movingLinesMask >> globalLinePosition) & 1;
 
       return (
-        <div key={`${sixiangIndex}-${offset}`} className="w-full h-2 flex justify-center gap-0">
+        <div key={`${sixiangIndex}-${linePos}`} className="w-full h-2 flex justify-center gap-0">
           {isYang ? (
             <div className={cn(
               "w-full h-full rounded-sm transition-all duration-200",

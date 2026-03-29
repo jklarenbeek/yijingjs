@@ -29,6 +29,7 @@ const AppHeader = ({
                 ? "bg-purple-500 hover:bg-purple-600 text-white"
                 : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100"
             )}
+            title={showSixiangs ? 'Switch all views to trigrams' : 'Switch all views to sixiangs'}
             aria-label={showSixiangs ? 'Show trigrams' : 'Show sixiangs'}
           >
             {showSixiangs ? '⚌' : '☰'}
