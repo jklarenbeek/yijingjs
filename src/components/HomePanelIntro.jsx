@@ -1,111 +1,286 @@
-// HomePanelIntro.jsx
-// Drop this in place of the existing <div className="p-2 mb-8"> header block in HomePanel.jsx
+/* eslint-disable no-unused-vars */
+// src/components/HomePanelIntro.jsx
+import { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useYijing } from './YijingContext';
+import { toBinary } from '../utils/tools';
+import DynamicHexagram from './DynamicHexagram';
 
-import { useEffect, useRef } from 'react';
+// ── Concept carousel data ─────────────────────────────────────────────────────
 
-const I_CHING_BLURB =
-  'The I Ching — Book of Changes — is a 3,000-year-old oracle and philosophical system rooted in ancient China. ' +
-  'Its 64 hexagrams map every archetypal situation in the cosmos. ' +
-  'Cast coins, observe the lines, and let the shifting patterns speak to your present moment.';
+const concepts = [
+  {
+    tag:   'State Space',
+    title: 'A 6-bit universe',
+    text:  'Each state is a unique binary configuration of six lines — yin or yang, 0 or 1.',
+    mode:  'random',
+    accent: '#f59e0b',
+  },
+  {
+    tag:   'Combinatorics',
+    title: '64 possible states',
+    text:  'Two states for each of six lines gives exactly 64 complete combinations.',
+    mode:  'sequence',
+    accent: '#818cf8',
+  },
+  {
+    tag:   'Hamiltonian Path',
+    title: 'Minimal change',
+    text:  'Neighboring states differ by exactly one bit — a Hamiltonian path through a 6D hypercube.',
+    mode:  'neighbors',
+    accent: '#34d399',
+  },
+  {
+    tag:   'Group Symmetry',
+    title: 'Transformations',
+    text:  'Inversion, reflection, and permutation form a group that reveals deep structural symmetry.',
+    mode:  'transformations',
+    accent: '#f472b6',
+  },
+  {
+    tag:   'Gray Encoding',
+    title: 'A system of change',
+    text:  "Gray code traces a smooth path through all states. Not symbolic — computational.",
+    mode:  'gray',
+    accent: '#38bdf8',
+  },
+];
 
-// A single hexagram glyph built from pure divs — no SVG dependency
-const HexagramGlyph = () => (
-  <div className="flex flex-col gap-[5px] shrink-0 pt-1">
-    {[true, false, true, false, true, false].map((yang, i) =>
-      yang ? (
-        // Solid yang line
-        <div
-          key={i}
-          className="h-[7px] w-[44px] rounded-sm bg-amber-500"
-          style={{ animationDelay: `${i * 0.18}s` }}
-        />
-      ) : (
-        // Broken yin line
-        <div key={i} className="flex gap-[6px]" style={{ animationDelay: `${i * 0.18}s` }}>
-          <div className="h-[7px] w-[19px] rounded-sm bg-amber-500" />
-          <div className="h-[7px] w-[19px] rounded-sm bg-amber-500" />
-        </div>
-      )
-    )}
-  </div>
+// ── Sub-components ────────────────────────────────────────────────────────────
+
+const ConceptHero = ({ concept }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 28, filter: 'blur(6px)' }}
+    animate={{ opacity: 1, y: 0,  filter: 'blur(0px)' }}
+    exit   ={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
+    transition={{ duration: 0.65, ease: [0.4, 0, 0.2, 1] }}
+    className="absolute inset-0 flex flex-col justify-center gap-3 md:gap-5 text-center md:text-left"
+  >
+    {/* Concept tag */}
+    <motion.span
+      initial={{ opacity: 0, x: -8 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.1, duration: 0.4 }}
+      className="text-xs font-mono uppercase tracking-[0.25em] font-semibold"
+      style={{ color: concept.accent }}
+    >
+      {concept.tag}
+    </motion.span>
+
+    {/* Main title */}
+    <h2
+      className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light text-white leading-tight"
+      style={{ letterSpacing: '-0.02em' }}
+    >
+      {concept.title}
+    </h2>
+
+    {/* Body text */}
+    <p className="text-base md:text-lg text-indigo-200/70 font-mono leading-relaxed max-w-lg">
+      {concept.text}
+    </p>
+  </motion.div>
 );
 
-const HomePanelIntro = ({ currentMethod }) => {
-  const blurbRef = useRef(null);
+// Dot indicator that flashes amber when its concept is active
+const StepDot = ({ active, accent, onClick }) => (
+  <button
+    onClick={onClick}
+    aria-label="Jump to concept"
+    className="w-1.5 h-1.5 rounded-full transition-all duration-300 focus:outline-none"
+    style={{
+      background: active ? accent : 'rgba(255,255,255,0.2)',
+      transform:  active ? 'scale(1.8)' : 'scale(1)',
+      boxShadow:  active ? `0 0 8px ${accent}cc` : 'none',
+    }}
+  />
+);
 
-  // Trigger blurb reveal once on mount (after title animation settles)
+// ── Main component ────────────────────────────────────────────────────────────
+
+export default function HomePanelIntro() {
+  const { value, ordinal, setMode } = useYijing();
+  const [step, setStep]   = useState(0);
+  const timerRef          = useRef(null);
+
+  // Auto-advance
+  const advance = () => setStep(s => (s + 1) % concepts.length);
+
+  const resetTimer = () => {
+    clearInterval(timerRef.current);
+    timerRef.current = setInterval(advance, 5500);
+  };
+
   useEffect(() => {
-    const t = setTimeout(() => {
-      if (blurbRef.current) blurbRef.current.classList.add('opacity-100', 'translate-y-0');
-    }, 1900);
-    return () => clearTimeout(t);
+    resetTimer();
+    return () => clearInterval(timerRef.current);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleDotClick = (i) => {
+    setStep(i);
+    resetTimer();
+  };
+
+  // Sync engine mode with current concept
+  useEffect(() => {
+    setMode(concepts[step].mode);
+  }, [step, setMode]);
+
+  const bits      = toBinary(value);
+  const concept   = concepts[step];
+
   return (
-    <div className="p-2 mb-8">
-      {/* Eyebrow rule + label */}
-      <div
-        className="flex items-center gap-3 mb-4 opacity-0 translate-y-2"
-        style={{ animation: 'slideUpFade 0.6s cubic-bezier(.16,1,.3,1) 0.1s forwards' }}
-      >
-        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent" />
-        <span className="text-[10px] tracking-[0.25em] text-gray-400 dark:text-gray-500 font-medium uppercase">
-          Yijing · Explorer
-        </span>
-        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent" />
-      </div>
+    <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-12 md:py-24 min-h-[65vh] flex flex-col justify-center">
+      <div className="flex flex-col md:flex-row items-center md:items-center gap-10 md:gap-20">
 
-      {/* Glyph + title block */}
-      <div className="flex items-start gap-5 flex-wrap">
-        {/* Animated hexagram glyph */}
-        <div
-          className="opacity-0 scale-75 -rotate-12"
-          style={{ animation: 'glyphReveal 0.9s cubic-bezier(.16,1,.3,1) 0.15s forwards' }}
+        {/* ── Left: Concept text ── */}
+        <div className="flex-1 flex flex-col gap-6 w-full">
+          {/* Concept hero with correct AnimatePresence mode */}
+          <div className="relative h-52 sm:h-56 md:h-60 w-full">
+            <AnimatePresence mode="wait">
+              <ConceptHero key={step} concept={concept} />
+            </AnimatePresence>
+          </div>
+
+          {/* Step dots */}
+          <div className="flex items-center gap-3 justify-center md:justify-start mt-2">
+            {concepts.map((c, i) => (
+              <StepDot
+                key={i}
+                active={i === step}
+                accent={c.accent}
+                onClick={() => handleDotClick(i)}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* ── Right: Live data panel ── */}
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
+          className="flex flex-col gap-0 min-w-[300px] max-w-xs w-full"
+          style={{
+            background: 'linear-gradient(145deg, rgba(15,20,45,0.85) 0%, rgba(10,14,35,0.95) 100%)',
+            border: '1px solid rgba(99,120,255,0.18)',
+            borderRadius: '16px',
+            boxShadow: [
+              '-12px 16px 40px rgba(0,0,0,0.6)',
+              'inset 0 1px 0 rgba(255,255,255,0.06)',
+              '0 0 0 1px rgba(99,120,255,0.08)',
+            ].join(', '),
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+          }}
         >
-          <HexagramGlyph />
-        </div>
+          {/* Panel header */}
+          <div
+            className="flex items-center justify-between px-5 py-3"
+            style={{ borderBottom: '1px solid rgba(99,120,255,0.12)' }}
+          >
+            <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-indigo-300/50">
+              live state
+            </span>
+            <div className="flex items-center gap-2">
+              <motion.span
+                key={ordinal}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+                className="text-[10px] font-mono tabular-nums text-indigo-300/40"
+              >
+                {String(ordinal).padStart(2, '0')}/63
+              </motion.span>
+              <motion.span
+                key={concept.mode}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+                className="text-[10px] font-mono uppercase tracking-widest font-semibold"
+                style={{ color: concept.accent }}
+              >
+                {concept.mode}
+              </motion.span>
+            </div>
+          </div>
 
-        <div className="flex-1 min-w-[200px]">
-          {/* Line 1 */}
-          <h2
-            className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 leading-tight opacity-0 translate-y-3"
-            style={{ animation: 'slideUpFade 0.7s cubic-bezier(.16,1,.3,1) 0.35s forwards' }}
+          {/* Hexagram visualization */}
+          <div
+            className="flex items-center justify-center px-5 py-5"
+            style={{ borderBottom: '1px solid rgba(99,120,255,0.10)' }}
           >
-            Everything is changing
-          </h2>
-          {/* Line 2 */}
-          <p
-            className="text-xl text-gray-600 dark:text-gray-400 mt-1 opacity-0 translate-y-3"
-            style={{ animation: 'slideUpFade 0.7s cubic-bezier(.16,1,.3,1) 0.65s forwards' }}
-          >
-            Discover what is next!
-          </p>
-        </div>
+            <div
+              className="relative flex items-center justify-center"
+              style={{
+                width: '120px',
+                aspectRatio: '1 / 1',
+                background: 'radial-gradient(ellipse 80% 80% at 50% 50%, rgba(251,191,36,0.08) 0%, transparent 70%)',
+                borderRadius: '12px',
+              }}
+            >
+              <DynamicHexagram value={value} style={{ width: '80px' }} />
+            </div>
+          </div>
+
+          {/* Data rows */}
+          <div className="flex flex-col divide-y divide-indigo-500/10">
+
+            {/* Decimal value */}
+            <div className="flex items-center justify-between px-5 py-3.5">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-300/45">
+                decimal
+              </span>
+              <motion.span
+                key={ordinal}
+                initial={{ opacity: 0.4, scale: 0.82 }}
+                animate={{ opacity: 1,   scale: 1 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+                className="text-2xl font-bold font-sans tabular-nums"
+                style={{ color: concept.accent, letterSpacing: '-0.03em' }}
+              >
+                {value.toString().padStart(2, '0')}
+              </motion.span>
+            </div>
+
+            {/* Binary state */}
+            <div className="flex items-center justify-between px-5 py-3.5">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-300/45">
+                binary
+              </span>
+              <motion.span
+                key={bits}
+                initial={{ opacity: 0.5 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.25 }}
+                className="font-mono font-semibold text-white/90 tabular-nums"
+                style={{ letterSpacing: '0.28em', fontSize: '13px' }}
+              >
+                {bits}
+              </motion.span>
+            </div>
+
+            {/* Hex representation */}
+            <div className="flex items-center justify-between px-5 py-3.5 rounded-b-2xl">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-300/45">
+                hex
+              </span>
+              <motion.span
+                key={value}
+                initial={{ opacity: 0.5 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.25, delay: 0.05 }}
+                className="font-mono font-semibold tabular-nums"
+                style={{ color: 'rgba(156,163,175,0.7)', fontSize: '13px', letterSpacing: '0.1em' }}
+              >
+                0x{value.toString(16).toUpperCase().padStart(2, '0')}
+              </motion.span>
+            </div>
+          </div>
+        </motion.div>
+
       </div>
-
-      {/* Blurb — appears after title animation */}
-      <p
-        ref={blurbRef}
-        className="text-gray-600 dark:text-gray-400 mt-4 max-w-2xl text-sm leading-relaxed
-                   border-l-2 border-gray-200 dark:border-gray-700 pl-3
-                   opacity-0 translate-y-2 transition-all duration-700 ease-out"
-      >
-        {I_CHING_BLURB}
-      </p>
-
-      <style>{`
-        @keyframes slideUpFade {
-          from { opacity: 0; transform: translateY(12px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes glyphReveal {
-          from { opacity: 0; transform: scale(0.7) rotate(-20deg); }
-          60%  { opacity: 1; transform: scale(1.08) rotate(3deg); }
-          to   { opacity: 1; transform: scale(1) rotate(0deg); }
-        }
-      `}</style>
     </div>
   );
-};
-
-export default HomePanelIntro;
+}

@@ -19,6 +19,8 @@ import MatrixPanel from './components/MatrixPanel';
 import SequencesPanel from './components/SequencesPanel';
 import SefirotPanel from './components/SefirotPanel';
 import HomePanel from './components/HomePanel';
+import { YijingProvider } from './components/YijingContext';
+import BackgroundEngine from './components/BackgroundEngine';
 
 function App() {
   const [selectedHex, setSelectedHex] = useState(null);
@@ -201,7 +203,9 @@ function App() {
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      <div className="min-h-screen flex flex-col bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white transition-colors">
+      <YijingProvider>
+        <BackgroundEngine />
+        <div className="min-h-screen flex flex-col bg-transparent text-gray-900 dark:text-white transition-colors">
         <AppHeader
           darkMode={darkMode}
           toggleDarkMode={toggleDarkMode}
@@ -289,7 +293,8 @@ function App() {
           ) : null}
         </DragOverlay>
 
-      </div>
+        </div>
+      </YijingProvider>
     </DndContext>
   );
 }
